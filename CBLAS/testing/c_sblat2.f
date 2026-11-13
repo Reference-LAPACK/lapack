@@ -32,6 +32,7 @@
 *  cblas_ssbmv      T PUT F FOR NO TEST. SAME COLUMNS.
 *  cblas_sspmv      T PUT F FOR NO TEST. SAME COLUMNS.
 *  cblas_sskewsymv  T PUT F FOR NO TEST. SAME COLUMNS.
+*  cblas_sskewsbmv  T PUT F FOR NO TEST. SAME COLUMNS.
 *  cblas_strmv      T PUT F FOR NO TEST. SAME COLUMNS.
 *  cblas_stbmv      T PUT F FOR NO TEST. SAME COLUMNS.
 *  cblas_stpmv      T PUT F FOR NO TEST. SAME COLUMNS.
@@ -70,7 +71,7 @@
       INTEGER            NIN, NOUT
       PARAMETER          ( NIN = 5, NOUT = 6 )
       INTEGER            NSUBS
-      PARAMETER          ( NSUBS = 18 )
+      PARAMETER          ( NSUBS = 19 )
       REAL               ZERO, HALF, ONE
       PARAMETER          ( ZERO = 0.0, HALF = 0.5, ONE = 1.0 )
       INTEGER            NMAX, INCMAX
@@ -132,6 +133,7 @@
      $                   'cblas_ssyr2     ',
      $                   'cblas_sspr2     ',
      $                   'cblas_sskewsymv ',
+     $                   'cblas_sskewsbmv ',
      $                   'cblas_sskewsyr2 '/
 *     .. Executable Statements ..
       CALL CPU_TIME( S1 )
@@ -329,7 +331,7 @@
             FATAL = .FALSE.
             GO TO ( 140, 140, 150, 150, 150, 160, 160,
      $              160, 160, 160, 160, 170, 180, 180,
-     $              190, 190, 150, 190 )ISNUM
+     $              190, 190, 150, 190, 150 )ISNUM
 *           Test SGEMV, 01, and SGBMV, 02.
   140       IF (CORDER) THEN
             CALL SCHK1( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
@@ -344,7 +346,7 @@
      $                  X, XX, XS, Y, YY, YS, YT, G, 1 )
             END IF
             GO TO 200
-*           Test SSYMV, 03, SSBMV, 04, and SSPMV, 05, and SSKEWSYMV, 17.
+*           Test SSYMV, 03, SSBMV, 04, and SSPMV, 05, SSKEWSYMV, 17, and SSKEWSBMV, 19.
   150       IF (CORDER) THEN
             CALL SCHK2( SNAMES( ISNUM ), EPS, THRESH, NOUT, NTRA, TRACE,
      $                  REWI, FATAL, NIDIM, IDIM, NKB, KB, NALF, ALF,
@@ -896,7 +898,7 @@
      $                   INCYS, IX, IY, K, KS, LAA, LDA, LDAS, LX, LY,
      $                   N, NARGS, NC, NK, NS
       LOGICAL            BANDED, FULL, NULL, PACKED, RESET, SAME,
-     $                   SKEWFULL
+     $                   SKEWFULL, SKEWBANDED
       CHARACTER*1        UPLO, UPLOS
       CHARACTER*14       CUPLO
       CHARACTER*2        ICH
@@ -907,7 +909,7 @@
       EXTERNAL           LSE, LSERES
 *     .. External Subroutines ..
       EXTERNAL           SMAKE, SMVCH, CSSBMV, CSSPMV, CSSYMV,
-     $                   CSSKEWSYMV
+     $                   CSSKEWSYMV, CSSKEWSBMV
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX
 *     .. Scalars in Common ..
@@ -921,11 +923,12 @@
       FULL = SNAME( 9: 9 ).EQ.'y'
       BANDED = SNAME( 9: 9 ).EQ.'b'
       PACKED = SNAME( 9: 9 ).EQ.'p'
-      SKEWFULL = SNAME( 8: 11 ).EQ.'skew'
+      SKEWFULL = SNAME( 8: 13 ).EQ.'skewsy'
+      SKEWBANDED = SNAME( 8: 13 ).EQ.'skewsb'
 *     Define the number of arguments.
       IF( FULL.OR.SKEWFULL )THEN
          NARGS = 10
-      ELSE IF( BANDED )THEN
+      ELSE IF( BANDED.OR.SKEWBANDED )THEN
          NARGS = 11
       ELSE IF( PACKED )THEN
          NARGS = 9
@@ -940,19 +943,20 @@
       DO 110 IN = 1, NIDIM
          N = IDIM( IN )
 *
-         IF( BANDED )THEN
+         IF( BANDED.OR.SKEWBANDED )THEN
             NK = NKB
          ELSE
             NK = 1
          END IF
          DO 100 IK = 1, NK
-            IF( BANDED )THEN
+            IF( BANDED.OR.SKEWBANDED )THEN
                K = KB( IK )
             ELSE
                K = N - 1
             END IF
+            IF( SKEWBANDED .AND. K.LT.1 ) GO TO 100
 *           Set LDA to 1 more than minimum value if room.
-            IF( BANDED )THEN
+            IF( BANDED.OR.SKEWBANDED )THEN
                LDA = K + 1
             ELSE
                LDA = N
@@ -980,8 +984,13 @@
 *              Generate the matrix A.
 *
                TRANSL = ZERO
-               CALL SMAKE( SNAME( 8: 9 ), UPLO, ' ', N, N, A, NMAX, AA,
-     $                     LDA, K, K, RESET, TRANSL )
+               IF( SKEWBANDED ) THEN
+                  CALL SMAKE( 'kb', UPLO, ' ', N, N, A,
+     $                        NMAX, AA, LDA, K, K, RESET, TRANSL )
+               ELSE
+                  CALL SMAKE( SNAME( 8: 9 ), UPLO, ' ', N, N, A,
+     $                        NMAX, AA, LDA, K, K, RESET, TRANSL )
+               END IF
 *
                DO 80 IX = 1, NINC
                   INCX = INC( IX )
@@ -1066,6 +1075,16 @@
                               CALL CSSBMV( IORDER, UPLO, N, K, ALPHA,
      $                                    AA, LDA, XX, INCX, BETA, YY,
      $					  INCY )
+                           ELSE IF( SKEWBANDED )THEN
+                              IF( TRACE )
+     $                           WRITE( NTRA, FMT = 9994 )NC, SNAME,
+     $                           CUPLO, N, K, ALPHA, LDA, INCX, BETA,
+     $                           INCY
+                              IF( REWI )
+     $                           REWIND NTRA
+                              CALL CSSKEWSBMV( IORDER, UPLO, N, K,
+     $                                    ALPHA, AA, LDA, XX, INCX,
+     $					  BETA, YY, INCY )
                            ELSE IF( PACKED )THEN
                               IF( TRACE )
      $                           WRITE( NTRA, FMT = 9995 )NC, SNAME,
@@ -1104,7 +1123,7 @@
      $                                        YS, YY, ABS( INCY ) )
                               END IF
                               ISAME( 10 ) = INCYS.EQ.INCY
-                           ELSE IF( BANDED )THEN
+                           ELSE IF( BANDED.OR.SKEWBANDED )THEN
                               ISAME( 3 ) = KS.EQ.K
                               ISAME( 4 ) = ALS.EQ.ALPHA
                               ISAME( 5 ) = LSE( AS, AA, LAA )
@@ -1198,10 +1217,10 @@
 *
   120 CONTINUE
       WRITE( NOUT, FMT = 9996 )SNAME
-      IF( FULL )THEN
+      IF( FULL.OR.SKEWFULL )THEN
          WRITE( NOUT, FMT = 9993 )NC, SNAME, CUPLO, N, ALPHA, LDA,
      $         INCX, BETA, INCY
-      ELSE IF( BANDED )THEN
+      ELSE IF( BANDED.OR.SKEWBANDED )THEN
          WRITE( NOUT, FMT = 9994 )NC, SNAME, CUPLO, N, K, ALPHA, LDA,
      $      INCX, BETA, INCY
       ELSE IF( PACKED )THEN
@@ -2655,7 +2674,7 @@
 *  Stores the values in the array AA in the data structure required
 *  by the routine, with unwanted elements set to rogue value.
 *
-*  TYPE is 'ge', 'gb', 'sy','sb', 'sp', 'skewsy', 'tr', 'tb' OR 'tp'.
+*  TYPE is 'ge', 'gb', 'sy','sb', 'sp', 'skewsy', 'kb', 'tr', 'tb' OR 'tp'.
 *
 *  Auxiliary routine for test program for Level 2 Blas.
 *
@@ -2688,6 +2707,7 @@
       GEN = TYPE( 1: 1 ).EQ.'g'
       SYM = TYPE( 1: 1 ).EQ.'s'.AND.TYPE( 2: 2 ).NE.'k'
       SKEW = TYPE( 1: 1 ).EQ.'s'.AND.TYPE( 2: 2 ).EQ.'k'
+     $       .OR.TYPE( 1: 2 ).EQ.'kb'
       TRI = TYPE( 1: 1 ).EQ.'t'
       UPPER = ( SYM.OR.SKEW.OR.TRI ).AND.UPLO.EQ.'U'
       LOWER = ( SYM.OR.SKEW.OR.TRI ).AND.UPLO.EQ.'L'
@@ -2774,19 +2794,19 @@
                AA( I + ( J - 1 )*LDA ) = ROGUE
   120       CONTINUE
   130    CONTINUE
-      ELSE IF( TYPE.EQ.'sb'.OR.TYPE.EQ.'tb' )THEN
+      ELSE IF( TYPE.EQ.'sb'.OR.TYPE.EQ.'kb'.OR.TYPE.EQ.'tb' )THEN
          DO 170 J = 1, N
             IF( UPPER )THEN
                KK = KL + 1
                IBEG = MAX( 1, KL + 2 - J )
-               IF( UNIT )THEN
+               IF( UNIT.OR.SKEW )THEN
                   IEND = KL
                ELSE
                   IEND = KL + 1
                END IF
             ELSE
                KK = 1
-               IF( UNIT )THEN
+               IF( UNIT.OR.SKEW )THEN
                   IBEG = 2
                ELSE
                   IBEG = 1
