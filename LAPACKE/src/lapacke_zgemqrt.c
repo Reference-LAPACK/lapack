@@ -40,6 +40,7 @@ lapack_int API_SUFFIX(LAPACKE_zgemqrt)( int matrix_layout, char side, char trans
                             lapack_int ldc )
 {
     lapack_int nrows_v;
+    lapack_int ldwork;
     lapack_int info = 0;
     lapack_complex_double* work = NULL;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
@@ -62,9 +63,11 @@ lapack_int API_SUFFIX(LAPACKE_zgemqrt)( int matrix_layout, char side, char trans
         }
     }
 #endif
-    /* Allocate memory for working array(s) */
+    /* Allocate memory for working array(s): ?gemqrt uses N*NB entries
+     * for side = 'l' and M*NB for side = 'r'. */
+    ldwork = API_SUFFIX(LAPACKE_lsame)( side, 'l' ) ? n : m;
     work = (lapack_complex_double*)
-        LAPACKE_malloc( sizeof(lapack_complex_double) * MAX(1,m) * MAX(1,nb) );
+        LAPACKE_malloc( sizeof(lapack_complex_double) * MAX(1,ldwork) * MAX(1,nb) );
     if( work == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_0;

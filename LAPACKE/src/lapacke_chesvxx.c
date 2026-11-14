@@ -84,7 +84,7 @@ lapack_int API_SUFFIX(LAPACKE_chesvxx)( int matrix_layout, char fact, char uplo,
         goto exit_level_0;
     }
     work = (lapack_complex_float*)
-        LAPACKE_malloc( sizeof(lapack_complex_float) * MAX(1,2*n) );
+        LAPACKE_malloc( sizeof(lapack_complex_float) * MAX(1,5*n) );
     if( work == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_1;
