@@ -65,8 +65,11 @@ include $(TOPSRCDIR)/make.inc
 .PHONY: all
 all: $(BLASLIB)
 
-# force ordering of .mod building
-xerbla.o: xerbla_blas.o
+# Built without nagfor's -thread_safe: SET_BLAS_XERBLA assigns a module
+# procedure pointer, which -thread_safe rejects (setting a handler is not
+# thread-safe anyway). The link still uses it.
+xerbla_blas.o: xerbla_blas.f90
+	$(FC) $(filter-out -thread_safe,$(FFLAGS)) -c -o $@ $<
 
 #---------------------------------------------------------
 #  Comment out the next 6 definitions if you already have

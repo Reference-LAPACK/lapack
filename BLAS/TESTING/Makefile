@@ -8,6 +8,11 @@ double:    xblat1d xblat2d xblat3d
 complex:   xblat1c xblat2c xblat3c
 complex16: xblat1z xblat2z xblat3z
 
+# The Inf and NaN that SXVALS and DXVALS return are computed from constants.
+# nagfor folds those expressions at compile time and rejects the result, so
+# make.inc can turn that off for them through FFLAGS_NOPROPAGATE.
+sblat1.o dblat1.o cblat1.o zblat1.o: FFLAGS += $(FFLAGS_NOPROPAGATE)
+
 xblat1s: sblat1.o $(BLASLIB)
 	$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $^
 xblat1d: dblat1.o $(BLASLIB)

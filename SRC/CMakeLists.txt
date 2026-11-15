@@ -43,7 +43,7 @@ set(NANMOD la_xisnan.F90)
 set(ALLAUX ilaenv.f ilaenv2stage.f ieeeck.f lsamen.f iparmq.f iparam2stage.F
    ilaprec.f ilatrans.f ilauplo.f iladiag.f chla_transtype.f
    ../INSTALL/ilaver.f ../INSTALL/lsame.f xerbla.f xerbla_array.f
-   ../INSTALL/slamch.f xerbla_lapack.f90)
+   ../INSTALL/slamch.f)
 
 set(SCLAUX
    sbdsvdx.f sbdsvdmr3.f sbdsvdmr3_work.f sbdtgk.f slar1v_tgk.f slarrf_tgk.f slarrv_tgk.f slarrb_tgk.f sbdsdc.f
@@ -544,11 +544,19 @@ add_library(mod_files OBJECT ${NANMOD} $<TARGET_OBJECTS:const_mod_file>)
 set_target_properties(mod_files PROPERTIES Fortran_PREPROCESS ON)
 lapack_add_coverage(mod_files)
 
+# The XERBLA handler module gets its own object library so that it can be
+# built without nagfor's -thread_safe (see CMAKE/CheckLAPACKCompilerFlags.cmake).
+set(XERBLA_MODULE xerbla_lapack.f90)
+
 if(BUILD_DEFAULT_API)
   add_library(${LAPACKLIB}_obj OBJECT ${SOURCES} ${XSOURCES})
   target_link_libraries(${LAPACKLIB}_obj PUBLIC mod_files)
   set_target_properties(${LAPACKLIB}_obj PROPERTIES Fortran_PREPROCESS ON)
   lapack_add_coverage(${LAPACKLIB}_obj)
+
+  add_library(${LAPACKLIB}_xerbla_obj OBJECT ${XERBLA_MODULE})
+  set_target_properties(${LAPACKLIB}_xerbla_obj PROPERTIES LAPACK_NO_THREAD_SAFE ON)
+  lapack_add_coverage(${LAPACKLIB}_xerbla_obj)
 endif()
 
 if(BUILD_INDEX64_EXT_API)
@@ -559,12 +567,19 @@ if(BUILD_INDEX64_EXT_API)
   target_link_libraries(${LAPACKLIB}_64_obj PUBLIC mod_files)
   target_compile_options(${LAPACKLIB}_64_obj PRIVATE ${FOPT_ILP64})
   set_target_properties(${LAPACKLIB}_64_obj PROPERTIES Fortran_PREPROCESS ON)
+
+  generate_64bit_suffixed_sources(${LAPACKLIB}_xerbla XERBLA_MODULE XERBLA_MODULE_64)
+  add_library(${LAPACKLIB}_xerbla_64_obj OBJECT ${XERBLA_MODULE_64})
+  target_compile_options(${LAPACKLIB}_xerbla_64_obj PRIVATE ${FOPT_ILP64})
+  set_target_properties(${LAPACKLIB}_xerbla_64_obj PROPERTIES LAPACK_NO_THREAD_SAFE ON)
 endif()
 
 add_library(${LAPACKLIB}
   $<TARGET_OBJECTS:mod_files>
   $<$<BOOL:${BUILD_DEFAULT_API}>: $<TARGET_OBJECTS:${LAPACKLIB}_obj>>
-  $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${LAPACKLIB}_64_obj>>)
+  $<$<BOOL:${BUILD_DEFAULT_API}>: $<TARGET_OBJECTS:${LAPACKLIB}_xerbla_obj>>
+  $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${LAPACKLIB}_64_obj>>
+  $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${LAPACKLIB}_xerbla_64_obj>>)
 
 # For flang, use C linker instead of Fortran linker to avoid macOS-specific flags
 # that CMake adds (tested CMake 4.2).

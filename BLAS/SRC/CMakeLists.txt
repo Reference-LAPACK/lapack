@@ -60,7 +60,7 @@ set(ZB1AUX
 #---------------------------------------------------------------------
 #  Auxiliary routines needed by both the Level 2 and Level 3 BLAS
 #---------------------------------------------------------------------
-set(ALLBLAS lsame.f xerbla.f xerbla_array.f xerbla_blas.f90)
+set(ALLBLAS lsame.f xerbla.f xerbla_array.f)
 
 #---------------------------------------------------------
 #  Level 2 BLAS
@@ -117,9 +117,17 @@ if(BUILD_COMPLEX16)
 endif()
 list(REMOVE_DUPLICATES SOURCES)
 
+# The XERBLA handler module gets its own object library so that it can be
+# built without nagfor's -thread_safe (see CMAKE/CheckLAPACKCompilerFlags.cmake).
+set(XERBLA_MODULE xerbla_blas.f90)
+
 if(BUILD_DEFAULT_API)
   add_library(${BLASLIB}_obj OBJECT ${SOURCES})
   lapack_add_coverage(${BLASLIB}_obj)
+
+  add_library(${BLASLIB}_xerbla_obj OBJECT ${XERBLA_MODULE})
+  set_target_properties(${BLASLIB}_xerbla_obj PROPERTIES LAPACK_NO_THREAD_SAFE ON)
+  lapack_add_coverage(${BLASLIB}_xerbla_obj)
 endif()
 
 if(BUILD_INDEX64_EXT_API)
@@ -128,11 +136,18 @@ if(BUILD_INDEX64_EXT_API)
 
   add_library(${BLASLIB}_64_obj OBJECT ${SOURCES_64})
   target_compile_options(${BLASLIB}_64_obj PRIVATE ${FOPT_ILP64})
+
+  generate_64bit_suffixed_sources(${BLASLIB}_xerbla XERBLA_MODULE XERBLA_MODULE_64)
+  add_library(${BLASLIB}_xerbla_64_obj OBJECT ${XERBLA_MODULE_64})
+  target_compile_options(${BLASLIB}_xerbla_64_obj PRIVATE ${FOPT_ILP64})
+  set_target_properties(${BLASLIB}_xerbla_64_obj PROPERTIES LAPACK_NO_THREAD_SAFE ON)
 endif()
 
 add_library(${BLASLIB}
   $<$<BOOL:${BUILD_DEFAULT_API}>: $<TARGET_OBJECTS:${BLASLIB}_obj>>
-  $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${BLASLIB}_64_obj>>)
+  $<$<BOOL:${BUILD_DEFAULT_API}>: $<TARGET_OBJECTS:${BLASLIB}_xerbla_obj>>
+  $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${BLASLIB}_64_obj>>
+  $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${BLASLIB}_xerbla_64_obj>>)
 
 # For flang, use C linker instead of Fortran linker to avoid macOS-specific flags
 # that CMake adds (tested CMake 4.2).
