@@ -246,14 +246,14 @@
 *>     INFO is INTEGER
 *>           = 0:  successful exit
 *>           < 0:  if INFO = -i, the i-th argument had an illegal value
+*>                 INFO = -6 if A contains a NaN or an infinity, or an
+*>                 entry whose absolute value overflows; XERBLA is not
+*>                 called in that case.
 *>           > 0:  SBDSVDMR3 returned a positive INFO, passed through
-*>                 unchanged: MIN(M,N)+1 if the bidiagonal contained
-*>                 a NaN or Inf, MIN(M,N)+2 if the SBDSDC fallback
+*>                 unchanged: MIN(M,N)+2 if the SBDSDC fallback
 *>                 in SBDSVDMR3 returned a non-finite result, and any
 *>                 other positive value is the INFO of that fallback.
 *>                 See SBDSVDMR3.
-*>                 if INFO = N*2 + 1, an internal error occurred in
-*>                 CGESVDMR3
 *> \endverbatim
 *
 *  Authors:
@@ -315,10 +315,10 @@
      $                   SBDSVDMR3, SLASCL, XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            SISNAN, LSAME
       INTEGER            ILAENV
       REAL               SLAMCH, CLANGE, SROUNDUP_LWORK
-      EXTERNAL           LSAME, ILAENV, SLAMCH,
+      EXTERNAL           SISNAN, LSAME, ILAENV, SLAMCH,
      $                   CLANGE, SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
@@ -507,6 +507,15 @@
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
       ANRM = CLANGE( 'M', M, N, A, LDA, DUM )
+*
+*     Return INFO = -6, without calling XERBLA, if A contains a NaN or
+*     an infinity, or an entry whose absolute value overflows (the
+*     largest singular value of A would overflow too).
+*
+      IF( SISNAN( ANRM ) .OR. ANRM.GT.SLAMCH( 'Overflow' ) ) THEN
+         INFO = -6
+         RETURN
+      END IF
       ISCL = 0
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          ISCL = 1
