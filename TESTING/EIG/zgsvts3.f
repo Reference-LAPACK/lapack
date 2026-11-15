@@ -190,6 +190,8 @@
 *>          RESULT(5) = norm( I - Q'*Q ) / ( N*ULP )
 *>          RESULT(6) = 0        if ALPHA is in decreasing order;
 *>                    = ULPINV   otherwise.
+*>          RESULT(1) is also set to ULPINV if ZGGSVD3 rejects the
+*>          minimum LWORK that it documents, or writes past it.
 *> \endverbatim
 *
 *  Authors:
@@ -228,12 +230,15 @@
 *     .. Parameters ..
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
+      DOUBLE PRECISION   GUARD
+      PARAMETER          ( GUARD = -1.0D+300 )
       COMPLEX*16         CZERO, CONE
       PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 ),
      $                   CONE = ( 1.0D+0, 0.0D+0 ) )
 *     ..
 *     .. Local Scalars ..
-      INTEGER            I, INFO, J, K, L
+      LOGICAL            BADWRK
+      INTEGER            I, INFO, J, JOB, K, L, LWMIN, NGUARD
       DOUBLE PRECISION   ANORM, BNORM, RESID, TEMP, ULP, ULPINV, UNFL
 *     ..
 *     .. External Functions ..
@@ -252,19 +257,50 @@
       ULPINV = ONE / ULP
       UNFL = DLAMCH( 'Safe minimum' )
 *
-*     Copy the matrix A to the array AF.
-*
-      CALL ZLACPY( 'Full', M, N, A, LDA, AF, LDA )
-      CALL ZLACPY( 'Full', P, N, B, LDB, BF, LDB )
-*
       ANORM = MAX( ZLANGE( '1', M, N, A, LDA, RWORK ), UNFL )
       BNORM = MAX( ZLANGE( '1', P, N, B, LDB, RWORK ), UNFL )
 *
-*     Factorize the matrices A and B in the arrays AF and BF.
+*     Factorize the matrices A and B in the arrays AF and BF, twice:
+*     first without U, V and Q, and then with them for the tests
+*     below. Each call gets exactly the minimum workspace that
+*     ZGGSVD3 documents for its jobs (it needs P entries only to
+*     form V), followed by a guard that the call must leave
+*     unchanged.
 *
-      CALL ZGGSVD3( 'U', 'V', 'Q', M, N, P, K, L, AF, LDA, BF, LDB,
-     $              ALPHA, BETA, U, LDU, V, LDV, Q, LDQ, WORK, LWORK,
-     $              RWORK, IWORK, INFO )
+      BADWRK = .FALSE.
+      DO 6 JOB = 1, 2
+         IF( N.GT.0 .AND. MAX( M, P ).GT.0 ) THEN
+            IF( JOB.EQ.1 ) THEN
+               LWMIN = N + MAX( M, N+1 )
+            ELSE
+               LWMIN = N + MAX( M, P, N+1 )
+            END IF
+         ELSE
+            LWMIN = MAX( 1, 2*N )
+         END IF
+         LWMIN = MIN( LWMIN, LWORK )
+         NGUARD = MIN( M+P+4*N+4, LWORK-LWMIN )
+         DO 2 I = LWMIN + 1, LWMIN + NGUARD
+            WORK( I ) = GUARD
+    2    CONTINUE
+         CALL ZLACPY( 'Full', M, N, A, LDA, AF, LDA )
+         CALL ZLACPY( 'Full', P, N, B, LDB, BF, LDB )
+         IF( JOB.EQ.1 ) THEN
+            CALL ZGGSVD3( 'N', 'N', 'N', M, N, P, K, L, AF, LDA, BF,
+     $                    LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ,
+     $                    WORK, LWMIN, RWORK, IWORK, INFO )
+         ELSE
+            CALL ZGGSVD3( 'U', 'V', 'Q', M, N, P, K, L, AF, LDA, BF,
+     $                    LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ,
+     $                    WORK, LWMIN, RWORK, IWORK, INFO )
+         END IF
+         IF( INFO.LT.0 )
+     $      BADWRK = .TRUE.
+         DO 4 I = LWMIN + 1, LWMIN + NGUARD
+            IF( WORK( I ).NE.GUARD )
+     $         BADWRK = .TRUE.
+    4    CONTINUE
+    6 CONTINUE
 *
 *     Copy R
 *
@@ -311,6 +347,8 @@
       ELSE
          RESULT( 1 ) = ZERO
       END IF
+      IF( BADWRK )
+     $   RESULT( 1 ) = ULPINV
 *
 *     Compute B := V'*B*Q - D2*R
 *

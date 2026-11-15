@@ -152,9 +152,10 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
-*>          If N <= 1,               LWORK >= 1.
-*>          If JOBZ = 'N' and N > 1, LWORK >= 2*N.
-*>          If JOBZ = 'V' and N > 1, LWORK >= 1 + 5*N + 2*N**2.
+*>          If JOBZ = 'N' and N <= 1, LWORK >= 1.
+*>          If JOBZ = 'V' and N <= 1, LWORK >= 1+2*N.
+*>          If JOBZ = 'N' and N > 1,  LWORK >= 2*N.
+*>          If JOBZ = 'V' and N > 1,  LWORK >= 1 + 5*N + 2*N**2.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal sizes of the WORK and IWORK
@@ -265,7 +266,11 @@
       INFO = 0
       IF( N.LE.1 ) THEN
          LIWMIN = 1
-         LWMIN = 1
+         IF( WANTZ ) THEN
+            LWMIN = 1 + 2*N
+         ELSE
+            LWMIN = 1
+         END IF
       ELSE IF( WANTZ ) THEN
          LIWMIN = 3 + 5*N
          LWMIN = 1 + 5*N + 2*N**2

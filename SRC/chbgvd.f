@@ -155,7 +155,7 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
-*>          If N <= 1,               LWORK >= 1.
+*>          If N <= 1,               LWORK >= 1+N.
 *>          If JOBZ = 'N' and N > 1, LWORK >= N.
 *>          If JOBZ = 'V' and N > 1, LWORK >= 2*N**2.
 *>
@@ -176,7 +176,7 @@
 *> \verbatim
 *>          LRWORK is INTEGER
 *>          The dimension of array RWORK.
-*>          If N <= 1,               LRWORK >= 1.
+*>          If N <= 1,               LRWORK >= 1+N.
 *>          If JOBZ = 'N' and N > 1, LRWORK >= N.
 *>          If JOBZ = 'V' and N > 1, LRWORK >= 1 + 5*N + 2*N**2.
 *>

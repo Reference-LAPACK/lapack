@@ -276,7 +276,10 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK. LWORK >= 1.
+*>          The dimension of the array WORK.
+*>          If N > 0 and MAX(M,P) > 0, LWORK >= N+MAX(M,P,3*N+1) if
+*>          JOBV = 'V', and LWORK >= N+MAX(M,3*N+1) otherwise.
+*>          LWORK >= MAX(1,2*N) if N = 0 or MAX(M,P) = 0.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
@@ -366,7 +369,7 @@
 *
 *     .. Local Scalars ..
       LOGICAL            WANTQ, WANTU, WANTV, LQUERY
-      INTEGER            I, IBND, ISUB, J, NCYCLE, LWKOPT
+      INTEGER            I, IBND, ISUB, J, NCYCLE, LWKOPT, LWMIN
       DOUBLE PRECISION   ANORM, BNORM, SMAX, TEMP, TOLA, TOLB, ULP, UNFL
 *     ..
 *     .. External Functions ..
@@ -389,6 +392,19 @@
       WANTQ = LSAME( JOBQ, 'Q' )
       LQUERY = ( LWORK.EQ.-1 )
       LWKOPT = 1
+*
+*     WORK(1:N) holds the TAU of DGGSVP3, which gets WORK(N+1:LWORK)
+*     as its workspace, and DTGSJA uses WORK(1:2*N).
+*
+      IF( N.GT.0 .AND. MAX( M, P ).GT.0 ) THEN
+         IF( WANTV ) THEN
+            LWMIN = N + MAX( M, P, 3*N+1 )
+         ELSE
+            LWMIN = N + MAX( M, 3*N+1 )
+         END IF
+      ELSE
+         LWMIN = MAX( 1, 2*N )
+      END IF
 *
 *     Test the input arguments
 *
@@ -415,7 +431,7 @@
          INFO = -18
       ELSE IF( LDQ.LT.1 .OR. ( WANTQ .AND. LDQ.LT.N ) ) THEN
          INFO = -20
-      ELSE IF( LWORK.LT.1 .AND. .NOT.LQUERY ) THEN
+      ELSE IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
          INFO = -22
       END IF
 *
@@ -428,7 +444,7 @@
      $                 WORK, -1, INFO )
          LWKOPT = N + INT( WORK( 1 ) )
          LWKOPT = MAX( 2*N, LWKOPT )
-         LWKOPT = MAX( 1, LWKOPT )
+         LWKOPT = MAX( LWMIN, LWKOPT )
          WORK( 1 ) = DBLE( LWKOPT )
       END IF
 *

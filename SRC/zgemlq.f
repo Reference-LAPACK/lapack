@@ -116,7 +116,11 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The dimension of the array WORK. LWORK >= 1.
+*>          The dimension of the array WORK.
+*>          If MIN(M,N,K) = 0, LWORK >= 1.
+*>          If SIDE = 'L', LWORK >= MAX(1,N*MB).
+*>          If SIDE = 'R', LWORK >= MAX(1,M*MB).
+*>          MB = INT(T(2)) is the block size stored in T by ZGELQ.
 *>          If LWORK = -1, then a workspace query is assumed. The routine
 *>          only calculates the size of the WORK array, returns this
 *>          value as WORK(1), and no error message related to WORK

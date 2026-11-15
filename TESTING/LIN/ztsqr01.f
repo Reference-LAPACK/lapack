@@ -104,10 +104,12 @@
       DOUBLE PRECISION ZERO
       COMPLEX*16 ONE, CZERO
       PARAMETER( ZERO = 0.0, ONE = (1.0,0.0), CZERO=(0.0,0.0) )
+      DOUBLE PRECISION GUARD
+      PARAMETER( GUARD = -1.0D+300 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL TESTZEROS, TS
-      INTEGER INFO, J, K, L, LWORK, TSIZE, MNB
+      LOGICAL OVERRN, TESTZEROS, TS
+      INTEGER INFO, J, K, L, LWORK, LWQ, TSIZE, MNB
       DOUBLE PRECISION   ANORM, EPS, RESID, CNORM, DNORM
 *     ..
 *     .. Local Arrays ..
@@ -191,7 +193,7 @@
      $             WORKQUERY, -1, INFO)
       LWORK = MAX( LWORK, INT( WORKQUERY( 1 ) ) )
       ALLOCATE ( T( TSIZE ) )
-      ALLOCATE ( WORK( LWORK ) )
+      ALLOCATE ( WORK( 2*LWORK ) )
       srnamt = 'ZGEQR'
       CALL ZGEQR( M, N, AF, M, T, TSIZE, WORK, LWORK, INFO )
 *
@@ -280,8 +282,15 @@
 *     Apply Q to D as D*Q
 *
       srnamt = 'ZGEMQR'
+*     Pass exactly the workspace that the workspace query asks
+*     for, followed by a guard that the call must leave unchanged.
       CALL ZGEMQR( 'R', 'N', N, M, K, AF, M, T, TSIZE, DF, N,
-     $             WORK, LWORK, INFO)
+     $             WORKQUERY, -1, INFO)
+      LWQ = INT( WORKQUERY( 1 ) )
+      WORK( LWQ+1: ) = GUARD
+      CALL ZGEMQR( 'R', 'N', N, M, K, AF, M, T, TSIZE, DF, N,
+     $             WORK, LWQ, INFO)
+      OVERRN = ANY( WORK( LWQ+1: ).NE.GUARD )
 *
 *     Compute |D*Q - D*Q| / |D|
 *
@@ -292,6 +301,7 @@
       ELSE
          RESULT( 5 ) = ZERO
       END IF
+      IF( OVERRN ) RESULT( 5 ) = 1 / EPS
 *
 *     Copy D into DF again
 *
@@ -299,8 +309,15 @@
 *
 *     Apply Q to D as D*QT
 *
+*     Pass exactly the workspace that the workspace query asks
+*     for, followed by a guard that the call must leave unchanged.
       CALL ZGEMQR( 'R', 'C', N, M, K, AF, M, T, TSIZE, DF, N,
-     $             WORK, LWORK, INFO)
+     $             WORKQUERY, -1, INFO)
+      LWQ = INT( WORKQUERY( 1 ) )
+      WORK( LWQ+1: ) = GUARD
+      CALL ZGEMQR( 'R', 'C', N, M, K, AF, M, T, TSIZE, DF, N,
+     $             WORK, LWQ, INFO)
+      OVERRN = ANY( WORK( LWQ+1: ).NE.GUARD )
 *
 *     Compute |D*QT - D*QT| / |D|
 *
@@ -311,6 +328,7 @@
       ELSE
          RESULT( 6 ) = ZERO
       END IF
+      IF( OVERRN ) RESULT( 6 ) = 1 / EPS
 *
 *     Short and wide
 *
@@ -334,9 +352,15 @@
      $             WORKQUERY, -1, INFO)
       LWORK = MAX( LWORK, INT( WORKQUERY( 1 ) ) )
       ALLOCATE ( T( TSIZE ) )
-      ALLOCATE ( WORK( LWORK ) )
+      ALLOCATE ( WORK( 2*LWORK ) )
       srnamt = 'ZGELQ'
-      CALL ZGELQ( M, N, AF, M, T, TSIZE, WORK, LWORK, INFO )
+*     Pass exactly the workspace that the workspace query asks
+*     for, followed by a guard that the call must leave unchanged.
+      CALL ZGELQ( M, N, AF, M, T, TSIZE, WORKQUERY, -1, INFO )
+      LWQ = INT( WORKQUERY( 1 ) )
+      WORK( LWQ+1: ) = GUARD
+      CALL ZGELQ( M, N, AF, M, T, TSIZE, WORK, LWQ, INFO )
+      OVERRN = ANY( WORK( LWQ+1: ).NE.GUARD )
 *
 *
 *     Generate the n-by-n matrix Q
@@ -361,6 +385,7 @@
       ELSE
          RESULT( 1 ) = ZERO
       END IF
+      IF( OVERRN ) RESULT( 1 ) = 1 / EPS
 *
 *     Compute |I - Q'*Q| and store in RESULT(2)
 *
