@@ -51,7 +51,7 @@ lapack_int API_SUFFIX(LAPACKE_ssyequb)( int matrix_layout, char uplo, lapack_int
     }
 #endif
     /* Allocate memory for working array(s) */
-    work = (float*)LAPACKE_malloc( sizeof(float) * MAX(1,3*n) );
+    work = (float*)LAPACKE_malloc( sizeof(float) * MAX(1,2*n) );
     if( work == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_0;

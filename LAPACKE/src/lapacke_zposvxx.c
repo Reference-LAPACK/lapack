@@ -77,7 +77,7 @@ lapack_int API_SUFFIX(LAPACKE_zposvxx)( int matrix_layout, char fact, char uplo,
     }
 #endif
     /* Allocate memory for working array(s) */
-    rwork = (double*)LAPACKE_malloc( sizeof(double) * MAX(1,3*n) );
+    rwork = (double*)LAPACKE_malloc( sizeof(double) * MAX(1,2*n) );
     if( rwork == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_0;
