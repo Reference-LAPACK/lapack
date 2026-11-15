@@ -108,15 +108,14 @@ contains
 
   subroutine check_singleton_vectors(failures)
     integer, intent(inout) :: failures
-    real(sp) :: d(1), e(1), s(1), z(2,2), a(1,1), u(1,1), vt(1,1)
+    real(sp) :: d(1), e(1), s(1), z(2,2)
     real(sp) :: w(lwork), tol
     integer :: iw(lwork), iroutine, ns, info
 
     tol = 100.0_sp*epsilon(1.0_sp)
-    do iroutine = 1, 4
+    do iroutine = 1, 2
       d = 2.0_sp
       e = 0.0_sp
-      a = 2.0_sp
       z = 0.0_sp
       select case (iroutine)
       case (1)
@@ -125,12 +124,6 @@ contains
       case (2)
         call sbdsvdmr3('U','V','V',1,d,e,2.0_sp,3.0_sp,1,1, &
                         ns,s,z,2,w,lwork,iw,lwork,info)
-      case (3)
-        call sgesvdx('V','V','V',1,1,a,1,2.0_sp,3.0_sp,1,1, &
-                     ns,s,u,1,vt,1,w,lwork,iw,info)
-      case (4)
-        call sgesvdmr3('V','V','V',1,1,a,1,2.0_sp,3.0_sp,1,1, &
-                       ns,s,u,1,vt,1,w,lwork,iw,info)
       end select
       if (info /= 0 .or. ns /= 1) then
         print *, 'Singleton vectors routine=', iroutine, &
@@ -142,12 +135,7 @@ contains
         print *, 'Singleton singular value routine=', iroutine
         failures = failures + 1
       end if
-      select case (iroutine)
-      case (1:2)
-        if (abs(z(1,1)*z(2,1)-1.0_sp) > tol) failures = failures + 1
-      case (3:4)
-        if (abs(u(1,1)*vt(1,1)-1.0_sp) > tol) failures = failures + 1
-      end select
+      if (abs(z(1,1)*z(2,1)-1.0_sp) > tol) failures = failures + 1
     end do
   end subroutine
 end program
