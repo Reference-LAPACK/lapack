@@ -4,7 +4,7 @@
 set(COMMON_SOURCES cblas_globals.c)
 
 # Error handling routines for level 2 & 3
-set(ERRHAND cblas_xerbla.c xerbla.c)
+set(ERRHAND cblas_xerbla.c xerbla.c cblas_iblaver.c)
 
 #
 #

@@ -11,7 +11,7 @@ include $(TOPSRCDIR)/make.inc
 all: $(CBLASLIB)
 
 # Error handling routines for level 2 & 3
-errhand = cblas_globals.o cblas_xerbla.o xerbla.o
+errhand = cblas_globals.o cblas_xerbla.o xerbla.o cblas_iblaver.o
 
 #
 #
