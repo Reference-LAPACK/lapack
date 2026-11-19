@@ -1,0 +1,24 @@
+# Dependabot configuration. Only the GitHub Actions used by the workflows
+# are kept up to date.
+#
+# Actions are pinned by commit SHA with a version comment. Dependabot
+# updates both the SHA and the comment.
+
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    # Wait a week after a release before proposing it, so a compromised or
+    # broken release has time to be noticed and pulled.
+    cooldown:
+      default-days: 7
+    # One PR for all action updates instead of one per action.
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "CI"
+
