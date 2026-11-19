@@ -313,7 +313,7 @@
       REAL               Z1, Z2, Z3, Z4
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           CAXPY, CLARF1F, CLARFGP, CSCAL,
+      EXTERNAL           CAXPBY, CLARF1F, CLARFGP, CSCAL,
      $                   XERBLA
       EXTERNAL           CLACGV
 *
@@ -399,18 +399,18 @@
             IF( I .EQ. 1 ) THEN
                CALL CSCAL( P-I+1, CMPLX( Z1, 0.0E0 ), X11(I,I), 1 )
             ELSE
-               CALL CSCAL( P-I+1, CMPLX( Z1*COS(PHI(I-1)), 0.0E0 ),
-     $                     X11(I,I), 1 )
-               CALL CAXPY( P-I+1, CMPLX( -Z1*Z3*Z4*SIN(PHI(I-1)),
-     $                     0.0E0 ), X12(I,I-1), 1, X11(I,I), 1 )
+               CALL CAXPBY( P-I+1, CMPLX( -Z1*Z3*Z4*SIN(PHI(I-1)),
+     $                      0.0E0 ), X12(I,I-1), 1,
+     $                      CMPLX( Z1*COS(PHI(I-1)), 0.0E0 ),
+     $                      X11(I,I), 1 )
             END IF
             IF( I .EQ. 1 ) THEN
                CALL CSCAL( M-P-I+1, CMPLX( Z2, 0.0E0 ), X21(I,I), 1 )
             ELSE
-               CALL CSCAL( M-P-I+1, CMPLX( Z2*COS(PHI(I-1)), 0.0E0 ),
-     $                     X21(I,I), 1 )
-               CALL CAXPY( M-P-I+1, CMPLX( -Z2*Z3*Z4*SIN(PHI(I-1)),
-     $                     0.0E0 ), X22(I,I-1), 1, X21(I,I), 1 )
+               CALL CAXPBY( M-P-I+1, CMPLX( -Z2*Z3*Z4*SIN(PHI(I-1)),
+     $                      0.0E0 ), X22(I,I-1), 1,
+     $                      CMPLX( Z2*COS(PHI(I-1)), 0.0E0 ),
+     $                      X21(I,I), 1 )
             END IF
 *
             THETA(I) = ATAN2( SCNRM2( M-P-I+1, X21(I,I), 1 ),
@@ -446,16 +446,15 @@
             END IF
 *
             IF( I .LT. Q ) THEN
-               CALL CSCAL( Q-I, CMPLX( -Z1*Z3*SIN(THETA(I)), 0.0E0 ),
-     $                     X11(I,I+1), LDX11 )
-               CALL CAXPY( Q-I, CMPLX( Z2*Z3*COS(THETA(I)), 0.0E0 ),
-     $                     X21(I,I+1), LDX21, X11(I,I+1), LDX11 )
+               CALL CAXPBY( Q-I, CMPLX( Z2*Z3*COS(THETA(I)), 0.0E0 ),
+     $                      X21(I,I+1), LDX21,
+     $                      CMPLX( -Z1*Z3*SIN(THETA(I)), 0.0E0 ),
+     $                      X11(I,I+1), LDX11 )
             END IF
-            CALL CSCAL( M-Q-I+1, CMPLX( -Z1*Z4*SIN(THETA(I)),
-     $                  0.0E0 ),
-     $                  X12(I,I), LDX12 )
-            CALL CAXPY( M-Q-I+1, CMPLX( Z2*Z4*COS(THETA(I)), 0.0E0 ),
-     $                  X22(I,I), LDX22, X12(I,I), LDX12 )
+            CALL CAXPBY( M-Q-I+1, CMPLX( Z2*Z4*COS(THETA(I)),
+     $                   0.0E0 ), X22(I,I), LDX22,
+     $                   CMPLX( -Z1*Z4*SIN(THETA(I)), 0.0E0 ),
+     $                   X12(I,I), LDX12 )
 *
             IF( I .LT. Q )
      $         PHI(I) = ATAN2( SCNRM2( Q-I, X11(I,I+1), LDX11 ),
@@ -557,19 +556,19 @@
                CALL CSCAL( P-I+1, CMPLX( Z1, 0.0E0 ), X11(I,I),
      $                     LDX11 )
             ELSE
-               CALL CSCAL( P-I+1, CMPLX( Z1*COS(PHI(I-1)), 0.0E0 ),
-     $                     X11(I,I), LDX11 )
-               CALL CAXPY( P-I+1, CMPLX( -Z1*Z3*Z4*SIN(PHI(I-1)),
-     $                     0.0E0 ), X12(I-1,I), LDX12, X11(I,I), LDX11 )
+               CALL CAXPBY( P-I+1, CMPLX( -Z1*Z3*Z4*SIN(PHI(I-1)),
+     $                      0.0E0 ), X12(I-1,I), LDX12,
+     $                      CMPLX( Z1*COS(PHI(I-1)), 0.0E0 ),
+     $                      X11(I,I), LDX11 )
             END IF
             IF( I .EQ. 1 ) THEN
                CALL CSCAL( M-P-I+1, CMPLX( Z2, 0.0E0 ), X21(I,I),
      $                     LDX21 )
             ELSE
-               CALL CSCAL( M-P-I+1, CMPLX( Z2*COS(PHI(I-1)), 0.0E0 ),
-     $                     X21(I,I), LDX21 )
-               CALL CAXPY( M-P-I+1, CMPLX( -Z2*Z3*Z4*SIN(PHI(I-1)),
-     $                     0.0E0 ), X22(I-1,I), LDX22, X21(I,I), LDX21 )
+               CALL CAXPBY( M-P-I+1, CMPLX( -Z2*Z3*Z4*SIN(PHI(I-1)),
+     $                      0.0E0 ), X22(I-1,I), LDX22,
+     $                      CMPLX( Z2*COS(PHI(I-1)), 0.0E0 ),
+     $                      X21(I,I), LDX21 )
             END IF
 *
             THETA(I) = ATAN2( SCNRM2( M-P-I+1, X21(I,I), LDX21 ),
@@ -601,16 +600,15 @@
             CALL CLACGV( M-P-I+1, X21(I,I), LDX21 )
 *
             IF( I .LT. Q ) THEN
-               CALL CSCAL( Q-I, CMPLX( -Z1*Z3*SIN(THETA(I)), 0.0E0 ),
-     $                     X11(I+1,I), 1 )
-               CALL CAXPY( Q-I, CMPLX( Z2*Z3*COS(THETA(I)), 0.0E0 ),
-     $                     X21(I+1,I), 1, X11(I+1,I), 1 )
+               CALL CAXPBY( Q-I, CMPLX( Z2*Z3*COS(THETA(I)), 0.0E0 ),
+     $                      X21(I+1,I), 1,
+     $                      CMPLX( -Z1*Z3*SIN(THETA(I)), 0.0E0 ),
+     $                      X11(I+1,I), 1 )
             END IF
-            CALL CSCAL( M-Q-I+1, CMPLX( -Z1*Z4*SIN(THETA(I)),
-     $                  0.0E0 ),
-     $                  X12(I,I), 1 )
-            CALL CAXPY( M-Q-I+1, CMPLX( Z2*Z4*COS(THETA(I)), 0.0E0 ),
-     $                  X22(I,I), 1, X12(I,I), 1 )
+            CALL CAXPBY( M-Q-I+1, CMPLX( Z2*Z4*COS(THETA(I)),
+     $                   0.0E0 ), X22(I,I), 1,
+     $                   CMPLX( -Z1*Z4*SIN(THETA(I)), 0.0E0 ),
+     $                   X12(I,I), 1 )
 *
             IF( I .LT. Q )
      $         PHI(I) = ATAN2( SCNRM2( Q-I, X11(I+1,I), 1 ),
