@@ -455,6 +455,55 @@ void F77_ssbmv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_INT *k, float
 		 *beta, y, *incy );
 }
 
+void F77_sskewsbmv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_INT *k, float *alpha,
+	      float *a, CBLAS_INT *lda, float *x, CBLAS_INT *incx, float *beta,
+	      float *y, CBLAS_INT *incy
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len
+#endif
+) {
+  float *A;
+  CBLAS_INT i,j,irow,jcol,LDA;
+  CBLAS_UPLO uplo;
+
+  get_uplo_type(uplow,&uplo);
+
+  if (*layout == TEST_ROW_MJR) {
+     LDA = *k+1;
+     A   = ( float* )malloc( (*n+*k)*LDA*sizeof( float ) );
+     if (uplo == CblasUpper) {
+        for( i=0; i<*k; i++ ){
+           irow=*k-i;
+           jcol=(*k)-i;
+           for( j=jcol; j<*n; j++ )
+        A[ LDA*(j-jcol)+irow ]=a[ (*lda)*j+i ];
+        }
+        i=*k;
+        irow=*k-i;
+        for( j=0; j<*n; j++ )
+           A[ LDA*j+irow ]=a[ (*lda)*j+i ];
+     }
+     else {
+        i=0;
+        irow=*k-i;
+        for( j=0; j<*n; j++ )
+           A[ LDA*j+irow ]=a[ (*lda)*j+i ];
+        for( i=1; i<*k+1; i++ ){
+           irow=*k-i;
+           jcol=i;
+           for( j=jcol; j<(*n+*k); j++ )
+              A[ LDA*j+irow ]=a[ (*lda)*(j-jcol)+i ];
+        }
+     }
+     API_SUFFIX(cblas_sskewsbmv)(CblasRowMajor, uplo, *n, *k, *alpha, A, LDA, x, *incx,
+		 *beta, y, *incy );
+     free(A);
+   }
+   else
+     API_SUFFIX(cblas_sskewsbmv)(CblasColMajor, uplo, *n, *k, *alpha, a, *lda, x, *incx,
+		 *beta, y, *incy );
+}
+
 void F77_sspmv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, float *alpha, float *ap,
 	      float *x, CBLAS_INT *incx, float *beta, float *y, CBLAS_INT *incy
 #ifdef BLAS_FORTRAN_STRLEN_END

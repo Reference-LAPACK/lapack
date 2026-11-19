@@ -21,6 +21,7 @@ cblas_dsymv     T PUT F FOR NO TEST. SAME COLUMNS.
 cblas_dsbmv     T PUT F FOR NO TEST. SAME COLUMNS.
 cblas_dspmv     T PUT F FOR NO TEST. SAME COLUMNS.
 cblas_dskewsymv T PUT F FOR NO TEST. SAME COLUMNS.
+cblas_dskewsbmv T PUT F FOR NO TEST. SAME COLUMNS.
 cblas_dtrmv     T PUT F FOR NO TEST. SAME COLUMNS.
 cblas_dtbmv     T PUT F FOR NO TEST. SAME COLUMNS.
 cblas_dtpmv     T PUT F FOR NO TEST. SAME COLUMNS.
