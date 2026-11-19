@@ -373,10 +373,14 @@
             IF( .NOT.( VL.LT.TMP1 .AND. VU.GE.TMP1 ) )
      $         M = 0
          END IF
+         IF( WANTZ )
+     $      Q( 1, 1 ) = ONE
          IF( M.EQ.1 ) THEN
             W( 1 ) = TMP1
-            IF( WANTZ )
-     $         Z( 1, 1 ) = ONE
+            IF( WANTZ ) THEN
+               Z( 1, 1 ) = ONE
+               IFAIL( 1 ) = 0
+            END IF
          END IF
          RETURN
       END IF
