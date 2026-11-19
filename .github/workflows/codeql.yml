@@ -10,7 +10,6 @@ on:
   push:
     branches:
     - master
-    - dependabot-and-codeql  # TODO: remove before merging
     paths-ignore:
     - 'DOCS/**'
     - '**.md'
