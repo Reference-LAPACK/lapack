@@ -153,6 +153,7 @@ add_eig_executable(test_ssteds_interfaces test_ssteds_interfaces.f90
 add_eig_executable(xdmdeigtsts ${SDMDEIGTST} ${AEIGTST})
 add_eig_executable(test_sgges3_scaling test_sgges3_scaling.f90)
 add_eig_executable(test_sgesvj_emptsw test_sgesvj_emptsw.f90)
+add_eig_executable(test_ssvd_range_boundaries test_ssvd_range_boundaries.f90)
 endif()
 
 if(BUILD_COMPLEX)
@@ -160,6 +161,7 @@ add_eig_executable(xeigtstc ${CEIGTST} ${SCIGTST} ${AEIGTST})
 add_eig_executable(xdmdeigtstc ${CDMDEIGTST} ${AEIGTST})
 add_eig_executable(test_cgges3_scaling test_cgges3_scaling.f90)
 add_eig_executable(test_cgesvj_emptsw test_cgesvj_emptsw.f90)
+add_eig_executable(test_csvd_range_boundaries test_csvd_range_boundaries.f90)
 endif()
 
 
@@ -185,6 +187,7 @@ add_eig_executable(test_dsteds_interfaces test_dsteds_interfaces.f90
 add_eig_executable(xdmdeigtstd ${DDMDEIGTST} ${AEIGTST})
 add_eig_executable(test_dgges3_scaling test_dgges3_scaling.f90)
 add_eig_executable(test_dgesvj_emptsw test_dgesvj_emptsw.f90)
+add_eig_executable(test_dsvd_range_boundaries test_dsvd_range_boundaries.f90)
 endif()
 
 if(BUILD_COMPLEX16)
@@ -193,4 +196,5 @@ add_eig_executable(xdmdeigtstz ${ZDMDEIGTST} ${AEIGTST})
 add_eig_executable(test_wq_zrwork test_wq_rwork.f)
 add_eig_executable(test_zgges3_scaling test_zgges3_scaling.f90)
 add_eig_executable(test_zgesvj_emptsw test_zgesvj_emptsw.f90)
+add_eig_executable(test_zsvd_range_boundaries test_zsvd_range_boundaries.f90)
 endif()

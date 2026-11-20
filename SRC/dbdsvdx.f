@@ -327,7 +327,7 @@
             NS = 1
             S( 1 ) = ABS( D( 1 ) )
          ELSE
-            IF( VL.LT.ABS( D( 1 ) ) .AND. VU.GE.ABS( D( 1 ) ) ) THEN
+            IF( VL.LE.ABS( D( 1 ) ) .AND. VU.GT.ABS( D( 1 ) ) ) THEN
                NS = 1
                S( 1 ) = ABS( D( 1 ) )
             END IF

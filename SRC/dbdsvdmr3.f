@@ -399,7 +399,7 @@
             NS = 1
             S( 1 ) = SVAL
          ELSE
-            IF( VL.LT.SVAL .AND. VU.GE.SVAL ) THEN
+            IF( VL.LE.SVAL .AND. VU.GT.SVAL ) THEN
                NS = 1
                S( 1 ) = SVAL
             END IF

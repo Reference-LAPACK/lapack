@@ -89,7 +89,7 @@
 *> \verbatim
 *>          RANGE is CHARACTER*1
 *>          = 'A': all singular values will be found.
-*>          = 'V': all singular values in the half-open interval (VL,VU]
+*>          = 'V': all singular values in the half-open interval [VL,VU)
 *>                 will be found.
 *>          = 'I': the IL-th through IU-th singular values will be found.
 *> \endverbatim
