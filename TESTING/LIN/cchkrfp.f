@@ -78,10 +78,10 @@
 *     ..
 *     .. Local Scalars ..
       LOGICAL            FATAL, TSTERR
-      INTEGER            VERS_MAJOR, VERS_MINOR, VERS_PATCH
+      INTEGER            VERS_MAJOR, VERS_MINOR, VERS_PATCH, OUT_LEN
       INTEGER            I, NN, NNS, NNT
       REAL               EPS, S1, S2, THRESH
-
+      CHARACTER*30       LIBNAME
 *     ..
 *     .. Local Arrays ..
       INTEGER            NVAL( MAXIN ), NSVAL( MAXIN ), NTVAL( NTYPES )
@@ -112,6 +112,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ILAVER, CDRVRFP, CDRVRF1, CDRVRF2, CDRVRF3,
      +                   SET_LAPACK_XERBLA, XER_REPLACE,
+     +                   GET_LAPACK_LIBNAME,
      +                   CDRVRF4, CERRRFP
       INTERFACE
         SUBROUTINE XERBLA_INTERFACE(SRNAME, INFO)
@@ -140,8 +141,10 @@
 *
 *     Report LAPACK version tag (e.g. LAPACK-3.2.0)
 *
+      CALL GET_LAPACK_LIBNAME( LIBNAME, OUT_LEN )
       CALL ILAVER( VERS_MAJOR, VERS_MINOR, VERS_PATCH )
-      WRITE( NOUT, FMT = 9994 ) VERS_MAJOR, VERS_MINOR, VERS_PATCH
+      WRITE( NOUT, FMT = 9994 ) LIBNAME(1:OUT_LEN-1),
+     $    VERS_MAJOR, VERS_MINOR, VERS_PATCH
 *
 *     Read the values of N
 *
@@ -293,7 +296,7 @@
  9995 FORMAT( ' !! Invalid input value: ', A4, '=', I6, '; must be <=',
      $      I6 )
  9994 FORMAT( /  ' Tests of the COMPLEX LAPACK RFP routines ',
-     $      / ' LAPACK VERSION ', I1, '.', I2, '.', I1,
+     $      / ' ', A, ' VERSION ', I0, '.', I0, '.', I0,
      $      / / ' The following parameter values will be used:' )
  9993 FORMAT( 4X, A4, ':  ', 10I6, / 11X, 10I6 )
  9992 FORMAT( / ' Routines pass computational tests if test ratio is ',

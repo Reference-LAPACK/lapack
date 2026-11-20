@@ -28,12 +28,17 @@
 *  -- LAPACK is a software package provided by Univ. of Tennessee,    --
 *  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
 *
-      INTEGER MAJOR, MINOR, PATCH
+      CHARACTER*30 LIBNAME
+      INTEGER MAJOR, MINOR, PATCH, OUT_LEN
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL ILAVER
+      EXTERNAL ILAVER, GET_LAPACK_LIBNAME
 *
+      CALL GET_LAPACK_LIBNAME ( LIBNAME, OUT_LEN )
       CALL ILAVER ( MAJOR, MINOR, PATCH )
-      WRITE(*,*) "LAPACK ",MAJOR,".",MINOR,".",PATCH
+      WRITE ( *, FMT = 9972 ) LIBNAME(1:OUT_LEN-1),
+     $    MAJOR, MINOR, PATCH
+*
+ 9972 FORMAT( A, ' version ', I0, '.', I0, '.', I0 )
 *
       END
