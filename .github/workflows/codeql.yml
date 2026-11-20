@@ -1,0 +1,97 @@
+name: CodeQL
+
+# Static analysis (SAST) with CodeQL. Results appear under Security > Code
+# scanning, and on pull requests as annotations on the changed lines.
+#
+# CodeQL has no Fortran support, so this covers the C code (CBLAS and
+# LAPACKE), the Python scripts and the workflows themselves.
+
+on:
+  push:
+    branches:
+    - master
+    paths-ignore:
+    - 'DOCS/**'
+    - '**.md'
+    - '**README'
+  pull_request:
+    paths-ignore:
+    - 'DOCS/**'
+    - '**.md'
+    - '**README'
+  # Rerun weekly so new CodeQL queries are applied to unchanged code.
+  schedule:
+  - cron: '17 4 * * 1'
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  analyze:
+    name: analyze (${{ matrix.language }})
+    runs-on: ubuntu-24.04
+
+    permissions:
+      # Needed to upload the results to code scanning.
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        # C has to be built so CodeQL can see each compiler call. Python and
+        # the workflow files are analyzed from source.
+        - language: c-cpp
+          build-mode: manual
+        - language: python
+          build-mode: none
+        - language: actions
+          build-mode: none
+
+    steps:
+    - name: Checkout LAPACK
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+      with:
+        languages: ${{ matrix.language }}
+        build-mode: ${{ matrix.build-mode }}
+        queries: security-extended
+
+    # Only the C libraries are built: CBLAS and LAPACKE link against the
+    # system BLAS and LAPACK, so the Fortran sources are not compiled. This
+    # is the same configuration as the cblas-lapacke-without-fortran-compiler
+    # job in special.yml.
+    - name: Install BLAS and LAPACK
+      if: matrix.language == 'c-cpp'
+      run: |
+        sudo apt update
+        sudo apt install -y liblapack-dev libblas-dev
+
+    - name: Configure CMake
+      if: matrix.language == 'c-cpp'
+      run: >
+        cmake -B build -G Ninja
+        -D CMAKE_BUILD_TYPE=Release
+        -D CBLAS:BOOL=ON
+        -D LAPACKE:BOOL=ON
+        -D USE_OPTIMIZED_BLAS:BOOL=ON
+        -D USE_OPTIMIZED_LAPACK:BOOL=ON
+        -D BUILD_TESTING:BOOL=OFF
+        -D LAPACKE_WITH_TMG:BOOL=OFF
+
+    - name: Build
+      if: matrix.language == 'c-cpp'
+      run: cmake --build build --parallel
+
+    - name: Perform CodeQL analysis
+      uses: github/codeql-action/analyze@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+      with:
+        category: /language:${{ matrix.language }}
