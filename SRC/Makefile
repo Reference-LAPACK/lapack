@@ -80,7 +80,7 @@ SCLAUX = \
    sbdsqr.o sdisna.o slabad.o slacpy.o sladiv.o slae2.o  slaebz.o \
    slaed0.o slaed1.o slaed2.o slaed3.o slaed4.o slaed5.o slaed6.o \
    slaed7.o slaed8.o slaed9.o slaeda.o slaev2.o slagtf.o \
-   slagts.o slamrg.o slanst.o \
+   slagts.o slagtsi.o slamrg.o slanst.o \
    slapy2.o slapy3.o slarnv.o \
    slarra.o slarrb.o slarrc.o slarrd.o slarre.o slarrf.o slarrj.o \
    slarrk.o slarrr.o slaneg.o \
@@ -103,7 +103,7 @@ DZLAUX = \
    dbdsqr.o ddisna.o dlabad.o dlacpy.o dladiv.o dlae2.o  dlaebz.o \
    dlaed0.o dlaed1.o dlaed2.o dlaed3.o dlaed4.o dlaed5.o dlaed6.o \
    dlaed7.o dlaed8.o dlaed9.o dlaeda.o dlaev2.o dlagtf.o \
-   dlagts.o dlamrg.o dlanst.o \
+   dlagts.o dlagtsi.o dlamrg.o dlanst.o \
    dlapy2.o dlapy3.o dlarnv.o \
    dlarra.o dlarrb.o dlarrc.o dlarrd.o dlarre.o dlarrf.o dlarrj.o \
    dlarrk.o dlarrr.o dlaneg.o \
