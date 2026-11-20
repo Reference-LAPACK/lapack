@@ -72,7 +72,7 @@ lapack_int API_SUFFIX(LAPACKE_dgesvdmr3)( int matrix_layout, char jobu, char job
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_0;
     }
-    iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * MAX(1,(12*MIN(m,n))) );
+    iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * MAX(1,(24*MIN(m,n))) );
     if( iwork == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_1;

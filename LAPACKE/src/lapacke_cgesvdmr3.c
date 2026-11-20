@@ -45,7 +45,7 @@ lapack_int API_SUFFIX(LAPACKE_cgesvdmr3)( int matrix_layout, char jobu, char job
     lapack_complex_float* work = NULL;
     lapack_complex_float work_query;
     float* rwork = NULL;
-    lapack_int lrwork = MAX(1, MIN(m,n)*(MIN(m,n)*2+15*MIN(m,n)));
+    lapack_int lrwork = MAX(1, 7*MIN(m,n)*MIN(m,n)+41*MIN(m,n));
     lapack_int* iwork = NULL;
     lapack_int i;
     if( matrix_layout != LAPACK_COL_MAJOR && matrix_layout != LAPACK_ROW_MAJOR ) {
@@ -80,7 +80,7 @@ lapack_int API_SUFFIX(LAPACKE_cgesvdmr3)( int matrix_layout, char jobu, char job
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_1;
     }
-    iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * MAX(1,(12*MIN(m,n))) );
+    iwork = (lapack_int*)LAPACKE_malloc( sizeof(lapack_int) * MAX(1,(24*MIN(m,n))) );
     if( iwork == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_2;

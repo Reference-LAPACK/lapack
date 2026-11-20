@@ -61,7 +61,7 @@
 *  M      (output) INTEGER      Number of singular values found (= N).
 *  WORK   (workspace) DOUBLE (LWORK).  LWORK >= max(1, 2*N*N + 34*N).
 *  LWORK  (input) INTEGER       -1 => workspace query.
-*  IWORK  (workspace) INTEGER (LIWORK).  LIWORK >= max(1, 20*N).
+*  IWORK  (workspace) INTEGER (LIWORK).  LIWORK >= max(1, 24*N).
 *  LIWORK (input) INTEGER       -1 => workspace query.
 *  INFO   (output) INTEGER  0 ok; <0 illegal arg; 1 DLASQ1; 2 DLARRV_TGK.
 *
