@@ -710,7 +710,7 @@
             IF ( RCOND_TMP .LT. ILLRCOND_THRESH ) THEN
                ERR_BNDS_COMP( J, LA_LINRX_ERR_I ) = 1.0D+0
                ERR_BNDS_COMP( J, LA_LINRX_TRUST_I ) = 0.0D+0
-               IF ( PARAMS( LA_LINRX_CWISE_I ) .EQ. 1.0D+0
+               IF ( .NOT. IGNORE_CWISE
      $              .AND. INFO.LT.N + J ) INFO = N + J
             ELSE IF ( ERR_BNDS_COMP( J, LA_LINRX_ERR_I )
      $              .LT. ERR_LBND ) THEN
