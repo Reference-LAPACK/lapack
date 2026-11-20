@@ -111,7 +111,7 @@
 *> Path name(s)  Types    Test routine
 *>
 *> CHS or NEP      21     CCHKHS
-*> CST or SEP      21     CCHKST (routines)
+*> CST or SEP      23     CCHKST (routines)
 *>                 18     CDRVST (drivers)
 *> CBD or SVD      16     CCHKBD (routines)
 *>                  5     CDRVBD (drivers)
@@ -1887,7 +1887,7 @@
 *           NBMIN = minimum block size
 *           NX    = crossover point
 *
-         MAXTYP = 22
+         MAXTYP = 23
          NTYPES = MIN( MAXTYP, NTYPES )
          CALL ALAREQ( C3, NTYPES, DOTYPE, MAXTYP, NIN, NOUT )
          CALL XLAENV( 1, 1 )
