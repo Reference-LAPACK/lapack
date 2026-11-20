@@ -210,24 +210,25 @@
 *     .. Local Scalars ..
       INTEGER            B1, BLKSIZ, BN, GPIND, I, IINFO, INDRV1,
      $                   INDRV2, INDRV3, INDRV4, INDRV5, ITS, J, J1,
-     $                   JBLK, JMAX, JR, NBLK, NRMCHK
+     $                   JBLK, JMAX, JR, NBLK, NRMCHK, BEXP
       REAL               CTR, EPS, EPS1, NRM, ONENRM, ORTOL, PERTOL,
-     $                   SCL, SEP, STPCRT, TOL, XJ, XJM
+     $                   SCL, SEP, STPCRT, TOL, XJ, XJM,
+     $                   SOLSCL, AMAX, RMIN, RMAX
 *     ..
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 )
 *     ..
 *     .. External Functions ..
       INTEGER            ISAMAX
-      REAL               SLAMCH, SNRM2
-      EXTERNAL           ISAMAX, SLAMCH, SNRM2
+      REAL               SLAMCH, SNRM2, SLANST
+      EXTERNAL           ISAMAX, SLAMCH, SNRM2, SLANST
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           SCOPY, SLAGTF, SLAGTS, SLARNV, SSCAL,
-     $                   XERBLA
+      EXTERNAL           SCOPY, SLAGTF, SLAGTSI, SLARNV,
+     $                   SLASCL, XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, CMPLX, MAX, REAL, SQRT
+      INTRINSIC          ABS, CMPLX, EXPONENT, MAX, REAL, SCALE, SQRT
 *     ..
 *     .. Executable Statements ..
 *
@@ -277,6 +278,8 @@
 *     Get machine constants.
 *
       EPS = SLAMCH( 'Precision' )
+      RMIN = SQRT( SLAMCH( 'Safe minimum' ) / EPS )
+      RMAX = ONE / RMIN
 *
 *     Initialize seed for random number generator SLARNV.
 *
@@ -312,12 +315,26 @@
 *
 *        Compute reorthogonalization criterion and stopping criterion.
 *
-         ONENRM = ABS( D( B1 ) ) + ABS( E( B1 ) )
-         ONENRM = MAX( ONENRM, ABS( D( BN ) )+ABS( E( BN-1 ) ) )
-         DO 50 I = B1 + 1, BN - 1
-            ONENRM = MAX( ONENRM, ABS( D( I ) )+ABS( E( I-1 ) )+
-     $               ABS( E( I ) ) )
-   50    CONTINUE
+*        Use a common power of the radix for extremely scaled blocks.
+*        This leaves eigenvectors invariant and keeps the row sums and
+*        the desired right hand side norm in a representable range.
+*
+         AMAX = SLANST( 'M', BLKSIZ, D( B1 ), E( B1 ) )
+         BEXP = 0
+         IF( AMAX.GT.RMAX / REAL( BLKSIZ ) .OR.
+     $       ( AMAX.GT.ZERO .AND. AMAX.LT.RMIN ) )
+     $      BEXP = -EXPONENT( AMAX )
+         IF( BEXP.EQ.0 ) THEN
+            ONENRM = SLANST( '1', BLKSIZ, D( B1 ), E( B1 ) )
+         ELSE
+            ONENRM = ZERO
+            DO I = B1, BN
+               SCL = ABS( SCALE( D( I ), BEXP ) )
+               IF( I.GT.B1 ) SCL = SCL + ABS( SCALE( E( I-1 ), BEXP ) )
+               IF( I.LT.BN ) SCL = SCL + ABS( SCALE( E( I ), BEXP ) )
+               ONENRM = MAX( ONENRM, SCL )
+            END DO
+         END IF
          ORTOL = ODM3*ONENRM
 *
          STPCRT = SQRT( ODM1 / REAL( BLKSIZ ) )
@@ -341,6 +358,8 @@
                GO TO 140
             END IF
 *
+            IF( BEXP.NE.0 ) XJ = SCALE( XJ, BEXP )
+*
 *           If eigenvalues j and j-1 are too close, add a relatively
 *           small perturbation.
 *
@@ -361,9 +380,20 @@
 *
 *           Copy the matrix T so it won't be destroyed in factorization.
 *
-            CALL SCOPY( BLKSIZ, D( B1 ), 1, WORK( INDRV4+1 ), 1 )
-            CALL SCOPY( BLKSIZ-1, E( B1 ), 1, WORK( INDRV2+2 ), 1 )
-            CALL SCOPY( BLKSIZ-1, E( B1 ), 1, WORK( INDRV3+1 ), 1 )
+            IF( BEXP.EQ.0 ) THEN
+               CALL SCOPY( BLKSIZ, D( B1 ), 1, WORK( INDRV4+1 ), 1 )
+               CALL SCOPY( BLKSIZ-1, E( B1 ), 1, WORK( INDRV2+2 ), 1 )
+               CALL SCOPY( BLKSIZ-1, E( B1 ), 1, WORK( INDRV3+1 ), 1 )
+            ELSE
+               DO I = 1, BLKSIZ
+                  WORK( INDRV4+I ) = SCALE( D( B1+I-1 ), BEXP )
+               END DO
+               DO I = 1, BLKSIZ - 1
+                  SCL = SCALE( E( B1+I-1 ), BEXP )
+                  WORK( INDRV2+I+1 ) = SCL
+                  WORK( INDRV3+I ) = SCL
+               END DO
+            END IF
 *
 *           Compute LU factors with partial pivoting  ( PT = LU )
 *
@@ -383,17 +413,22 @@
 *           Normalize and scale the righthand side vector Pb.
 *
             JMAX = ISAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
+            IF( WORK( INDRV1+JMAX ).EQ.ZERO ) THEN
+               CALL SLARNV( 2, ISEED, BLKSIZ, WORK( INDRV1+1 ) )
+               JMAX = ISAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
+            END IF
             SCL = REAL( BLKSIZ )*ONENRM*MAX( EPS,
-     $            ABS( WORK( INDRV4+BLKSIZ ) ) ) /
-     $            ABS( WORK( INDRV1+JMAX ) )
-            CALL SSCAL( BLKSIZ, SCL, WORK( INDRV1+1 ), 1 )
+     $            ABS( WORK( INDRV4+BLKSIZ ) ) )
+            CALL SLASCL( 'G', 0, 0, ABS( WORK( INDRV1+JMAX ) ),
+     $                   SCL, BLKSIZ, 1, WORK( INDRV1+1 ), BLKSIZ,
+     $                   IINFO )
 *
-*           Solve the system LU = Pb.
+*           Solve the shifted tridiagonal system with a scaled RHS.
 *
-            CALL SLAGTS( -1, BLKSIZ, WORK( INDRV4+1 ),
+            CALL SLAGTSI( BLKSIZ, WORK( INDRV4+1 ),
      $                   WORK( INDRV2+2 ),
      $                   WORK( INDRV3+1 ), WORK( INDRV5+1 ), IWORK,
-     $                   WORK( INDRV1+1 ), TOL, IINFO )
+     $                   WORK( INDRV1+1 ), TOL, SOLSCL )
 *
 *           Reorthogonalize by modified Gram-Schmidt if eigenvalues are
 *           close enough.
@@ -425,7 +460,7 @@
 *           Continue for additional iterations after norm reaches
 *           stopping criterion.
 *
-            IF( NRM.LT.STPCRT )
+            IF( NRM.EQ.ZERO .OR. NRM.LT.STPCRT*SOLSCL )
      $         GO TO 70
             NRMCHK = NRMCHK + 1
             IF( NRMCHK.LT.EXTRA+1 )
@@ -443,11 +478,13 @@
 *           Accept iterate as jth eigenvector.
 *
   130       CONTINUE
-            SCL = ONE / SNRM2( BLKSIZ, WORK( INDRV1+1 ), 1 )
-            JMAX = ISAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
-            IF( WORK( INDRV1+JMAX ).LT.ZERO )
-     $         SCL = -SCL
-            CALL SSCAL( BLKSIZ, SCL, WORK( INDRV1+1 ), 1 )
+            NRM = SNRM2( BLKSIZ, WORK( INDRV1+1 ), 1 )
+            IF( NRM.NE.ZERO ) THEN
+               JMAX = ISAMAX( BLKSIZ, WORK( INDRV1+1 ), 1 )
+               SCL = SIGN( ONE, WORK( INDRV1+JMAX ) )
+               CALL SLASCL( 'G', 0, 0, NRM, SCL, BLKSIZ, 1,
+     $                      WORK( INDRV1+1 ), BLKSIZ, IINFO )
+            END IF
   140       CONTINUE
             DO 150 I = 1, N
                Z( I, J ) = CZERO
