@@ -125,7 +125,7 @@ jobs:
       # Uploaded even when the tests failed; that is when the results
       # are needed most.  The test summary below links to the artifact.
       if: ${{ !cancelled() }}
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       with:
         name: test-results-openmp-${{ matrix.toolchain.os }}-${{ matrix.lib_type }}
         path: |
@@ -139,7 +139,7 @@ jobs:
       # test is exactly what the test analytics report is for.
       if: ${{ !cancelled() }}
       continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
-      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         override_branch: ${{ env.CODECOV_OVERRIDE_BRANCH }}
@@ -216,7 +216,7 @@ jobs:
     - name: Upload test results
       id: upload-test-results
       if: ${{ !cancelled() }}
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       with:
         name: test-results-extended-api-${{ matrix.lib_type }}
         path: |
@@ -230,7 +230,7 @@ jobs:
       # test is exactly what the test analytics report is for.
       if: ${{ !cancelled() }}
       continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
-      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         override_branch: ${{ env.CODECOV_OVERRIDE_BRANCH }}
@@ -387,7 +387,7 @@ jobs:
     - name: Upload valgrind logs
       id: upload-valgrind-logs
       if: ${{ !cancelled() }}
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       with:
         name: valgrind-logs
         path: |
@@ -402,7 +402,7 @@ jobs:
     - name: Upload memory check results to Codecov
       if: ${{ !cancelled() }}
       continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
-      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         override_branch: ${{ env.CODECOV_OVERRIDE_BRANCH }}
@@ -594,7 +594,7 @@ jobs:
     - name: Upload BLAS coverage report to Codecov
       if: ${{ !cancelled() }}
       continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
-      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         override_branch: ${{ env.CODECOV_OVERRIDE_BRANCH }}
@@ -610,7 +610,7 @@ jobs:
     - name: Upload CBLAS coverage report to Codecov
       if: ${{ !cancelled() }}
       continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
-      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         override_branch: ${{ env.CODECOV_OVERRIDE_BRANCH }}
@@ -624,7 +624,7 @@ jobs:
     - name: Upload LAPACK coverage report to Codecov
       if: ${{ !cancelled() }}
       continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
-      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         override_branch: ${{ env.CODECOV_OVERRIDE_BRANCH }}
@@ -638,7 +638,7 @@ jobs:
     - name: Upload LAPACK testing coverage report to Codecov
       if: ${{ !cancelled() }}
       continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
-      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         override_branch: ${{ env.CODECOV_OVERRIDE_BRANCH }}
@@ -652,7 +652,7 @@ jobs:
     - name: Upload LAPACKE coverage report to Codecov
       if: ${{ !cancelled() }}
       continue-on-error: ${{ secrets.CODECOV_TOKEN == '' }}
-      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+      uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         override_branch: ${{ env.CODECOV_OVERRIDE_BRANCH }}
