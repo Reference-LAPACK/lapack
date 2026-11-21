@@ -678,7 +678,7 @@
      $                              LDU,
      $                      V, LDV, RDUMMY, -1, IERR )
                        LWRK_DGESVD2 = INT( RDUMMY(1) )
-                       CALL DORMQR( 'R', 'C', N, N, N/2, U, LDU,
+                       CALL DORMQR( 'R', 'T', N, N, N/2, U, LDU,
      $                              RDUMMY,
      $                      V, LDV, RDUMMY, -1, IERR )
                        LWRK_DORMQR2 = INT( RDUMMY(1) )
@@ -1245,7 +1245,7 @@
                   CALL DLASET('A',NR,N-NR,ZERO,ZERO,V(1,NR+1),LDV)
                   CALL DLASET('A',N-NR,N-NR,ZERO,ONE,V(NR+1,NR+1),
      $                         LDV)
-                  CALL DORMQR('R','C', N, N, NR, U(1,NR+1), LDU,
+                  CALL DORMQR('R','T', N, N, NR, U(1,NR+1), LDU,
      $                 WORK(N+1),V,LDV,WORK(N+NR+1),LWORK-N-NR,IERR)
                   CALL DLAPMT( .FALSE., N, N, V, LDV, IWORK )
 *                 .. assemble the left singular vector matrix U of dimensions
