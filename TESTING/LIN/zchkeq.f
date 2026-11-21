@@ -21,7 +21,8 @@
 *>
 *> \verbatim
 *>
-*> ZCHKEQ tests ZGEEQU, ZGBEQU, ZPOEQU, ZPPEQU and ZPBEQU
+*> ZCHKEQ tests ZGEEQU, ZGBEQU, ZPOEQU, ZPPEQU and ZPBEQU, and the
+*> ZGEEQUB and ZGBEQUB routines at extreme magnitudes.
 *> \endverbatim
 *
 *  Arguments:
@@ -80,12 +81,13 @@
 *     .. Local Scalars ..
       LOGICAL            OK
       CHARACTER*3        PATH
-      INTEGER            I, INFO, J, KL, KU, M, N
-      DOUBLE PRECISION   CCOND, EPS, NORM, RATIO, RCMAX, RCMIN, RCOND
+      INTEGER            I, INFO, J, K, KL, KU, M, N
+      DOUBLE PRECISION   CCOND, EPS, NORM, RATIO, RCMAX, RCMIN, RCOND,
+     $                   BIGNUM, SMLNUM
 *     ..
 *     .. Local Arrays ..
-      DOUBLE PRECISION   C( NSZ ), POW( NPOW ), R( NSZ ), RESLTS( 5 ),
-     $                   RPOW( NPOW )
+      DOUBLE PRECISION   C( NSZ ), POW( NPOW ), R( NSZ ), RESLTS( 7 ),
+     $                   RPOW( NPOW ), XS( 3 )
       COMPLEX*16         A( NSZ, NSZ ), AB( NSZB, NSZ ), AP( NSZP )
 *     ..
 *     .. External Functions ..
@@ -93,7 +95,8 @@
       EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
-      EXTERNAL           ZGBEQU, ZGEEQU, ZPBEQU, ZPOEQU, ZPPEQU
+      EXTERNAL           ZGBEQU, ZGBEQUB, ZGEEQU,
+     $                   ZGEEQUB, ZPBEQU, ZPOEQU, ZPPEQU
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -104,7 +107,7 @@
       PATH( 2: 3 ) = 'EQ'
 *
       EPS = DLAMCH( 'P' )
-      DO 10 I = 1, 5
+      DO 10 I = 1, 7
          RESLTS( I ) = ZERO
    10 CONTINUE
       DO 20 I = 1, NPOW
@@ -454,10 +457,122 @@
   450    CONTINUE
   460 CONTINUE
       RESLTS( 5 ) = RESLTS( 5 ) / EPS
+*
+*     Test ZGEEQUB and ZGBEQUB with row and column maxima at the
+*     extremes of the range: a subnormal one that is a power of the
+*     radix below SMLNUM, one just below SMLNUM, and one near overflow.
+*     The power-of-the-radix scale factors must neither be reported as
+*     zero nor overflow.
+*
+      SMLNUM = DLAMCH( 'S' )
+      BIGNUM = ONE / SMLNUM
+      XS( 1 ) = SMLNUM*EPS
+      XS( 2 ) = SMLNUM / 4
+      XS( 3 ) = DLAMCH( 'O' )
+      DO 490 K = 1, 3
+         IF( XS( K ).LE.ZERO ) GO TO 490
+*
+*        Row test: A = diag( 1, XS( K ), 1 ).  Expect R( 2 ) = BIGNUM
+*        (the scale factor is clamped to SMLNUM) for a tiny entry and a
+*        finite AMAX of at least XS( K ) / 4 for a huge one.
+*
+         DO 470 J = 1, 3
+            DO 465 I = 1, 3
+               A( I, J ) = ZERO
+  465       CONTINUE
+            AB( 1, J ) = ZERO
+  470    CONTINUE
+         A( 1, 1 ) = ONE
+         A( 2, 2 ) = XS( K )
+         A( 3, 3 ) = ONE
+         DO 480 J = 1, 3
+            AB( 1, J ) = A( J, J )
+  480    CONTINUE
+         CALL ZGEEQUB( 3, 3, A, NSZ, R, C, RCOND, CCOND, NORM, INFO )
+         IF( INFO.NE.0 .OR. .NOT.( NORM.GT.ZERO ) .OR.
+     $       NORM.GT.DLAMCH( 'O' ) .OR.
+     $       ( K.LT.3 .AND. R( 2 ).NE.BIGNUM ) .OR.
+     $       ( K.EQ.3 .AND. NORM.LT.XS( K ) / 4 ) ) RESLTS( 6 ) = ONE
+         CALL ZGBEQUB( 3, 3, 0, 0, AB, NSZB, R, C, RCOND, CCOND,
+     $                  NORM, INFO )
+         IF( INFO.NE.0 .OR. .NOT.( NORM.GT.ZERO ) .OR.
+     $       NORM.GT.DLAMCH( 'O' ) .OR.
+     $       ( K.LT.3 .AND. R( 2 ).NE.BIGNUM ) .OR.
+     $       ( K.EQ.3 .AND. NORM.LT.XS( K ) / 4 ) ) RESLTS( 7 ) = ONE
+*
+*        Column test: A = [ 1 XS( K ); 1 0 ].  Only the second column
+*        is tiny, so C( 2 ) = BIGNUM is expected for a tiny entry.
+*
+         A( 1, 1 ) = ONE
+         A( 2, 1 ) = ONE
+         A( 1, 2 ) = XS( K )
+         A( 2, 2 ) = ZERO
+         DO 500 J = 1, 2
+            DO 495 I = 1, 3
+               AB( I, J ) = ZERO
+  495       CONTINUE
+  500    CONTINUE
+         AB( 2, 1 ) = ONE
+         AB( 3, 1 ) = ONE
+         AB( 1, 2 ) = XS( K )
+         CALL ZGEEQUB( 2, 2, A, NSZ, R, C, RCOND, CCOND, NORM, INFO )
+         IF( INFO.NE.0 .OR. .NOT.( NORM.GT.ZERO ) .OR.
+     $       NORM.GT.DLAMCH( 'O' ) .OR.
+     $       ( K.LT.3 .AND. C( 2 ).NE.BIGNUM ) ) RESLTS( 6 ) = ONE
+         CALL ZGBEQUB( 2, 2, 1, 1, AB, NSZB, R, C, RCOND, CCOND,
+     $                  NORM, INFO )
+         IF( INFO.NE.0 .OR. .NOT.( NORM.GT.ZERO ) .OR.
+     $       NORM.GT.DLAMCH( 'O' ) .OR.
+     $       ( K.LT.3 .AND. C( 2 ).NE.BIGNUM ) ) RESLTS( 7 ) = ONE
+  490 CONTINUE
+*
+*     A 1-by-1 matrix with a subnormal entry: AMAX is the largest scale
+*     factor and must be the rounded entry, not raised to SMLNUM.
+*
+      DO 520 K = 1, 2
+         IF( XS( K ).LE.ZERO .OR. XS( K ).GE.SMLNUM ) GO TO 520
+         A( 1, 1 ) = XS( K )
+         CALL ZGEEQUB( 1, 1, A, NSZ, R, C, RCOND, CCOND, NORM, INFO )
+         IF( INFO.NE.0 .OR. .NOT.( NORM.GT.ZERO ) .OR.
+     $       NORM.GE.SMLNUM ) RESLTS( 6 ) = ONE
+         AB( 1, 1 ) = XS( K )
+         CALL ZGBEQUB( 1, 1, 0, 0, AB, NSZB, R, C, RCOND, CCOND,
+     $                   NORM, INFO )
+         IF( INFO.NE.0 .OR. .NOT.( NORM.GT.ZERO ) .OR.
+     $       NORM.GE.SMLNUM ) RESLTS( 7 ) = ONE
+  520 CONTINUE
+*
+*     A finite matrix with an entry whose CABS1, |re| + |im|, overflows.
+*     The row and column holding it must be scaled down, not reported
+*     as zero or scaled up.
+*
+      A( 1, 1 ) = DCMPLX( XS( 3 ), XS( 3 ) )
+      A( 2, 1 ) = ONE
+      A( 1, 2 ) = ONE
+      A( 2, 2 ) = ONE
+      CALL ZGEEQUB( 2, 2, A, NSZ, R, C, RCOND, CCOND, NORM, INFO )
+      IF( INFO.NE.0 .OR. .NOT.( NORM.GT.ZERO ) .OR.
+     $    NORM.GT.XS( 3 ) .OR. R( 1 ).GE.ONE .OR. C( 1 ).GE.ONE )
+     $   RESLTS( 6 ) = ONE
+      AB( 1, 1 ) = ZERO
+      AB( 2, 1 ) = A( 1, 1 )
+      AB( 3, 1 ) = ONE
+      AB( 1, 2 ) = ONE
+      AB( 2, 2 ) = ONE
+      AB( 3, 2 ) = ZERO
+      CALL ZGBEQUB( 2, 2, 1, 1, AB, NSZB, R, C, RCOND, CCOND, NORM,
+     $                INFO )
+      IF( INFO.NE.0 .OR. .NOT.( NORM.GT.ZERO ) .OR.
+     $    NORM.GT.XS( 3 ) .OR. R( 1 ).GE.ONE .OR. C( 1 ).GE.ONE )
+     $   RESLTS( 7 ) = ONE
+      RESLTS( 6 ) = RESLTS( 6 ) / EPS
+      RESLTS( 7 ) = RESLTS( 7 ) / EPS
       OK = ( RESLTS( 1 ).LE.THRESH ) .AND.
      $     ( RESLTS( 2 ).LE.THRESH ) .AND.
      $     ( RESLTS( 3 ).LE.THRESH ) .AND.
      $     ( RESLTS( 4 ).LE.THRESH ) .AND. ( RESLTS( 5 ).LE.THRESH )
+     $     .AND. ( RESLTS( 6 ).LE.THRESH ) .AND.
+     $     ( RESLTS( 7 ).LE.THRESH )
       WRITE( NOUT, FMT = * )
       IF( OK ) THEN
          WRITE( NOUT, FMT = 9999 )PATH
@@ -472,6 +587,10 @@
      $      WRITE( NOUT, FMT = 9995 )RESLTS( 4 ), THRESH
          IF( RESLTS( 5 ).GT.THRESH )
      $      WRITE( NOUT, FMT = 9994 )RESLTS( 5 ), THRESH
+         IF( RESLTS( 6 ).GT.THRESH )
+     $      WRITE( NOUT, FMT = 9993 )RESLTS( 6 ), THRESH
+         IF( RESLTS( 7 ).GT.THRESH )
+     $      WRITE( NOUT, FMT = 9992 )RESLTS( 7 ), THRESH
       END IF
  9999 FORMAT( 1X, 'All tests for ', A3,
      $      ' routines passed the threshold' )
@@ -484,6 +603,10 @@
  9995 FORMAT( ' ZPPEQU failed test with value ', D10.3, ' exceeding',
      $      ' threshold ', D10.3 )
  9994 FORMAT( ' ZPBEQU failed test with value ', D10.3, ' exceeding',
+     $      ' threshold ', D10.3 )
+ 9993 FORMAT( ' ZGEEQUB failed test with value ', D10.3, ' exceeding',
+     $      ' threshold ', D10.3 )
+ 9992 FORMAT( ' ZGBEQUB failed test with value ', D10.3, ' exceeding',
      $      ' threshold ', D10.3 )
       RETURN
 *
