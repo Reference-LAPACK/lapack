@@ -52,7 +52,7 @@
 *> DSY   10               List types on next line if 0 < NTYPES < 10
 *> DSR   10               List types on next line if 0 < NTYPES < 10
 *> DSK   10               List types on next line if 0 < NTYPES < 10
-*> DSA   10               List types on next line if 0 < NTYPES < 10
+*> DSA   11               List types on next line if 0 < NTYPES < 11
 *> DS2   10               List types on next line if 0 < NTYPES < 10
 *> DSP   10               List types on next line if 0 < NTYPES < 10
 *> DTR   18               List types on next line if 0 < NTYPES < 18
@@ -752,7 +752,7 @@
 *        SA:  symmetric indefinite matrices,
 *             with partial (Aasen's) pivoting algorithm
 *
-         NTYPES = 10
+         NTYPES = 11
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN

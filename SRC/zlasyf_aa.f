@@ -163,20 +163,24 @@
 *     .. Local Scalars ..
       INTEGER            J, K, K1, I1, I2, MJ
       COMPLEX*16         PIV, ALPHA
+      DOUBLE PRECISION   SFMIN
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH
       INTEGER            IZAMAX
-      EXTERNAL           LSAME, IZAMAX
+      EXTERNAL           LSAME, DLAMCH, IZAMAX
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGEMV, ZAXPY, ZSCAL,
-     $                   ZCOPY, ZSWAP, ZLASET
+     $                   ZCOPY, ZRSCL, ZSWAP, ZLASET
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX
+      INTRINSIC          ABS, MAX
 *     ..
 *     .. Executable Statements ..
+*
+      SFMIN = DLAMCH( 'S' )
 *
       J = 1
 *
@@ -323,9 +327,14 @@
 *
             IF( J.LT.(M-1) ) THEN
                IF( A( K, J+1 ).NE.ZERO ) THEN
-                  ALPHA = ONE / A( K, J+1 )
                   CALL ZCOPY( M-J-1, WORK( 3 ), 1, A( K, J+2 ), LDA )
-                  CALL ZSCAL( M-J-1, ALPHA, A( K, J+2 ), LDA )
+                  IF( ABS( A( K, J+1 ) ).GE.SFMIN ) THEN
+                     ALPHA = ONE / A( K, J+1 )
+                     CALL ZSCAL( M-J-1, ALPHA, A( K, J+2 ), LDA )
+                  ELSE
+                     CALL ZRSCL( M-J-1, A( K, J+1 ), A( K, J+2 ),
+     $                           LDA )
+                  END IF
                ELSE
                   CALL ZLASET( 'Full', 1, M-J-1, ZERO, ZERO,
      $                         A( K, J+2 ), LDA)
@@ -474,9 +483,13 @@
 *
             IF( J.LT.(M-1) ) THEN
                IF( A( J+1, K ).NE.ZERO ) THEN
-                  ALPHA = ONE / A( J+1, K )
                   CALL ZCOPY( M-J-1, WORK( 3 ), 1, A( J+2, K ), 1 )
-                  CALL ZSCAL( M-J-1, ALPHA, A( J+2, K ), 1 )
+                  IF( ABS( A( J+1, K ) ).GE.SFMIN ) THEN
+                     ALPHA = ONE / A( J+1, K )
+                     CALL ZSCAL( M-J-1, ALPHA, A( J+2, K ), 1 )
+                  ELSE
+                     CALL ZRSCL( M-J-1, A( J+1, K ), A( J+2, K ), 1 )
+                  END IF
                ELSE
                   CALL ZLASET( 'Full', M-J-1, 1, ZERO, ZERO,
      $                         A( J+2, K ), LDA )

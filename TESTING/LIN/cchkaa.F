@@ -52,7 +52,7 @@
 *> CHE   10               List types on next line if 0 < NTYPES < 10
 *> CHR   10               List types on next line if 0 < NTYPES < 10
 *> CHK   10               List types on next line if 0 < NTYPES < 10
-*> CHA   10               List types on next line if 0 < NTYPES < 10
+*> CHA   11               List types on next line if 0 < NTYPES < 11
 *> CH2   10               List types on next line if 0 < NTYPES < 10
 *> CSA   11               List types on next line if 0 < NTYPES < 10
 *> CS2   11               List types on next line if 0 < NTYPES < 10
@@ -756,7 +756,7 @@
 *        HA:  Hermitian matrices,
 *             Aasen Algorithm
 *
-         NTYPES = 10
+         NTYPES = 11
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN
