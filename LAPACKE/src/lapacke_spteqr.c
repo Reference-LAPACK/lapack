@@ -60,11 +60,9 @@ lapack_int API_SUFFIX(LAPACKE_spteqr)( int matrix_layout, char compz, lapack_int
     }
 #endif
     /* Additional scalars initializations for work arrays */
-    if( API_SUFFIX(LAPACKE_lsame)( compz, 'n' ) ) {
-        lwork = 1;
-    } else {
-        lwork = MAX(1,4*n-4);
-    }
+    /* WORK(4*N) for every compz: with compz = 'n', ?pteqr computes the
+     * eigenvalues with ?lasq1 (through ?bdsqr), which uses all of it. */
+    lwork = MAX(1,4*n);
     /* Allocate memory for working array(s) */
     work = (float*)LAPACKE_malloc( sizeof(float) * lwork );
     if( work == NULL ) {

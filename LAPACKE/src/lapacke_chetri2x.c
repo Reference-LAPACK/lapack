@@ -52,7 +52,8 @@ lapack_int API_SUFFIX(LAPACKE_chetri2x)( int matrix_layout, char uplo, lapack_in
 #endif
     /* Allocate memory for working array(s) */
     work = (lapack_complex_float*)
-        LAPACKE_malloc( sizeof(lapack_complex_float) * MAX(1,n+nb+1)*(+1) );
+        LAPACKE_malloc( sizeof(lapack_complex_float) * MAX(1,n+nb+1) *
+                        MAX(1,nb+3) );
     if( work == NULL ) {
         info = LAPACK_WORK_MEMORY_ERROR;
         goto exit_level_0;

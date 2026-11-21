@@ -87,23 +87,19 @@ lapack_int API_SUFFIX(LAPACKE_ztgsna)( int matrix_layout, char job, char howmny,
         goto exit_level_1;
     }
     lwork = LAPACK_Z2INT( work_query );
-    /* Allocate memory for work arrays */
-    if( API_SUFFIX(LAPACKE_lsame)( job, 'b' ) || API_SUFFIX(LAPACKE_lsame)( job, 'v' ) ) {
-        work = (lapack_complex_double*)
-            LAPACKE_malloc( sizeof(lapack_complex_double) * lwork );
-        if( work == NULL ) {
-            info = LAPACK_WORK_MEMORY_ERROR;
-            goto exit_level_1;
-        }
+    /* Allocate memory for work arrays (?tgsna uses WORK for every job) */
+    work = (lapack_complex_double*)
+        LAPACKE_malloc( sizeof(lapack_complex_double) * lwork );
+    if( work == NULL ) {
+        info = LAPACK_WORK_MEMORY_ERROR;
+        goto exit_level_1;
     }
     /* Call middle-level interface */
     info = API_SUFFIX(LAPACKE_ztgsna_work)( matrix_layout, job, howmny, select, n, a, lda, b,
                                 ldb, vl, ldvl, vr, ldvr, s, dif, mm, m, work,
                                 lwork, iwork );
     /* Release memory and exit */
-    if( API_SUFFIX(LAPACKE_lsame)( job, 'b' ) || API_SUFFIX(LAPACKE_lsame)( job, 'v' ) ) {
-        LAPACKE_free( work );
-    }
+    LAPACKE_free( work );
 exit_level_1:
     if( API_SUFFIX(LAPACKE_lsame)( job, 'b' ) || API_SUFFIX(LAPACKE_lsame)( job, 'v' ) ) {
         LAPACKE_free( iwork );

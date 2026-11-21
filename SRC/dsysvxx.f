@@ -450,7 +450,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is DOUBLE PRECISION array, dimension (4*N)
+*>          WORK is DOUBLE PRECISION array, dimension (5*N)
 *> \endverbatim
 *>
 *> \param[out] IWORK

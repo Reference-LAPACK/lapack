@@ -453,7 +453,7 @@
 *>
 *> \param[out] WORK
 *> \verbatim
-*>          WORK is REAL array, dimension (4*N)
+*>          WORK is REAL array, dimension (5*N)
 *> \endverbatim
 *>
 *> \param[out] IWORK
