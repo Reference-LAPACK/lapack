@@ -166,10 +166,11 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               ONE, ZERO
-      PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0 )
+      REAL               HALF, ONE, ZERO
+      PARAMETER          ( ONE = 1.0E+0, ZERO = 0.0E+0,
+     $                   HALF = 0.5E+0 )
       INTEGER            NTYPES
-      PARAMETER          ( NTYPES = 13 )
+      PARAMETER          ( NTYPES = 14 )
       INTEGER            NTESTS
       PARAMETER          ( NTESTS = 7 )
 *     ..
@@ -181,7 +182,7 @@
      $                   J, K, KL, KU, LDA, MODE, N, NERRS, NFAIL,
      $                   NIMAT, NRHS, NRUN
       REAL               AINVNM, ANORM, COND, DMAX, RCOND, RCONDC
-      REAL               RNAN, RONE
+      REAL               RNAN, RONE, SUBNRM
 *     ..
 *     .. Local Arrays ..
       CHARACTER          UPLOS( 2 )
@@ -191,8 +192,8 @@
 *     ..
 *     .. External Functions ..
       INTEGER            ISAMAX
-      REAL               CLANHT, SCASUM, SGET06
-      EXTERNAL           ISAMAX, CLANHT, SCASUM, SGET06
+      REAL               CLANHT, SCASUM, SGET06, SLAMCH
+      EXTERNAL           ISAMAX, CLANHT, SCASUM, SGET06, SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, CCOPY, CERRGT, CGET04,
@@ -375,6 +376,17 @@
                   RNAN = SQRT( -RONE )
                   D( N ) = RNAN
                END IF
+*
+*              Type 14:  scale the matrix into the subnormal range,
+*              where the reciprocal of a diagonal entry overflows.
+*              CLATMS cannot generate such a matrix, because it
+*              scales its output to the requested norm.
+*
+               IF( IMAT.EQ.14 ) THEN
+                  SUBNRM = SLAMCH( 'Safe minimum' ) / 8
+                  CALL SSCAL( N, SUBNRM / ANORM, D, 1 )
+                  CALL CSSCAL( N-1, SUBNRM / ANORM, E, 1 )
+               END IF
             END IF
 *
             CALL SCOPY( N, D, 1, D( N+1 ), 1 )
@@ -398,6 +410,38 @@
             IF( INFO.GT.0 ) THEN
                RCONDC = ZERO
                GO TO 100
+            END IF
+*
+            IF( IMAT.EQ.14 ) THEN
+*
+*              The subnormal matrix carries too few bits for the
+*              reconstruction and condition number tests, so test what
+*              the division by D promises: solving A*x = A*e for
+*              e = (1,...,1) returns x close to e, not Inf or NaN.
+*
+               DO 15 I = 1, N
+                  XACT( I ) = ONE
+   15          CONTINUE
+               RESULT( 2 ) = ZERO
+               DO 17 IUPLO = 1, 2
+                  UPLO = UPLOS( IUPLO )
+                  CALL CLAPTM( UPLO, N, 1, ONE, D, E, XACT, LDA, ZERO,
+     $                         B, LDA )
+                  CALL CPTTRS( UPLO, N, 1, D( N+1 ), E( N+1 ), B, LDA,
+     $                         INFO )
+                  DO 16 I = 1, N
+                     IF( .NOT.( ABS( B( I )-ONE ).LE.HALF ) )
+     $                  RESULT( 2 ) = ONE / SLAMCH( 'Epsilon' )
+   16             CONTINUE
+   17          CONTINUE
+               IF( RESULT( 2 ).GE.THRESH ) THEN
+                  IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
+     $               CALL ALAHD( NOUT, PATH )
+                  WRITE( NOUT, FMT = 9999 )N, IMAT, 2, RESULT( 2 )
+                  NFAIL = NFAIL + 1
+               END IF
+               NRUN = NRUN + 1
+               GO TO 110
             END IF
 *
             CALL CPTT01( N, D, E, D( N+1 ), E( N+1 ), WORK,

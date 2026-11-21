@@ -48,7 +48,7 @@
 *> ZPS    9               List types on next line if 0 < NTYPES <  9
 *> ZPP    9               List types on next line if 0 < NTYPES <  9
 *> ZPB    8               List types on next line if 0 < NTYPES <  8
-*> ZPT   12               List types on next line if 0 < NTYPES < 12
+*> ZPT   14               List types on next line if 0 < NTYPES < 14
 *> ZHE   10               List types on next line if 0 < NTYPES < 10
 *> ZHR   10               List types on next line if 0 < NTYPES < 10
 *> ZHK   10               List types on next line if 0 < NTYPES < 10
@@ -653,7 +653,7 @@
 *
 *        PT:  positive definite tridiagonal matrices
 *
-         NTYPES = 13
+         NTYPES = 14
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN

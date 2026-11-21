@@ -48,7 +48,7 @@
 *> DPS    9               List types on next line if 0 < NTYPES <  9
 *> DPP    9               List types on next line if 0 < NTYPES <  9
 *> DPB    8               List types on next line if 0 < NTYPES <  8
-*> DPT   12               List types on next line if 0 < NTYPES < 12
+*> DPT   14               List types on next line if 0 < NTYPES < 14
 *> DSY   10               List types on next line if 0 < NTYPES < 10
 *> DSR   10               List types on next line if 0 < NTYPES < 10
 *> DSK   10               List types on next line if 0 < NTYPES < 10
@@ -649,7 +649,7 @@
 *
 *        PT:  positive definite tridiagonal matrices
 *
-         NTYPES = 13
+         NTYPES = 14
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN

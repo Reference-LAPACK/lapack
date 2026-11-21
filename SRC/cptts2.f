@@ -126,20 +126,33 @@
 *
 *     .. Local Scalars ..
       INTEGER            I, J
+      REAL               SFMIN
+*     ..
+*     .. External Functions ..
+      REAL               SLAMCH
+      EXTERNAL           SLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CSSCAL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CONJG
+      INTRINSIC          ABS, CONJG
 *     ..
 *     .. Executable Statements ..
 *
 *     Quick return if possible
 *
       IF( N.LE.1 ) THEN
-         IF( N.EQ.1 )
-     $      CALL CSSCAL( NRHS, 1. / D( 1 ), B, LDB )
+         IF( N.EQ.1 ) THEN
+            SFMIN = SLAMCH( 'S' )
+            IF( ABS( D( 1 ) ).GE.SFMIN ) THEN
+               CALL CSSCAL( NRHS, 1. / D( 1 ), B, LDB )
+            ELSE
+               DO 1 J = 1, NRHS
+                  B( 1, J ) = B( 1, J ) / D( 1 )
+    1          CONTINUE
+            END IF
+         END IF
          RETURN
       END IF
 *
