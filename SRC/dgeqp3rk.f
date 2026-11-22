@@ -1058,6 +1058,10 @@
                TAU( J ) = ZERO
             END DO
 *
+         ELSE
+            MAXC2NRMK = ZERO
+            RELMAXC2NRMK = ZERO
+*
          END IF
 *
 *     END IF( J.LE.JMAX ) THEN

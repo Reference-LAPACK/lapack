@@ -207,7 +207,7 @@
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 19 )
       INTEGER            NTESTS
-      PARAMETER          ( NTESTS = 6 )
+      PARAMETER          ( NTESTS = 7 )
       DOUBLE PRECISION   ONE, ZERO, BIGNUM
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0,
      $                     BIGNUM = 1.0D+38 )
@@ -637,6 +637,12 @@
                   ABSTOL = -1.0
                   RELTOL = -1.0
 *
+*                 Preset the outputs that the routine must set to
+*                 zero when it factorizes all MIN(M,N) columns.
+*
+                  MAXC2NRMK = ONE
+                  RELMAXC2NRMK = ONE
+*
 *                 Compute the QR factorization with pivoting of A
 *
                   LW = MAX( 1, MAX( 2*N + NB*( N+NRHS+1 ),
@@ -826,6 +832,23 @@
                   END IF
 *
 *                 End test 6.
+*
+*                 Compute test 7:
+*
+*                 When DGEQP3RK has factorized all MIN(M,N) columns,
+*                 there is no residual matrix and MAXC2NRMK and
+*                 RELMAXC2NRMK must be ZERO.
+*
+                  IF( KFACT.EQ.MINMN ) THEN
+*
+                     IF( MAXC2NRMK.NE.ZERO .OR.
+     $                   RELMAXC2NRMK.NE.ZERO ) RESULT( 7 ) = BIGNUM
+*
+                     NRUN = NRUN + 1
+*
+                  END IF
+*
+*                 End test 7.
 *
 *                 Print information about the tests that did not
 *                 pass the threshold.
