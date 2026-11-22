@@ -607,6 +607,7 @@
          WRITE( IOUNIT, FMT = 8062 )3
          WRITE( IOUNIT, FMT = 8063 )4
          WRITE( IOUNIT, FMT = 8064 )5
+         WRITE( IOUNIT, FMT = 8065 )6
          WRITE( IOUNIT, FMT = '( '' Messages:'' )' )
 
       ELSE IF( LSAMEN( 2, P2, 'CX' ) ) THEN
@@ -1209,6 +1210,8 @@
  8063 FORMAT( 3X, I2, ': Returns 1.0D+100, if abs(R(K+1,K+1))',
      $                 ' > abs(R(K,K)), where K=1:KFACT-1' )
  8064 FORMAT( 3X, I2, ': 1-norm(Q**T * B - Q**T * B ) / ( M * EPS )')
+ 8065 FORMAT( 3X, I2, ': Returns 1.0D+38, if xGEQP3RK writes past the',
+     $                ' LWORK entries of WORK that it is given' )
 
 *
       RETURN

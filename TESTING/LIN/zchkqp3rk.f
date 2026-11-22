@@ -147,7 +147,9 @@
 *> \param[out] WORK
 *> \verbatim
 *>          WORK is COMPLEX*16 array, dimension
-*>                      (max(M*max(M,N) + 4*min(M,N) + max(M,N)))
+*>                      (MAXDIM*( MAXDIM+MAXNS+10 )), where MAXDIM is
+*>                      the largest value in MVAL and NVAL and MAXNS
+*>                      the largest in NSVAL
 *> \endverbatim
 *>
 *> \param[out] RWORK
@@ -206,13 +208,15 @@
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 19 )
       INTEGER            NTESTS
-      PARAMETER          ( NTESTS = 5 )
+      PARAMETER          ( NTESTS = 6 )
       DOUBLE PRECISION   ONE, ZERO, BIGNUM
       COMPLEX*16         CONE, CZERO
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0,
      $                   CZERO = ( 0.0D+0, 0.0D+0 ),
      $                   CONE = ( 1.0D+0, 0.0D+0 ),
      $                   BIGNUM = 1.0D+38 )
+      COMPLEX*16         CGUARD
+      PARAMETER          ( CGUARD = ( -1.0D+300, 0.0D+0 ) )
 *     ..
 *     .. Local Scalars ..
       CHARACTER          DIST, TYPE
@@ -224,9 +228,12 @@
      $                   KFACT, KL, KMAX, KU, LDA, LW, LWORK,
      $                   LWORK_MQR, M, MINMN, MINMNB_GEN, MODE, N,
      $                   NB, NB_ZERO, NERRS, NFAIL, NB_GEN, NRHS,
-     $                   NRUN, NX, T
+     $                   NRUN, NX, T, IWS, KFACT2, LW2, LG,
+     $                   LWBND, MAXDIM, MAXNS
+      LOGICAL            OVERRN
       DOUBLE PRECISION   ANORM, CNDNUM, EPS, ABSTOL, RELTOL,
-     $                   DTEMP, MAXC2NRMK, RELMAXC2NRMK
+     $                   DTEMP, MAXC2NRMK, RELMAXC2NRMK,
+     $                   MAXC2NRMK2, RELMAXC2NRMK2
 *     ..
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
@@ -264,6 +271,24 @@
       PATH( 2: 3 ) = 'QK'
       NRUN = 0
       NFAIL = 0
+*
+*     The WORK arrays of the callers have at least
+*     MAXDIM*( MAXDIM+MAXNS+10 ) entries, where MAXDIM is the largest
+*     M or N and MAXNS the largest NRHS to be tested. Test 6 stays
+*     within that.
+*
+      MAXDIM = 0
+      DO I = 1, NM
+         MAXDIM = MAX( MAXDIM, MVAL( I ) )
+      END DO
+      DO I = 1, NN
+         MAXDIM = MAX( MAXDIM, NVAL( I ) )
+      END DO
+      MAXNS = 0
+      DO I = 1, NNS
+         MAXNS = MAX( MAXNS, NSVAL( I ) )
+      END DO
+      LWBND = MAXDIM*( MAXDIM+MAXNS+10 )
       NERRS = 0
       DO  I = 1, 4
          ISEED( I ) = ISEEDY( I )
@@ -748,6 +773,64 @@
 *                    End compute test 5.
 *
                   END IF
+*
+*                 Compute test 6:
+*
+*                 This test checks that ZGEQP3RK stays within the LWORK
+*                 entries of WORK that it is given when LWORK is one less
+*                 than the optimal size 2*N + NB*( N+NRHS+1 ), so that it
+*                 has to reduce the block size. The N+NRHS+1 entries of
+*                 WORK after the first LWORK entries are a guard that
+*                 the call must leave unchanged. The overrun is
+*                 contiguous, so the first entry catches it. The test
+*                 is skipped if LWORK plus the guard exceeds LWBND.
+*
+                  IF( MINMN.GT.0 .AND. KMAX.EQ.MINMN ) THEN
+*
+                     IWS = N + NRHS - 1
+                     LW2 = 2*N + NB*( N+NRHS+1 ) - 1
+                     LG = N + NRHS + 1
+*
+                     IF( LW2.GE.IWS .AND. LW2+LG.LE.LWBND ) THEN
+*
+                        CALL ZLACPY( 'All', M, N, COPYA, LDA, A, LDA )
+                        CALL ZLACPY( 'All', M, NRHS, COPYB, LDA,
+     $                               A( LDA*N + 1 ),  LDA )
+                        CALL ICOPY( N, IWORK( 1 ), 1, IWORK( N+1 ), 1 )
+*
+                        DO J = LW2 + 1, LW2 + LG
+                           WORK( J ) = CGUARD
+                        END DO
+*
+                        ABSTOL = -1.0
+                        RELTOL = -1.0
+*
+                        SRNAMT = 'ZGEQP3RK'
+                        CALL ZGEQP3RK( M, N, NRHS, KMAX, ABSTOL,
+     $                                 RELTOL, A, LDA, KFACT2,
+     $                                 MAXC2NRMK2, RELMAXC2NRMK2,
+     $                                 IWORK( N+1 ), TAU,
+     $                                 WORK, LW2, RWORK,
+     $                                 IWORK( 2*N+1 ), INFO )
+*
+                        IF( INFO.LT.0 )
+     $                     CALL ALAERH( PATH, 'ZGEQP3RK', INFO, 0, ' ',
+     $                                  M, N, NX, -1, NB, IMAT,
+     $                                  NFAIL, NERRS, NOUT )
+*
+                        OVERRN = .FALSE.
+                        DO J = LW2 + 1, LW2 + LG
+                           IF( WORK( J ).NE.CGUARD ) OVERRN = .TRUE.
+                        END DO
+                        IF( OVERRN ) RESULT( 6 ) = BIGNUM
+*
+                        NRUN = NRUN + 1
+*
+                     END IF
+*
+                  END IF
+*
+*                 End test 6.
 *
 *                 Print information about the tests that did not pass
 *                 the threshold.
