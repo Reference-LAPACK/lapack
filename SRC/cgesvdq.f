@@ -1252,7 +1252,7 @@
                    CALL CGEQRF( N, NR, U(1,NR+1), LDU, CWORK(N+1),
      $                  CWORK(N+NR+1), LCWORK-N-NR, IERR )
                    DO 1143 p = 1, NR
-                       DO 1144 q = 1, N
+                       DO 1144 q = 1, NR
                            V(q,p) = CONJG(U(p,NR+q))
  1144                  CONTINUE
  1143              CONTINUE

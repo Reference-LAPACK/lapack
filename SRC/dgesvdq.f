@@ -1234,7 +1234,7 @@
                    CALL DGEQRF( N, NR, U(1,NR+1), LDU, WORK(N+1),
      $                  WORK(N+NR+1), LWORK-N-NR, IERR )
                    DO 1143 p = 1, NR
-                       DO 1144 q = 1, N
+                       DO 1144 q = 1, NR
                            V(q,p) = U(p,NR+q)
  1144                  CONTINUE
  1143              CONTINUE
