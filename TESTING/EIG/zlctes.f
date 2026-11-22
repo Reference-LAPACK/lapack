@@ -103,3 +103,84 @@
 *     End of ZLCTES
 *
       END
+*
+*  =====================================================================
+*> \brief \b ZLCTSM
+*>
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
+*>
+*> ZLCTSM returns .TRUE. if the eigenvalue Z/D is to be selected
+*> (specifically, in this subroutine, if the real part of Z is
+*> negative, D is nonzero (the eigenvalue is finite) and Z or D is far
+*> outside the range [sqrt(safe minimum), 1/sqrt(safe minimum)] that a
+*> well scaled problem lies in), and otherwise it returns .FALSE..
+*>
+*> Unlike ZLCTES, whose choice depends only on signs, this choice
+*> depends on the magnitudes of Z and D. It is used by the test
+*> routines ZDRGES and ZDRGES3 to test that ZGGES and ZGGES3 pass
+*> the selection function the eigenvalues in the units of the input
+*> matrices when they have scaled the matrices.
+*> \endverbatim
+*>
+*> \param[in] Z
+*> \verbatim
+*>          Z is COMPLEX*16
+*>          The numerator part of a complex eigenvalue Z/D.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is COMPLEX*16
+*>          The denominator part of a complex eigenvalue Z/D.
+*> \endverbatim
+*
+*> \ingroup complex16_eig
+*
+*  =====================================================================
+      LOGICAL          FUNCTION ZLCTSM( Z, D )
+      IMPLICIT NONE
+*
+*  -- LAPACK test routine --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*
+*     .. Scalar Arguments ..
+      COMPLEX*16         D, Z
+*     ..
+*
+*  =====================================================================
+*
+*     .. Parameters ..
+      DOUBLE PRECISION   ZERO, ONE
+      PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
+*     ..
+*     .. Local Scalars ..
+      DOUBLE PRECISION   BIG, DABS1, SMALL, ZABS1
+*     ..
+*     .. External Functions ..
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
+*     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC          ABS, AIMAG, DBLE, SQRT
+*     ..
+*     .. Executable Statements ..
+*
+      SMALL = SQRT( DLAMCH( 'Safe minimum' ) )
+      BIG = ONE / SMALL
+      ZABS1 = ABS( DBLE( Z ) ) + ABS( AIMAG( Z ) )
+      DABS1 = ABS( DBLE( D ) ) + ABS( AIMAG( D ) )
+*
+      ZLCTSM = ( DBLE( Z ).LT.ZERO ) .AND. ( DABS1.GT.ZERO ) .AND.
+     $         ( ZABS1.GT.BIG .OR. DABS1.GT.BIG .OR.
+     $         ( ZABS1.GT.ZERO .AND. ZABS1.LT.SMALL ) .OR.
+     $         ( DABS1.GT.ZERO .AND. DABS1.LT.SMALL ) )
+*
+      RETURN
+*
+*     End of ZLCTSM
+*
+      END

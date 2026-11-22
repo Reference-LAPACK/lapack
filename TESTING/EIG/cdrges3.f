@@ -99,6 +99,15 @@
 *> (12)  if sorting worked and SDIM is the number of eigenvalues
 *>       which were CELECTed.
 *>
+*> In addition, CDRGES3 runs CGGES3 with SORT = 'S' and the selection
+*> function CLCTSM on eight fixed 2-by-2 pencils (A,B) with A or B
+*> scaled by a very large or very small factor, in which the eigenvalue
+*> to be selected is not first, and checks that INFO = 0, SDIM = 1 and
+*> that the selected eigenvalue is first in (ALPHA,BETA). Since CGGES3
+*> rescales such matrices, this tests that the selection function is
+*> passed the eigenvalues in the units of A and B. These checks are
+*> counted as tests but are not among the numbered tests.
+*>
 *> Test Matrices
 *> =============
 *>
@@ -418,6 +427,11 @@
      $                   SDIM
       REAL               SAFMAX, SAFMIN, TEMP1, TEMP2, ULP, ULPINV
       COMPLEX            CTEMP, X
+      LOGICAL            FIXBAD, BWKF( 2 )
+      INTEGER            ICASE, ISGN
+      REAL             BIGV, SGN, SMALLV, SCA, SCB, RWKF( 16 )
+      COMPLEX            AF( 2, 2 ), BF( 2, 2 ), ALF( 2 ), BEF( 2 ),
+     $                   VDUM( 1, 1 ), WKF( 100 )
 *     ..
 *     .. Local Arrays ..
       LOGICAL            LASIGN( MAXTYP ), LBSIGN( MAXTYP )
@@ -429,11 +443,11 @@
       REAL               RMAGN( 0: 3 )
 *     ..
 *     .. External Functions ..
-      LOGICAL            CLCTES
+      LOGICAL            CLCTES, CLCTSM
       INTEGER            ILAENV
       REAL               SLAMCH
       COMPLEX            CLARND
-      EXTERNAL           CLCTES, ILAENV, SLAMCH, CLARND
+      EXTERNAL           CLCTES, CLCTSM, ILAENV, SLAMCH, CLARND
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, CGET51, CGET54, CGGES3, CLACPY, CLARFG,
@@ -547,6 +561,53 @@
       NTESTT = 0
       NERRS = 0
       NMATS = 0
+*
+*     Fixed pencils with A or B scaled: the selection function must be
+*     passed the eigenvalues in the units of the input matrices.
+*     CLCTSM selects an eigenvalue whose ALPHA has negative real
+*     part if ALPHA or BETA is far outside the range of a well scaled
+*     problem, so for each diagonal pencil below it selects exactly
+*     one of the two eigenvalues, but selects neither if they are
+*     passed to it scaled twice.
+*
+      BIGV = SLAMCH( 'Overflow' )**0.75E+0
+      SMALLV = ONE / BIGV
+      DO 1100 ICASE = 1, 4
+         DO 1110 ISGN = 1, 2
+            SGN = REAL( 3-2*ISGN )
+            SCA = ONE
+            SCB = ONE
+            IF( ICASE.EQ.1 )
+     $         SCA = BIGV
+            IF( ICASE.EQ.2 )
+     $         SCA = SMALLV
+            IF( ICASE.EQ.3 )
+     $         SCB = BIGV
+            IF( ICASE.EQ.4 )
+     $         SCB = SMALLV
+            AF( 1, 1 ) = SGN*SCA
+            AF( 2, 1 ) = CZERO
+            AF( 1, 2 ) = CZERO
+            AF( 2, 2 ) = -SGN*SCA
+            BF( 1, 1 ) = SCB
+            BF( 2, 1 ) = CZERO
+            BF( 1, 2 ) = CZERO
+            BF( 2, 2 ) = SCB
+            CALL CGGES3( 'N', 'N', 'S', CLCTSM, 2, AF, 2, BF, 2, SDIM,
+     $                  ALF, BEF, VDUM, 1, VDUM, 1, WKF, 100, RWKF,
+     $                  BWKF, IINFO )
+            FIXBAD = IINFO.NE.0 .OR. SDIM.NE.1
+            IF( .NOT.FIXBAD ) THEN
+               IF( .NOT.CLCTSM( ALF( 1 ), BEF( 1 ) ) .OR.
+     $             CLCTSM( ALF( 2 ), BEF( 2 ) ) )FIXBAD = .TRUE.
+            END IF
+            NTESTT = NTESTT + 1
+            IF( FIXBAD ) THEN
+               NERRS = NERRS + 1
+               WRITE( NOUNIT, FMT = 9990 )ICASE, ISGN, IINFO, SDIM
+            END IF
+ 1110    CONTINUE
+ 1100 CONTINUE
 *
       DO 190 JSIZE = 1, NSIZES
          N = NN( JSIZE )
@@ -939,6 +1000,8 @@
      $      4( I4, ',' ), ' result ', I2, ' is', 0P, F8.2 )
  9991 FORMAT( ' Matrix order=', I5, ', type=', I2, ', seed=',
      $      4( I4, ',' ), ' result ', I2, ' is', 1P, E10.3 )
+ 9990 FORMAT( ' CDRGES3: fixed scaled pencil ', I2, ' (sign ', I2,
+     $      ') ordered wrongly: INFO=', I6, ', SDIM=', I6 )
 *
 *     End of CDRGES3
 *
