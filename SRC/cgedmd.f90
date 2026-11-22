@@ -470,11 +470,18 @@
 !>              illegal value
 !>       = 0 :: Successful return.
 !>       = 1 :: Void input. Quick exit (M=0 or N=0).
-!>       = 2 :: The SVD computation of X did not converge.
+!>       = 2 :: The SVD computation of X did not converge, or
+!>              the SVD routine reported a NaN or an infinity in
+!>              X through a negative INFO (WHTSVD = 2). With
+!>              WHTSVD = 3, CGESVDQ reports such data by
+!>              calling XERBLA, which stops the program unless
+!>              XERBLA returns; then INFO = 2 is returned.
 !>              Suggestion: Check the input data and/or
 !>              repeat with different WHTSVD.
 !>       = 3 :: The computation of the eigenvalues did not
-!>              converge.
+!>              converge, or
+!>              CGEEV reported a NaN or an infinity in the
+!>              Rayleigh quotient through a negative INFO.
 !>       = 4 :: If data scaling was requested on input and
 !>              the procedure found inconsistency in the data
 !>              such that for some column index i,
@@ -937,7 +944,7 @@
               END IF
       END SELECT
 !
-      IF ( INFO1 > 0 ) THEN
+      IF ( INFO1 /= 0 ) THEN
          ! The SVD selected subroutine did not converge.
          ! Return with an error code.
          INFO = 2
@@ -1069,7 +1076,7 @@
       ! W(1:K,1:K) contains the eigenvectors of the Rayleigh
       ! quotient.  See the description of Z.
       ! Also, see the description of CGEEV.
-      IF ( INFO1 > 0 ) THEN
+      IF ( INFO1 /= 0 ) THEN
          ! CGEEV failed to compute the eigenvalues and
          ! eigenvectors of the Rayleigh quotient.
          INFO = 3

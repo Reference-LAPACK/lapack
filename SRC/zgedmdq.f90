@@ -525,11 +525,18 @@
 !>              illegal value
 !>       = 0 :: Successful return.
 !>       = 1 :: Void input. Quick exit (M=0 or N=0).
-!>       = 2 :: The SVD computation of X did not converge.
+!>       = 2 :: The SVD computation of X did not converge, or
+!>              the SVD routine reported a NaN or an infinity in
+!>              X through a negative INFO (WHTSVD = 2). With
+!>              WHTSVD = 3, ZGESVDQ reports such data by
+!>              calling XERBLA, which stops the program unless
+!>              XERBLA returns; then INFO = 2 is returned.
 !>              Suggestion: Check the input data and/or
 !>              repeat with different WHTSVD.
 !>       = 3 :: The computation of the eigenvalues did not
-!>              converge.
+!>              converge, or
+!>              ZGEEV reported a NaN or an infinity in the
+!>              Rayleigh quotient through a negative INFO.
 !>       = 4 :: If data scaling was requested on input and
 !>              the procedure found inconsistency in the data
 !>              such that for some column index i,
