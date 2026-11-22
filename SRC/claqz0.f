@@ -236,6 +236,10 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.  LWORK >= max(1,N).
+*>          If N is at least the crossover point (ILAENV with ISPEC = 12)
+*>          and LWORK is smaller than the optimal value returned by a
+*>          workspace query, the routine uses the double-shift algorithm
+*>          of CHGEQZ, which is slower for large N.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
@@ -447,10 +451,20 @@
          WORK( 1 ) = REAL( LWORKREQ )
          RETURN
       ELSE IF ( LWORK .LT. LWORKREQ ) THEN
-         INFO = -18
-      END IF
-      IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'CLAQZ0', -INFO )
+*
+*        Not enough workspace for the multishift code with aggressive
+*        early deflation. Fall back to CHGEQZ, which needs only N.
+*
+         IF( LWORK .LT. MAX( 1, N ) ) THEN
+            INFO = -18
+            CALL XERBLA( 'CLAQZ0', -INFO )
+            RETURN
+         END IF
+         CALL CHGEQZ( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B,
+     $                LDB,
+     $                ALPHA, BETA, Q, LDQ, Z, LDZ, WORK, LWORK, RWORK,
+     $                INFO )
+         WORK( 1 ) = REAL( LWORKREQ )
          RETURN
       END IF
 *

@@ -371,7 +371,7 @@
 *> \param[in] LWORK
 *> \verbatim
 *>          LWORK is INTEGER
-*>          The number of entries in WORK.  LWORK >= MAX( 8*N, N*(N+1) ).
+*>          The number of entries in WORK.  LWORK >= MAX( 8*N, 2*N*N ).
 *> \endverbatim
 *>
 *> \param[out] RESULT
@@ -433,13 +433,17 @@
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
       INTEGER            MAXTYP
       PARAMETER          ( MAXTYP = 27 )
+      INTEGER            NGUARD
+      PARAMETER          ( NGUARD = 4 )
+      DOUBLE PRECISION   GUARD
+      PARAMETER          ( GUARD = -1.2345D+3 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            BADNN
+      LOGICAL            BADGRD, BADNN, ILABAD
       INTEGER            I, IADD, IERR, IN, J, JC, JR, JSIZE, JTYPE,
-     $                   MAXWRK, MINWRK, MTYPES, N, N1, NERRS, NMATS,
-     $                   NMAX, NTESTT
-      DOUBLE PRECISION   SAFMAX, SAFMIN, ULP, ULPINV
+     $                   I1, MAXWRK, MINWRK, MTYPES, N, N1, NERRS,
+     $                   NMATS, NMAX, NTESTT
+      DOUBLE PRECISION   SAFMAX, SAFMIN, ULP, ULPINV, TEMP8
 *     ..
 *     .. Local Arrays ..
       INTEGER            IASIGN( MAXTYP ), IBSIGN( MAXTYP ),
@@ -448,7 +452,7 @@
      $                   KBMAGN( MAXTYP ), KBTYPE( MAXTYP ),
      $                   KBZERO( MAXTYP ), KCLASS( MAXTYP ),
      $                   KTRIAN( MAXTYP ), KZ1( 6 ), KZ2( 6 )
-      DOUBLE PRECISION   RMAGN( 0: 3 )
+      DOUBLE PRECISION   RES8( 4 ), RMAGN( 0: 3 )
 *     ..
 *     .. External Functions ..
       INTEGER            ILAENV
@@ -457,7 +461,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, DGET52, DGGEV3, DLACPY, DLARFG, DLASET,
-     $                   DLATM4, DORM2R, XER_REPLACE, XLAENV
+     $                   DLATM4, DORM2R, XER_REPLACE, XLAENV,
+     $                   DGET51, DGET53, DLAQZ0
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SIGN
@@ -523,10 +528,10 @@
 *
       MINWRK = 1
       IF( INFO.EQ.0 .AND. LWORK.GE.1 ) THEN
-         MINWRK = MAX( 1, 8*NMAX, NMAX*( NMAX+1 ) )
+         MINWRK = MAX( 1, 8*NMAX, 2*NMAX*NMAX )
          MAXWRK = 7*NMAX + NMAX*ILAENV( 1, 'DGEQRF', ' ', NMAX, 1, NMAX,
      $            0 )
-         MAXWRK = MAX( MAXWRK, NMAX*( NMAX+1 ) )
+         MAXWRK = MAX( MAXWRK, 2*NMAX*NMAX )
          WORK( 1 ) = MAXWRK
       END IF
 *
@@ -754,7 +759,7 @@
 *
   100       CONTINUE
 *
-            DO 110 I = 1, 7
+            DO 110 I = 1, 8
                RESULT( I ) = -ONE
   110       CONTINUE
 *
@@ -901,15 +906,129 @@
   170          CONTINUE
   180       CONTINUE
 *
+*           Do test (8): call DLAQZ0 directly on the Hessenberg-
+*           triangular pencil formed from the lower triangles of A
+*           and B, with LWORK = N, the documented minimum. The
+*           crossover set above is small, so for N >= 10 this is less
+*           than the multishift code needs. DLAQZ0 must then use
+*           DHGEQZ instead of stopping, and must leave the NGUARD
+*           entries of WORK after WORK( N ) alone. In that case
+*           DHGEQZ itself initializes Q and Z for WANTQ = WANTZ = 'I'.
+*           N >= 2 keeps the guard inside the LWORK entries that
+*           DDRGEV3 requires.
+*
+            RESULT( 8 ) = ZERO
+            IF( N.GE.2 ) THEN
+               DO 240 JC = 1, N
+                  DO 230 JR = JC + 2, N
+                     A( JR, JC ) = ZERO
+  230             CONTINUE
+                  DO 235 JR = JC + 1, N
+                     B( JR, JC ) = ZERO
+  235             CONTINUE
+  240          CONTINUE
+               CALL DLACPY( ' ', N, N, A, LDA, S, LDA )
+               CALL DLACPY( ' ', N, N, B, LDA, T, LDA )
+               DO 245 I = 1, NGUARD
+                  WORK( N+I ) = GUARD
+  245          CONTINUE
+               CALL DLAQZ0( 'S', 'I', 'I', N, 1, N, S, LDA, T, LDA,
+     $                      ALPHR1, ALPHI1, BETA1, Q, LDQ, Z, LDQ, WORK,
+     $                      N, 0, IERR )
+               BADGRD = .FALSE.
+               DO 246 I = 1, NGUARD
+                  IF( WORK( N+I ).NE.GUARD )
+     $               BADGRD = .TRUE.
+  246          CONTINUE
+               IF( IERR.NE.0 .OR. BADGRD ) THEN
+                  RESULT( 8 ) = ULPINV
+                  WRITE( NOUNIT, FMT = 9999 )'DLAQZ0', IERR, N, JTYPE,
+     $               IOLDSD
+               ELSE
+                  CALL DGET51( 1, N, A, LDA, S, LDA, Q, LDQ, Z, LDQ,
+     $                         WORK, RES8( 1 ) )
+                  CALL DGET51( 1, N, B, LDA, T, LDA, Q, LDQ, Z, LDQ,
+     $                         WORK, RES8( 2 ) )
+                  CALL DGET51( 3, N, A, LDA, T, LDA, Q, LDQ, Q, LDQ,
+     $                         WORK, RES8( 3 ) )
+                  CALL DGET51( 3, N, B, LDA, T, LDA, Z, LDQ, Z, LDQ,
+     $                         WORK, RES8( 4 ) )
+                  DO 247 I = 1, 4
+                     IF( .NOT.( RES8( I ).LT.ULPINV ) )
+     $                  RES8( I ) = ULPINV
+                     RESULT( 8 ) = MAX( RESULT( 8 ), RES8( I ) )
+  247             CONTINUE
+                  DO 260 JC = 1, N
+                     DO 250 JR = JC + 1, N
+                        IF( T( JR, JC ).NE.ZERO )
+     $                     RESULT( 8 ) = ULPINV
+                        IF( JR.GT.JC+1 .AND. S( JR, JC ).NE.ZERO )
+     $                     RESULT( 8 ) = ULPINV
+  250                CONTINUE
+  260             CONTINUE
+*
+*                 Check that the eigenvalues agree with the diagonal
+*                 entries and the 2-by-2 blocks of S and T, and that
+*                 no two consecutive subdiagonal entries of S are
+*                 nonzero.
+*
+                  DO 270 J = 1, N
+                     ILABAD = .FALSE.
+                     TEMP8 = ZERO
+                     IF( ALPHI1( J ).EQ.ZERO ) THEN
+                        TEMP8 = ( ABS( ALPHR1( J )-S( J, J ) ) /
+     $                          MAX( SAFMIN, ABS( ALPHR1( J ) ),
+     $                          ABS( S( J, J ) ) )+
+     $                          ABS( BETA1( J )-T( J, J ) ) /
+     $                          MAX( SAFMIN, ABS( BETA1( J ) ),
+     $                          ABS( T( J, J ) ) ) ) / ULP
+                        IF( J.LT.N ) THEN
+                           IF( S( J+1, J ).NE.ZERO ) ILABAD = .TRUE.
+                        END IF
+                        IF( J.GT.1 ) THEN
+                           IF( S( J, J-1 ).NE.ZERO ) ILABAD = .TRUE.
+                        END IF
+                     ELSE
+                        IF( ALPHI1( J ).GT.ZERO ) THEN
+                           I1 = J
+                        ELSE
+                           I1 = J - 1
+                        END IF
+                        IF( I1.LE.0 .OR. I1.GE.N ) THEN
+                           ILABAD = .TRUE.
+                        ELSE
+                           IF( I1.LT.N-1 ) THEN
+                              IF( S( I1+2, I1+1 ).NE.ZERO )
+     $                           ILABAD = .TRUE.
+                           END IF
+                           IF( I1.GT.1 ) THEN
+                              IF( S( I1, I1-1 ).NE.ZERO )
+     $                           ILABAD = .TRUE.
+                           END IF
+                        END IF
+                        IF( .NOT.ILABAD ) THEN
+                           CALL DGET53( S( I1, I1 ), LDA, T( I1, I1 ),
+     $                                  LDA, BETA1( J ), ALPHR1( J ),
+     $                                  ALPHI1( J ), TEMP8, IERR )
+                           IF( IERR.GE.3 ) ILABAD = .TRUE.
+                        END IF
+                     END IF
+                     IF( ILABAD ) TEMP8 = ULPINV
+                     IF( .NOT.( TEMP8.LT.ULPINV ) ) TEMP8 = ULPINV
+                     RESULT( 8 ) = MAX( RESULT( 8 ), TEMP8 )
+  270             CONTINUE
+               END IF
+            END IF
+*
 *           End of Loop -- Check for RESULT(j) > THRESH
 *
   190       CONTINUE
 *
-            NTESTT = NTESTT + 7
+            NTESTT = NTESTT + 8
 *
 *           Print out tests which fail.
 *
-            DO 200 JR = 1, 7
+            DO 200 JR = 1, 8
                IF( RESULT( JR ).GE.THRESH ) THEN
 *
 *                 If this is the first test to fail,
@@ -988,7 +1107,12 @@
      $      / ' 4 = | |VL(i)| - 1 | / ulp,',
      $      / ' 5 = 0 if W same no matter if r or l computed,',
      $      / ' 6 = 0 if l same no matter if l computed,',
-     $      / ' 7 = 0 if r same no matter if r computed,', / 1X )
+     $      / ' 7 = 0 if r same no matter if r computed,',
+     $      / ' 8 = Schur form from DLAQZ0 with LWORK = N: | A - Q S ',
+     $      'Z'' | / ( |A| n ulp ), | B - Q T Z'' | / ( |B| n ulp ),',
+     $      / '     | I - Q Q'' | / ( n ulp ), | I - Z Z'' | ',
+     $      '/ ( n ulp ), eigenvalues vs. S and T, WORK overrun',
+     $      / 1X )
  9992 FORMAT( ' Matrix order=', I5, ', type=', I2, ', seed=',
      $      4( I4, ',' ), ' result ', I2, ' is', 0P, F8.2 )
  9991 FORMAT( ' Matrix order=', I5, ', type=', I2, ', seed=',
