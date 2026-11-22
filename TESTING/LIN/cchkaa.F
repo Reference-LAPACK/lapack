@@ -61,7 +61,7 @@
 *> CSK   11               List types on next line if 0 < NTYPES < 11
 *> CSR   11               List types on next line if 0 < NTYPES < 11
 *> CSP   11               List types on next line if 0 < NTYPES < 11
-*> CTR   18               List types on next line if 0 < NTYPES < 18
+*> CTR   19               List types on next line if 0 < NTYPES < 19
 *> CTP   18               List types on next line if 0 < NTYPES < 18
 *> CTB   17               List types on next line if 0 < NTYPES < 17
 *> CQR    8               List types on next line if 0 < NTYPES <  8
@@ -994,7 +994,7 @@
 *
 *        TR:  triangular matrices
 *
-         NTYPES = 18
+         NTYPES = 19
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN

@@ -55,7 +55,7 @@
 *> DSA   10               List types on next line if 0 < NTYPES < 10
 *> DS2   10               List types on next line if 0 < NTYPES < 10
 *> DSP   10               List types on next line if 0 < NTYPES < 10
-*> DTR   18               List types on next line if 0 < NTYPES < 18
+*> DTR   19               List types on next line if 0 < NTYPES < 19
 *> DTP   18               List types on next line if 0 < NTYPES < 18
 *> DTB   17               List types on next line if 0 < NTYPES < 17
 *> DQR    8               List types on next line if 0 < NTYPES <  8
@@ -834,7 +834,7 @@
 *
 *        TR:  triangular matrices
 *
-         NTYPES = 18
+         NTYPES = 19
          CALL ALAREQ( PATH, NMATS, DOTYPE, NTYPES, NIN, NOUT )
 *
          IF( TSTCHK ) THEN

@@ -366,16 +366,16 @@
 *              A is upper triangular.
 *
                DO J = 2, N
-                  TMAX = MAX( DLANGE( 'M', J-1, 1, A( 1, J ), 1,
-     $                        WORK ), TMAX )
+                  TMAX = MAX( DLANGE( 'M', J-1, 1, A( 1, J ),
+     $                        MAX( 1, J-1 ), WORK ), TMAX )
                END DO
             ELSE
 *
 *              A is lower triangular.
 *
                DO J = 1, N - 1
-                  TMAX = MAX( DLANGE( 'M', N-J, 1, A( J+1, J ), 1,
-     $                        WORK ), TMAX )
+                  TMAX = MAX( DLANGE( 'M', N-J, 1, A( J+1, J ),
+     $                        MAX( 1, N-J ), WORK ), TMAX )
                END DO
             END IF
 *

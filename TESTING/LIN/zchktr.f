@@ -183,7 +183,7 @@
 *
 *     .. Parameters ..
       INTEGER            NTYPE1, NTYPES
-      PARAMETER          ( NTYPE1 = 10, NTYPES = 18 )
+      PARAMETER          ( NTYPE1 = 10, NTYPES = 19 )
       INTEGER            NTESTS
       PARAMETER          ( NTESTS = 10 )
       INTEGER            NTRAN
@@ -476,6 +476,12 @@
    80    CONTINUE
 *
 *        Use pathological test matrices to test ZLATRS.
+*        Type 19 has column sums that overflow and takes the
+*        overflow branch of ZLATRS. It is a reachability test,
+*        so that builds with bounds checking execute that branch:
+*        for N >= 10 (and some smaller N) the column norms
+*        returned are infinite, tests 8-10 then give a ratio of
+*        zero, and only a NaN can make them fail.
 *
          DO 110 IMAT = NTYPE1 + 1, NTYPES
 *
@@ -562,26 +568,27 @@
                   CALL ZTRT03( UPLO, TRANS, DIAG, N, 1, A, LDA,
      $                         SCALE3( 2 ), RWORK, ONE, B( N+1 ), LDA,
      $                         X, LDA, WORK, RES )
-                  RESULT( 10 ) = MAX( RESULT( 10 ), RES )
+                  IF( RESULT( 10 ).LT.RES .OR. RES.NE.RES )
+     $               RESULT( 10 ) = RES
 *
 *                 Print information about the tests that did not pass
 *                 the threshold.
 *
-                  IF( RESULT( 8 ).GE.THRESH ) THEN
+                  IF( .NOT.( RESULT( 8 ).LT.THRESH ) ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
      $                  CALL ALAHD( NOUT, PATH )
                      WRITE( NOUT, FMT = 9996 )'ZLATRS', UPLO, TRANS,
      $                  DIAG, 'N', N, IMAT, 8, RESULT( 8 )
                      NFAIL = NFAIL + 1
                   END IF
-                  IF( RESULT( 9 ).GE.THRESH ) THEN
+                  IF( .NOT.( RESULT( 9 ).LT.THRESH ) ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
      $                  CALL ALAHD( NOUT, PATH )
                      WRITE( NOUT, FMT = 9996 )'ZLATRS', UPLO, TRANS,
      $                  DIAG, 'Y', N, IMAT, 9, RESULT( 9 )
                      NFAIL = NFAIL + 1
                   END IF
-                  IF( RESULT( 10 ).GE.THRESH ) THEN
+                  IF( .NOT.( RESULT( 10 ).LT.THRESH ) ) THEN
                      IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
      $                  CALL ALAHD( NOUT, PATH )
                      WRITE( NOUT, FMT = 9996 )'ZLATRS3', UPLO, TRANS,

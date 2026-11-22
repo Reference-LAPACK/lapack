@@ -484,6 +484,8 @@
          END IF
          WRITE( IOUNIT, FMT = 9966 )PATH
          WRITE( IOUNIT, FMT = 9965 )SUBNAM(1:LEN_TRIM( SUBNAM ))
+         IF( LSAME( C3, 'R' ) )
+     $      WRITE( IOUNIT, FMT = 9936 )
          WRITE( IOUNIT, FMT = '( '' Test ratios:'' )' )
          WRITE( IOUNIT, FMT = 9961 )1
          WRITE( IOUNIT, FMT = 9960 )2
@@ -1054,6 +1056,7 @@
      $      '16. One zero diagonal element', / 3X,
      $      '17. Large offdiagonals cause overflow when adding a column'
      $      , / 3X, '18. Unit triangular with large right hand side' )
+ 9936 FORMAT( 3X, '19. Large offdiagonals, column sums overflow' )
 *
 *     TB matrix types
 *
