@@ -127,6 +127,10 @@
 *>          SCALE is DOUBLE PRECISION array, dimension (NRHS)
 *>          The scaling factor s(k) is for the triangular system
 *>          A * x(:,k) = s(k)*b(:,k)  or  A**T* x(:,k) = s(k)*b(:,k).
+*>          SCALE(k) is at most 1 unless the off-diagonal part of A
+*>          is so large that it must be scaled to avoid overflow. In
+*>          that case SCALE(k) may exceed 1, as in ZLATRS, and x(:,k)
+*>          is still the solution of A * x(:,k) = s(k)*b(:,k).
 *>          If SCALE = 0, the matrix A is singular or badly scaled.
 *>          If A(j,j) = 0 is encountered, a non-trivial vector x(:,k)
 *>          that is an exact or approximate solution to A*x(:,k) = 0
@@ -660,16 +664,19 @@
 *
          DO KK = 1, K2 - K1
             RHS = K1 + KK - 1
-            DO I = 1, NBA
-               SCALE( RHS ) = MIN( SCALE( RHS ), WORK( I+KK*LDS ) )
-            END DO
+            IF( SCALE( RHS ).NE.ZERO ) THEN
+               SCALE( RHS ) = WORK( 1+KK*LDS )
+               DO I = 2, NBA
+                  SCALE( RHS ) = MIN( SCALE( RHS ), WORK( I+KK*LDS ) )
+               END DO
+            END IF
          END DO
 *
 *        Realize consistent scaling
 *
          DO KK = 1, K2 - K1
             RHS = K1 + KK - 1
-            IF( SCALE( RHS ).NE.ONE .AND. SCALE( RHS ).NE. ZERO ) THEN
+            IF( SCALE( RHS ).NE.ZERO ) THEN
                DO I = 1, NBA
                   I1 = (I - 1) * NB + 1
                   I2 = MIN( I * NB, N ) + 1
