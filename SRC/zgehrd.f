@@ -228,7 +228,7 @@
 *        Compute the workspace requirements
 *
          IF( NH.LE.1 ) THEN
-            LWKOPT = 1
+            LWKOPT = MAX( 1, N )
          ELSE
             NB = MIN( NBMAX, ILAENV( 1, 'ZGEHRD', ' ', N, ILO, IHI,
      $                              -1 ) )
@@ -256,7 +256,7 @@
 *     Quick return if possible
 *
       IF( NH.LE.1 ) THEN
-         WORK( 1 ) = 1
+         WORK( 1 ) = LWKOPT
          RETURN
       END IF
 *
