@@ -253,7 +253,7 @@
       CHARACTER*1        COMPQ2, COMPZ2
       INTEGER            COLA, I, IERR, J, J0, JCOL, JJ, JROW, K,
      $                   KACC22, LEN, LWKOPT, N2NB, NB, NBLST, NBMIN,
-     $                   NH, NNB, NX, PPW, PPWO, PW, TOP, TOPQ
+     $                   NH, NNB, PPW, PPWO, PW, TOP, TOPQ
       DOUBLE PRECISION   C, C1, C2, S, S1, S2, TEMP, TEMP1, TEMP2, TEMP3
 *     ..
 *     .. External Functions ..
@@ -340,26 +340,20 @@
       NBMIN = ILAENV( 2, 'DGGHD3', ' ', N, ILO, IHI, -1 )
       IF( NB.GT.1 .AND. NB.LT.NH ) THEN
 *
-*        Determine when to use unblocked instead of blocked code.
+*        Determine if workspace is large enough for blocked code.
 *
-         NX = MAX( NB, ILAENV( 3, 'DGGHD3', ' ', N, ILO, IHI, -1 ) )
-         IF( NX.LT.NH ) THEN
+         IF( LWORK.LT.LWKOPT ) THEN
 *
-*           Determine if workspace is large enough for blocked code.
+*           Not enough workspace to use optimal NB:  determine the
+*           minimum value of NB, and reduce NB or force use of
+*           unblocked code.
 *
-            IF( LWORK.LT.LWKOPT ) THEN
-*
-*              Not enough workspace to use optimal NB:  determine the
-*              minimum value of NB, and reduce NB or force use of
-*              unblocked code.
-*
-               NBMIN = MAX( 2, ILAENV( 2, 'DGGHD3', ' ', N, ILO, IHI,
-     $                 -1 ) )
-               IF( LWORK.GE.6*N*NBMIN ) THEN
-                  NB = LWORK / ( 6*N )
-               ELSE
-                  NB = 1
-               END IF
+            NBMIN = MAX( 2, ILAENV( 2, 'DGGHD3', ' ', N, ILO, IHI,
+     $              -1 ) )
+            IF( LWORK.GE.6*N*NBMIN ) THEN
+               NB = LWORK / ( 6*N )
+            ELSE
+               NB = 1
             END IF
          END IF
       END IF

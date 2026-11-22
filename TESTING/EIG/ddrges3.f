@@ -22,7 +22,7 @@
 *       INTEGER            ISEED( 4 ), NN( * )
 *       DOUBLE PRECISION   A( LDA, * ), ALPHAI( * ), ALPHAR( * ),
 *      $                   B( LDA, * ), BETA( * ), Q( LDQ, * ),
-*      $                   RESULT( 13 ), S( LDA, * ), T( LDA, * ),
+*      $                   RESULT( 14 ), S( LDA, * ), T( LDA, * ),
 *      $                   WORK( * ), Z( LDQ, * )
 *       ..
 *
@@ -51,7 +51,7 @@
 *> When DDRGES3 is called, a number of matrix "sizes" ("N's") and a
 *> number of matrix "TYPES" are specified.  For each size ("N")
 *> and each TYPE of matrix, a pair of matrices (A, B) will be generated
-*> and used for testing. For each matrix pair, the following 13 tests
+*> and used for testing. For each matrix pair, the following 14 tests
 *> will be performed and compared with the threshold THRESH except
 *> the tests (5), (11) and (13).
 *>
@@ -116,6 +116,15 @@
 *>
 *> (12)  if sorting worked and SDIM is the number of eigenvalues
 *>       which were SELECTed.
+*>
+*> (13)  is not used.
+*>
+*> (14)  DGGHD3 called with LWORK = 1 and with LWORK = 18*N, much
+*>       less than its optimum, with NB = 4 and NX = N+1: the rest
+*>       of WORK must be unchanged, INFO must be 0, the reduced
+*>       matrices must be upper Hessenberg and upper triangular, and
+*>       A = Q S Z', B = Q T Z' and the orthogonality of Q and Z must
+*>       hold to the accuracy of tests (1) to (4).
 *>
 *> Test Matrices
 *> =============
@@ -415,7 +424,7 @@
       INTEGER            ISEED( 4 ), NN( * )
       DOUBLE PRECISION   A( LDA, * ), ALPHAI( * ), ALPHAR( * ),
      $                   B( LDA, * ), BETA( * ), Q( LDQ, * ),
-     $                   RESULT( 13 ), S( LDA, * ), T( LDA, * ),
+     $                   RESULT( 14 ), S( LDA, * ), T( LDA, * ),
      $                   WORK( * ), Z( LDQ, * )
 *     ..
 *
@@ -434,6 +443,8 @@
      $                   JSIZE, JTYPE, KNTEIG, MAXWRK, MINWRK, MTYPES,
      $                   N, N1, NB, NERRS, NMATS, NMAX, NTEST, NTESTT,
      $                   RSUB, SDIM
+      INTEGER            ILW, LWG, NBMSAV, NBSAVE, NXSAVE
+      DOUBLE PRECISION   SENT
       DOUBLE PRECISION   SAFMAX, SAFMIN, TEMP1, TEMP2, ULP, ULPINV
 *     ..
 *     .. Local Arrays ..
@@ -455,6 +466,7 @@
       EXTERNAL           ALASVM, DGET51, DGET53, DGET54, DGGES3, DLACPY,
      $                   DLARFG, DLASET, DLATM4, DORM2R, XER_REPLACE,
      $                   XLAENV
+      EXTERNAL           DGGHD3
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SIGN
@@ -891,6 +903,71 @@
 *
   150       CONTINUE
 *
+*           Test DGGHD3 with less workspace than its optimum.
+*           The blocksize is set so that the blocked code is preferred
+*           and the crossover point above N, and DGGHD3 is given
+*           LWORK = 1 and then 18*N, less than the 6*N*NB it needs for
+*           the full blocksize. The rest of WORK is a guard that must
+*           stay unchanged. Test 14 also checks the reduction.
+*
+            NBSAVE = ILAENV( 1, 'DGGHD3', ' ', N, 1, N, -1 )
+            NBMSAV = ILAENV( 2, 'DGGHD3', ' ', N, 1, N, -1 )
+            NXSAVE = ILAENV( 3, 'DGGHD3', ' ', N, 1, N, -1 )
+            CALL XLAENV( 1, 4 )
+            CALL XLAENV( 2, 2 )
+            CALL XLAENV( 3, N+1 )
+            SENT = 7.77D+0
+            NTEST = 14
+            RESULT( 14 ) = ZERO
+            IF( N.GT.1 )
+     $         CALL DLASET( 'Lower', N-1, N-1, ZERO, ZERO,
+     $                      B( 2, 1 ), LDA )
+            DO 144 ILW = 1, 2
+               IF( ILW.EQ.1 ) THEN
+                  LWG = 1
+               ELSE
+                  LWG = MAX( 1, MIN( 18*N, LWORK ) )
+               END IF
+               CALL DLACPY( 'Full', N, N, A, LDA, S, LDA )
+               CALL DLACPY( 'Full', N, N, B, LDA, T, LDA )
+               DO 141 I = 1, LWORK
+                  WORK( I ) = SENT
+  141          CONTINUE
+               CALL DGGHD3( 'I', 'I', N, 1, N, S, LDA, T, LDA, Q, LDQ,
+     $                      Z, LDQ, WORK, LWG, IINFO )
+               IF( IINFO.NE.0 )
+     $            RESULT( 14 ) = ULPINV
+               DO 142 I = LWG + 1, LWORK
+                  IF( WORK( I ).NE.SENT )
+     $               RESULT( 14 ) = ULPINV
+  142          CONTINUE
+               DO 143 J = 1, N - 2
+                  DO 145 I = J + 2, N
+                     IF( S( I, J ).NE.ZERO )
+     $                  RESULT( 14 ) = ULPINV
+  145             CONTINUE
+  143          CONTINUE
+               DO 147 J = 1, N - 1
+                  DO 148 I = J + 1, N
+                     IF( T( I, J ).NE.ZERO )
+     $                  RESULT( 14 ) = ULPINV
+  148             CONTINUE
+  147          CONTINUE
+               CALL DGET51( 1, N, A, LDA, S, LDA, Q, LDQ, Z, LDQ, WORK,
+     $                      TEMP1 )
+               CALL DGET51( 1, N, B, LDA, T, LDA, Q, LDQ, Z, LDQ, WORK,
+     $                      TEMP2 )
+               RESULT( 14 ) = MAX( RESULT( 14 ), TEMP1, TEMP2 )
+               CALL DGET51( 3, N, B, LDA, T, LDA, Q, LDQ, Q, LDQ, WORK,
+     $                      TEMP1 )
+               CALL DGET51( 3, N, B, LDA, T, LDA, Z, LDQ, Z, LDQ, WORK,
+     $                      TEMP2 )
+               RESULT( 14 ) = MAX( RESULT( 14 ), TEMP1, TEMP2 )
+  144       CONTINUE
+            CALL XLAENV( 1, NBSAVE )
+            CALL XLAENV( 2, NBMSAV )
+            CALL XLAENV( 3, NXSAVE )
+*
 *           End of Loop -- Check for RESULT(j) > THRESH
 *
   160       CONTINUE
@@ -992,7 +1069,9 @@
      $      ' | / ( n ulp )', / ' 10 = A is in Schur form S',
      $      / ' 11 = difference between (alpha,beta) and diagonals',
      $      ' of (S,T)', / ' 12 = SDIM is the correct number of ',
-     $      'selected eigenvalues', / )
+     $      'selected eigenvalues',
+     $      / ' 14 = ', 'DGGHD3 with LWORK = 1 and 18*N: ',
+     $      'guard, INFO, shape, residuals', / )
  9991 FORMAT( ' Matrix order=', I5, ', type=', I2, ', seed=',
      $      4( I4, ',' ), ' result ', I2, ' is', 0P, F8.2 )
  9990 FORMAT( ' Matrix order=', I5, ', type=', I2, ', seed=',
