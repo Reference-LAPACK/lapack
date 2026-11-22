@@ -999,7 +999,7 @@
          CALL DSYEV_2STAGE( 'N', 'U', 2, A, 1, X, W, 3, INFO )
          CALL CHKXER( 'DSYEV_2STAGE ', INFOT, NOUT, LERR, OK )
          INFOT = 8
-         CALL DSYEV_2STAGE( 'N', 'U', 1, A, 1, X, W, 1, INFO )
+         CALL DSYEV_2STAGE( 'N', 'U', 2, A, 2, X, W, 2, INFO )
          CALL CHKXER( 'DSYEV_2STAGE ', INFOT, NOUT, LERR, OK )
          NT = NT + 6
 *

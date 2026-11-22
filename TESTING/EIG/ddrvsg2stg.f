@@ -400,6 +400,7 @@
      $                   RTUNFL, ULP, ULPINV, UNFL, VL, VU, TEMP1, TEMP2
 *     ..
 *     .. Local Arrays ..
+      INTEGER            LWTEST
       INTEGER            IDUMMA( 1 ), IOLDSD( 4 ), ISEED2( 4 ),
      $                   KMAGN( MAXTYP ), KMODE( MAXTYP ),
      $                   KTYPE( MAXTYP )
@@ -723,8 +724,25 @@
                   CALL DLACPY( ' ', N, N, A, LDA, Z, LDZ )
                   CALL DLACPY( UPLO, N, N, B, LDB, BB, LDB )
 *
+                  LWTEST = NWORK
+                  IF( N.LE.1 ) THEN
+*
+*                    N <= 1 needs LWORK = 1 only, and the
+*                    workspace query must return 1.
+*
+                     LWTEST = 1
+                     WORK( 1 ) = ZERO
+                     CALL DSYGV_2STAGE( IBTYPE, 'N', UPLO, N, Z, LDZ,
+     $                               BB, LDB, D2, WORK, -1,
+     $                               IINFO )
+                     IF( IINFO.NE.0 .OR.
+     $                .NOT.( WORK( 1 ).EQ.ONE ) ) THEN
+                        RESULT( NTEST ) = ULPINV
+                        GO TO 100
+                     END IF
+                  END IF
                   CALL DSYGV_2STAGE( IBTYPE, 'N', UPLO, N, Z, LDZ,
-     $                               BB, LDB, D2, WORK, NWORK, IINFO )
+     $                               BB, LDB, D2, WORK, LWTEST, IINFO )
                   IF( IINFO.NE.0 ) THEN
                      WRITE( NOUNIT, FMT = 9999 )
      $                  'DSYGV_2STAGE(V,' // UPLO //
@@ -733,6 +751,12 @@
                      IF( IINFO.LT.0 ) THEN
                         RETURN
                      ELSE
+                        RESULT( NTEST ) = ULPINV
+                        GO TO 100
+                     END IF
+                  END IF
+                  IF( N.LE.1 ) THEN
+                     IF( .NOT.( WORK( 1 ).EQ.ONE ) ) THEN
                         RESULT( NTEST ) = ULPINV
                         GO TO 100
                      END IF

@@ -496,6 +496,7 @@
      $                   VL, VU
 *     ..
 *     .. Local Arrays ..
+      INTEGER            LWTEST
       INTEGER            IDUMMA( 1 ), IOLDSD( 4 ), ISEED2( 4 ),
      $                   ISEED3( 4 ), KMAGN( MAXTYP ), KMODE( MAXTYP ),
      $                   KTYPE( MAXTYP )
@@ -1426,8 +1427,24 @@ c           LIWEDC = 12
 *
                NTEST = NTEST + 2
                SRNAMT = 'DSYEV_2STAGE'
-               CALL DSYEV_2STAGE( 'N', UPLO, N, A, LDU, D3, WORK, LWORK,
-     $                     IINFO )
+               LWTEST = LWORK
+               IF( N.LE.1 ) THEN
+*
+*                 N <= 1 needs LWORK = 1 only, and the workspace
+*                 query must return 1.
+*
+                  LWTEST = 1
+                  WORK( 1 ) = ZERO
+                  CALL DSYEV_2STAGE( 'N', UPLO, N, A, LDU, D3, WORK,
+     $                               -1, IINFO )
+                  IF( IINFO.NE.0 .OR.
+     $                .NOT.( WORK( 1 ).EQ.ONE ) ) THEN
+                     RESULT( NTEST ) = ULPINV
+                     GO TO 660
+                  END IF
+               END IF
+               CALL DSYEV_2STAGE( 'N', UPLO, N, A, LDU, D3, WORK,
+     $                     LWTEST, IINFO )
                IF( IINFO.NE.0 ) THEN
                   WRITE( NOUNIT, FMT = 9999 )
      $               'DSYEV_2STAGE(N,' // UPLO // ')',
@@ -1436,6 +1453,12 @@ c           LIWEDC = 12
                   IF( IINFO.LT.0 ) THEN
                      RETURN
                   ELSE
+                     RESULT( NTEST ) = ULPINV
+                     GO TO 660
+                  END IF
+               END IF
+               IF( N.LE.1 ) THEN
+                  IF( .NOT.( WORK( 1 ).EQ.ONE ) ) THEN
                      RESULT( NTEST ) = ULPINV
                      GO TO 660
                   END IF
