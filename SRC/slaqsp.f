@@ -143,12 +143,15 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, J, JC
-      REAL               CJ, LARGE, SMALL
+      REAL               CJ, HUGEV, LARGE, SMALL, T
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       REAL               SLAMCH
       EXTERNAL           LSAME, SLAMCH
+*     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC          MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -163,6 +166,7 @@
 *
       SMALL = SLAMCH( 'Safe minimum' ) / SLAMCH( 'Precision' )
       LARGE = ONE / SMALL
+      HUGEV = SLAMCH( 'Overflow' )
 *
       IF( SCOND.GE.THRESH .AND. AMAX.GE.SMALL .AND. AMAX.LE.LARGE ) THEN
 *
@@ -181,7 +185,14 @@
             DO 20 J = 1, N
                CJ = S( J )
                DO 10 I = 1, J
-                  AP( JC+I-1 ) = CJ*S( I )*AP( JC+I-1 )
+                  T = CJ*S( I )
+                  IF( T.GT.HUGEV ) THEN
+                     AP( JC+I-1 ) =
+     $                   MIN( CJ, S( I ) )*
+     $                   ( MAX( CJ, S( I ) )*AP( JC+I-1 ) )
+                  ELSE
+                     AP( JC+I-1 ) = T*AP( JC+I-1 )
+                  END IF
    10          CONTINUE
                JC = JC + J
    20       CONTINUE
@@ -193,7 +204,14 @@
             DO 40 J = 1, N
                CJ = S( J )
                DO 30 I = J, N
-                  AP( JC+I-J ) = CJ*S( I )*AP( JC+I-J )
+                  T = CJ*S( I )
+                  IF( T.GT.HUGEV ) THEN
+                     AP( JC+I-J ) =
+     $                   MIN( CJ, S( I ) )*
+     $                   ( MAX( CJ, S( I ) )*AP( JC+I-J ) )
+                  ELSE
+                     AP( JC+I-J ) = T*AP( JC+I-J )
+                  END IF
    30          CONTINUE
                JC = JC + N - J + 1
    40       CONTINUE

@@ -151,12 +151,15 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, J
-      DOUBLE PRECISION   CJ, LARGE, SMALL
+      DOUBLE PRECISION   CJ, HUGEV, LARGE, SMALL, T
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
       DOUBLE PRECISION   DLAMCH
       EXTERNAL           LSAME, DLAMCH
+*     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC          MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -171,6 +174,7 @@
 *
       SMALL = DLAMCH( 'Safe minimum' ) / DLAMCH( 'Precision' )
       LARGE = ONE / SMALL
+      HUGEV = DLAMCH( 'Overflow' )
 *
       IF( SCOND.GE.THRESH .AND. AMAX.GE.SMALL .AND. AMAX.LE.LARGE ) THEN
 *
@@ -188,7 +192,14 @@
             DO 20 J = 1, N
                CJ = S( J )
                DO 10 I = 1, J
-                  A( I, J ) = CJ*S( I )*A( I, J )
+                  T = CJ*S( I )
+                  IF( T.GT.HUGEV ) THEN
+                     A( I, J ) =
+     $                   MIN( CJ, S( I ) )*
+     $                   ( MAX( CJ, S( I ) )*A( I, J ) )
+                  ELSE
+                     A( I, J ) = T*A( I, J )
+                  END IF
    10          CONTINUE
    20       CONTINUE
          ELSE
@@ -198,7 +209,14 @@
             DO 40 J = 1, N
                CJ = S( J )
                DO 30 I = J, N
-                  A( I, J ) = CJ*S( I )*A( I, J )
+                  T = CJ*S( I )
+                  IF( T.GT.HUGEV ) THEN
+                     A( I, J ) =
+     $                   MIN( CJ, S( I ) )*
+     $                   ( MAX( CJ, S( I ) )*A( I, J ) )
+                  ELSE
+                     A( I, J ) = T*A( I, J )
+                  END IF
    30          CONTINUE
    40       CONTINUE
          END IF

@@ -161,7 +161,7 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, J
-      DOUBLE PRECISION   CJ, LARGE, SMALL
+      DOUBLE PRECISION   CJ, HUGEV, LARGE, SMALL, T
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -184,6 +184,7 @@
 *
       SMALL = DLAMCH( 'Safe minimum' ) / DLAMCH( 'Precision' )
       LARGE = ONE / SMALL
+      HUGEV = DLAMCH( 'Overflow' )
 *
       IF( SCOND.GE.THRESH .AND. AMAX.GE.SMALL .AND. AMAX.LE.LARGE ) THEN
 *
@@ -201,9 +202,21 @@
             DO 20 J = 1, N
                CJ = S( J )
                DO 10 I = MAX( 1, J-KD ), J - 1
-                  AB( KD+1+I-J, J ) = CJ*S( I )*AB( KD+1+I-J, J )
+                  T = CJ*S( I )
+                  IF( T.GT.HUGEV ) THEN
+                     AB( KD+1+I-J, J ) =
+     $                   MIN( CJ, S( I ) )*
+     $                   ( MAX( CJ, S( I ) )*AB( KD+1+I-J, J ) )
+                  ELSE
+                     AB( KD+1+I-J, J ) = T*AB( KD+1+I-J, J )
+                  END IF
    10          CONTINUE
-               AB( KD+1, J ) = CJ*CJ*DBLE( AB( KD+1, J ) )
+               T = CJ*CJ
+               IF( T.GT.HUGEV ) THEN
+                  AB( KD+1, J ) = CJ*( CJ*DBLE( AB( KD+1, J ) ) )
+               ELSE
+                  AB( KD+1, J ) = T*DBLE( AB( KD+1, J ) )
+               END IF
    20       CONTINUE
          ELSE
 *
@@ -211,9 +224,21 @@
 *
             DO 40 J = 1, N
                CJ = S( J )
-               AB( 1, J ) = CJ*CJ*DBLE( AB( 1, J ) )
+               T = CJ*CJ
+               IF( T.GT.HUGEV ) THEN
+                  AB( 1, J ) = CJ*( CJ*DBLE( AB( 1, J ) ) )
+               ELSE
+                  AB( 1, J ) = T*DBLE( AB( 1, J ) )
+               END IF
                DO 30 I = J + 1, MIN( N, J+KD )
-                  AB( 1+I-J, J ) = CJ*S( I )*AB( 1+I-J, J )
+                  T = CJ*S( I )
+                  IF( T.GT.HUGEV ) THEN
+                     AB( 1+I-J, J ) =
+     $                   MIN( CJ, S( I ) )*
+     $                   ( MAX( CJ, S( I ) )*AB( 1+I-J, J ) )
+                  ELSE
+                     AB( 1+I-J, J ) = T*AB( 1+I-J, J )
+                  END IF
    30          CONTINUE
    40       CONTINUE
          END IF
