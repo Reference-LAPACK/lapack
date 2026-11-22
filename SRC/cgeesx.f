@@ -205,6 +205,9 @@
 *>          INFO is INTEGER
 *>          = 0: successful exit
 *>          < 0: if INFO = -i, the i-th argument had an illegal value.
+*>               INFO = -6 if A contains a NaN or an infinity, or an
+*>               entry whose absolute value overflows; XERBLA is not
+*>               called in that case.
 *>          > 0: if INFO = i, and i is
 *>             <= N: the QR algorithm failed to compute all the
 *>                   eigenvalues; elements 1:ILO-1 and i+1:N of W
@@ -282,10 +285,10 @@
      $                   CLASCL, CTRSEN, CUNGHR, SLASCL, XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            LSAME, SISNAN
       INTEGER            ILAENV
       REAL               CLANGE, SLAMCH, SROUNDUP_LWORK
-      EXTERNAL           LSAME, ILAENV, CLANGE, SLAMCH,
+      EXTERNAL           LSAME, SISNAN, ILAENV, CLANGE, SLAMCH,
      $                   SROUNDUP_LWORK
 *     ..
 *     .. Intrinsic Functions ..
@@ -392,6 +395,14 @@
 *     Scale A if max element outside range [SMLNUM,BIGNUM]
 *
       ANRM = CLANGE( 'M', N, N, A, LDA, DUM )
+*
+*     Return INFO = -6, without calling XERBLA, if A contains a NaN
+*     or an infinity, or an entry whose absolute value overflows.
+*
+      IF( SISNAN( ANRM ) .OR. ANRM.GT.SLAMCH( 'Overflow' ) ) THEN
+         INFO = -6
+         RETURN
+      END IF
       SCALEA = .FALSE.
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          SCALEA = .TRUE.

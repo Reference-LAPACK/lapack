@@ -260,6 +260,9 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>                INFO = -6 if A contains a NaN or an infinity, or an
+*>                entry whose absolute value overflows; XERBLA is not
+*>                called in that case.
 *>          > 0:  if INFO = i, the QR algorithm failed to compute all the
 *>                eigenvalues, and no eigenvectors or condition numbers
 *>                have been computed; elements 1:ILO-1 and i+1:N of W
@@ -330,10 +333,10 @@
      $                   ZUNGHR
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            LSAME, DISNAN
       INTEGER            IDAMAX, ILAENV
       DOUBLE PRECISION   DLAMCH, DZNRM2, ZLANGE
-      EXTERNAL           LSAME, IDAMAX, ILAENV, DLAMCH, DZNRM2,
+      EXTERNAL           LSAME, DISNAN, IDAMAX, ILAENV, DLAMCH, DZNRM2,
      $                   ZLANGE
 *     ..
 *     .. Intrinsic Functions ..
@@ -474,6 +477,14 @@
 *
       ICOND = 0
       ANRM = ZLANGE( 'M', N, N, A, LDA, DUM )
+*
+*     Return INFO = -6, without calling XERBLA, if A contains a NaN
+*     or an infinity, or an entry whose absolute value overflows.
+*
+      IF( DISNAN( ANRM ) .OR. ANRM.GT.DLAMCH( 'Overflow' ) ) THEN
+         INFO = -6
+         RETURN
+      END IF
       SCALEA = .FALSE.
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          SCALEA = .TRUE.

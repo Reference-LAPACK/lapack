@@ -278,6 +278,8 @@
 *>          INFO is INTEGER
 *>          = 0:  successful exit
 *>          < 0:  if INFO = -i, the i-th argument had an illegal value.
+*>                INFO = -6 if A contains a NaN or an infinity;
+*>                XERBLA is not called in that case.
 *>          > 0:  if INFO = i, the QR algorithm failed to compute all the
 *>                eigenvalues, and no eigenvectors or condition numbers
 *>                have been computed; elements 1:ILO-1 and i+1:N of WR
@@ -346,11 +348,11 @@
      $                   STRSNA, XERBLA
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
+      LOGICAL            LSAME, SISNAN
       INTEGER            ISAMAX, ILAENV
       REAL               SLAMCH, SLANGE, SLAPY2,
      $                   SNRM2, SROUNDUP_LWORK
-      EXTERNAL           LSAME, ISAMAX, ILAENV,
+      EXTERNAL           LSAME, SISNAN, ISAMAX, ILAENV,
      $                   SLAMCH, SLANGE, SLAPY2,
      $                   SNRM2, SROUNDUP_LWORK
 *     ..
@@ -493,6 +495,14 @@
 *
       ICOND = 0
       ANRM = SLANGE( 'M', N, N, A, LDA, DUM )
+*
+*     Return INFO = -6, without calling XERBLA, if A contains a NaN
+*     or an infinity.
+*
+      IF( SISNAN( ANRM ) .OR. ANRM.GT.SLAMCH( 'Overflow' ) ) THEN
+         INFO = -6
+         RETURN
+      END IF
       SCALEA = .FALSE.
       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN
          SCALEA = .TRUE.
