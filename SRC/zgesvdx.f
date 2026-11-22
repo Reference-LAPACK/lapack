@@ -213,11 +213,17 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.
-*>          LWORK >= MAX(1,MIN(M,N)*(MIN(M,N)+4)) for the paths (see
-*>          comments inside the code):
-*>             - PATH 1  (M much larger than N)
-*>             - PATH 1t (N much larger than M)
-*>          LWORK >= MAX(1,MIN(M,N)*2+MAX(M,N)) for the other paths.
+*>          LWORK >= 1 if MIN(M,N) = 0. Otherwise let K = MIN(M,N) and
+*>          L = MAX(M,N). Then
+*>             LWORK >= K*(K+5) for the paths (see comments inside
+*>             the code):
+*>                - PATH 1  (M much larger than N)
+*>                - PATH 1t (N much larger than M)
+*>             LWORK >= 3*K+L for the other paths.
+*>          Paths 1 and 1t are taken when L >= MNTHR, where MNTHR is the
+*>          value returned by ILAENV for ISPEC = 6 (the reference ILAENV
+*>          returns INT( 1.6*K )). LWORK >= MAX( K*(K+5), 3*K+L )
+*>          is sufficient for every path and every ILAENV.
 *>          For good performance, LWORK should generally be larger.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
@@ -229,7 +235,7 @@
 *> \param[out] RWORK
 *> \verbatim
 *>          RWORK is DOUBLE PRECISION array, dimension (MAX(1,LRWORK))
-*>          LRWORK >= MIN(M,N)*(MIN(M,N)*2+15*MIN(M,N)).
+*>          LRWORK >= MIN(M,N)*(MIN(M,N)*2+17).
 *> \endverbatim
 *>
 *> \param[out] IWORK
