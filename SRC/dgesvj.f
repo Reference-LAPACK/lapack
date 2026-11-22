@@ -535,7 +535,7 @@
             AAPP = ZERO
             AAQQ = ONE
             CALL DLASSQ( M-p+1, A( p, p ), 1, AAPP, AAQQ )
-            IF( AAPP.GT.BIG ) THEN
+            IF( AAQQ.GT.DLAMCH( 'Overflow' ) ) THEN
                INFO = -6
                CALL XERBLA( 'DGESVJ', -INFO )
                RETURN
@@ -562,7 +562,7 @@
             AAPP = ZERO
             AAQQ = ONE
             CALL DLASSQ( p, A( 1, p ), 1, AAPP, AAQQ )
-            IF( AAPP.GT.BIG ) THEN
+            IF( AAQQ.GT.DLAMCH( 'Overflow' ) ) THEN
                INFO = -6
                CALL XERBLA( 'DGESVJ', -INFO )
                RETURN
@@ -589,7 +589,7 @@
             AAPP = ZERO
             AAQQ = ONE
             CALL DLASSQ( M, A( 1, p ), 1, AAPP, AAQQ )
-            IF( AAPP.GT.BIG ) THEN
+            IF( AAQQ.GT.DLAMCH( 'Overflow' ) ) THEN
                INFO = -6
                CALL XERBLA( 'DGESVJ', -INFO )
                RETURN

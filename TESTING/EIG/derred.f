@@ -101,6 +101,7 @@
 *     .. External Subroutines ..
       EXTERNAL           CHKXER, DGEES, DGEESX, DGEEV, DGEEVX, DGEJSV,
      $                   DGESDD, DGESVD, DGESVDX, DGESVDQ,
+     $                   DGESVJ,
      $                   DGESVDMR3
 *     ..
 *     .. External Functions ..
@@ -466,6 +467,43 @@
      $                 W, 1, IW, INFO)
          CALL CHKXER( 'DGEJSV', INFOT, NOUT, LERR, OK )
          NT = 11
+         IF( OK ) THEN
+            WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
+     $           NT
+         ELSE
+            WRITE( NOUT, FMT = 9998 )SRNAMT( 1:LEN_TRIM( SRNAMT ) )
+         END IF
+*
+*        Test DGESVJ
+*
+*        DGESVJ must report INFO = -6 through XERBLA when A contains
+*        an infinity, for each of the lower, upper and general storage
+*        options.
+*
+         SRNAMT = 'DGESVJ'
+         RONE = ONE
+         RZERO = ZERO
+         A( 1, 1 ) = ONE
+         A( 2, 1 ) = ZERO
+         A( 1, 2 ) = ZERO
+         A( 2, 2 ) = ONE
+         INFOT = 6
+         A( 2, 1 ) = RONE / RZERO
+         CALL DGESVJ( 'L', 'U', 'V', 2, 2, A, NMAX, S, 0, VT,
+     $                 NMAX, W, 20*NMAX, INFO )
+         CALL CHKXER( 'DGESVJ', INFOT, NOUT, LERR, OK )
+         A( 2, 1 ) = ZERO
+         A( 1, 2 ) = RONE / RZERO
+         CALL DGESVJ( 'U', 'U', 'V', 2, 2, A, NMAX, S, 0, VT,
+     $                 NMAX, W, 20*NMAX, INFO )
+         CALL CHKXER( 'DGESVJ', INFOT, NOUT, LERR, OK )
+         A( 1, 2 ) = ZERO
+         A( 2, 1 ) = RONE / RZERO
+         CALL DGESVJ( 'G', 'U', 'V', 2, 2, A, NMAX, S, 0, VT,
+     $                 NMAX, W, 20*NMAX, INFO )
+         CALL CHKXER( 'DGESVJ', INFOT, NOUT, LERR, OK )
+         A( 2, 1 ) = ZERO
+         NT = 3
          IF( OK ) THEN
             WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
      $           NT
