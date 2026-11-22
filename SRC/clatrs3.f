@@ -511,14 +511,14 @@
                IF( SCALOC .EQ. ZERO ) THEN
 *                 LATRS found that A is singular through A(j,j) = 0.
 *                 Reset the computation x(1:n) = 0, x(j) = 1, SCALE = 0
-*                 and compute op(A)*x = 0. Note that X(J1:J2-1, KK) is
+*                 and compute op(A)*x = 0. Note that X(J1:J2-1, RHS) is
 *                 set by LATRS.
                   SCALE( RHS ) = ZERO
                   DO II = 1, J1-1
-                     X( II, KK ) = CZERO
+                     X( II, RHS ) = CZERO
                   END DO
                   DO II = J2, N
-                     X( II, KK ) = CZERO
+                     X( II, RHS ) = CZERO
                   END DO
 *                 Discard the local scale factors.
                   DO II = 1, NBA
@@ -551,7 +551,7 @@
 *                    is returned that is not a solution to op(A) * x = b.
                      SCALE( RHS ) = ZERO
                      DO II = 1, N
-                        X( II, KK ) = CZERO
+                        X( II, RHS ) = CZERO
                      END DO
 *                    Discard the local scale factors.
                      DO II = 1, NBA
