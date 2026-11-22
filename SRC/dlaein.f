@@ -213,12 +213,15 @@
       INFO = 0
 *
 *     Each starting vector gets one solve, from v0 to v1.  The residual
-*     of v1 is SCALE times the norm of v0, over the norm of v1, so
-*     GROWTO is the growth V1NORM/(SCALE*V0NORM) that the acceptance
-*     test below requires.
+*     of v1 is SCALE times the norm of v0, over the norm of v1, so the
+*     acceptance test below requires the growth V1NORM/(SCALE*V0NORM)
+*     to be at least 1/(10*N*EPS3).  For a real eigenvalue it is
+*     written with the ratio V0NORM/(N*EPS3), which is of order one,
+*     because the reciprocal of N*EPS3 overflows when EPS3 is small.
+*     A starting vector that has underflowed to zero (V0NORM = 0) is
+*     not accepted.
 *
       ROOTN = SQRT( DBLE( N ) )
-      GROWTO = TENTH / ( DBLE( N )*EPS3 )
       NRMSML = MAX( ONE, EPS3*ROOTN )*SMLNUM
 *
 *     Form B = H - (WR,WI)*I (except that the subdiagonal elements and
@@ -343,7 +346,9 @@
 *           Test for sufficient growth in the norm of v.
 *
             V1NORM = DASUM( N, VR, 1 )
-            IF( V1NORM.GE.GROWTO*SCALE*V0NORM )
+            IF( V0NORM.GT.ZERO .AND.
+     $          V1NORM.GE.( TENTH*SCALE )*
+     $          ( V0NORM / ( DBLE( N )*EPS3 ) ) )
      $         GO TO 120
 *
 *           Choose new orthogonal starting vector and try again.
@@ -369,6 +374,15 @@
       ELSE
 *
 *        Complex eigenvalue.
+*
+*        The growth test of this path still uses the threshold
+*        GROWTO = 1/(10*N*EPS3), formed as a reciprocal, which
+*        overflows for a very small EPS3.  The pivot test below treats
+*        pivots up to SMLNUM as zero.  SMLNUM is an absolute floor, so
+*        this path cannot give a meaningful vector once the norm of H
+*        is about SMLNUM or less, whatever the growth test does.
+*
+         GROWTO = TENTH / ( DBLE( N )*EPS3 )
 *
          IF( NOINIT ) THEN
 *

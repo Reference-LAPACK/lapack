@@ -91,8 +91,14 @@
 *>            is at least sqrt(ulp); s = 1 for a normal matrix
 *>
 *>    (12)    | HX - XW | / ( |H| |X| ulp )
+*>            For the types 9 to 11 (in the real routines, when
+*>            all eigenvalues are real), the result also covers
+*>            H and W scaled to the norm 0.01*UNFL/(N*ULP).
 *>
 *>    (13)    | Y**H H - W**H Y | / ( |H| |Y| ulp )
+*>            For the types 9 to 11 (in the real routines, when
+*>            all eigenvalues are real), the result also covers
+*>            H and W scaled to the norm 0.01*UNFL/(N*ULP).
 *>
 *>    (14)    | AX - XW | / ( |A| |X| ulp )
 *>
@@ -454,13 +460,14 @@
       PARAMETER          ( MAXTYP = 21 )
 *     ..
 *     .. Local Scalars ..
-      LOGICAL            BADNN, MATCH
+      LOGICAL            BADNN, MATCH, REALEV
       INTEGER            I, IHI, IINFO, ILO, IMODE, IN, ITYPE, J, JCOL,
      $                   JJ, JP, JSIZE, JTYPE, K, MTYPES, N, N1, NERRS,
      $                   NMATS, NMAX, NSELC, NSELR, NTEST, NTESTT
-      DOUBLE PRECISION   ANINV, ANORM, COND, CONDS, OVFL, PRODI, PRODR,
-     $                   RTOVFL, RTULP, RTULPI, RTUNFL, SJ, TEMP1,
-     $                   TEMP2, ULP, ULPINV, UNFL, XNORM, YNORM
+      INTEGER            IWI, IWR
+      DOUBLE PRECISION   ANINV, ANORM, COND, CONDS, HNORM, OVFL, PRODI,
+     $                   PRODR, RTOVFL, RTULP, RTULPI, RTUNFL, SJ,
+     $                   TEMP1, TEMP2, ULP, ULPINV, UNFL, XNORM, YNORM
 *     ..
 *     .. Local Arrays ..
       CHARACTER          ADUMMA( 1 )
@@ -470,14 +477,14 @@
       DOUBLE PRECISION   DUMMA( 6 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DDOT, DLAMCH, DLAPY2, DNRM2
-      EXTERNAL           DDOT, DLAMCH, DLAPY2, DNRM2
+      DOUBLE PRECISION   DDOT, DLAMCH, DLANHS, DLAPY2, DNRM2
+      EXTERNAL           DDOT, DLAMCH, DLANHS, DLAPY2, DNRM2
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DCOPY, DGEHRD, DGEMM, DGET10, DGET22, DHSEIN,
-     $                   DHSEQR, DHST01, DLACPY, DLAFTS, DLASET, DLASUM,
-     $                   DLATME, DLATMR, DLATMS, DORGHR, DORMHR, DTREVC,
-     $                   DTREVC3, XER_REPLACE
+     $                   DHSEQR, DHST01, DLACPY, DLAFTS, DLASCL, DLASET,
+     $                   DLASUM, DLATME, DLATMR, DLATMS, DORGHR, DORMHR,
+     $                   DTREVC, DTREVC3, XER_REPLACE
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SQRT
@@ -1126,6 +1133,95 @@
                IF( DUMMA( 4 ).GT.THRESH ) THEN
                   WRITE( NOUNIT, FMT = 9998 )'Left', 'DHSEIN',
      $               DUMMA( 4 ), N, JTYPE, IOLDSD
+               END IF
+            END IF
+*
+*           For the types 9 to 11, whose entries are not much smaller
+*           than the norm, and when all eigenvalues are real, repeat
+*           tests 12 and 13 with H and its eigenvalues scaled down so
+*           that N*ULP*norm(H) is a small fraction of the underflow
+*           threshold, but all entries are still normal.  The growth
+*           threshold of the inverse iteration must not overflow
+*           there.  Only real eigenvalues are used because the code
+*           of DLAEIN for a complex conjugate pair treats pivots up
+*           to SMLNUM as zero, an absolute floor, and cannot give
+*           meaningful vectors at this scale.  The scaled matrix is
+*           kept in Z and the scaled eigenvalues in WORK( IWR ) and
+*           WORK( IWI ), which are not needed any more.  The EPS3 of
+*           xHSEIN is about 0.01*UNFL/N, a subnormal number: where
+*           subnormal numbers are flushed to zero it is zero, the
+*           inverse iteration rightly fails, and the check is
+*           skipped.
+*
+            REALEV = .TRUE.
+            DO 233 J = 1, N
+               IF( WI3( J ).NE.ZERO )
+     $            REALEV = .FALSE.
+  233       CONTINUE
+            HNORM = DLANHS( 'I', N, H, LDA, WORK )
+            TEMP1 = ( UNFL*ULPINV*1.0D-2 )*ANINV
+            IF( JTYPE.GE.9 .AND. JTYPE.LE.11 .AND.
+     $          REALEV .AND. HNORM.GT.TEMP1 .AND.
+     $          TEMP1*ULP.GT.ZERO ) THEN
+               IWR = N*N + 2*N + 1
+               IWI = IWR + N
+               CALL DLACPY( ' ', N, N, H, LDA, Z, LDU )
+               CALL DLASCL( 'G', 0, 0, HNORM, TEMP1, N, N, Z, LDU,
+     $                      IINFO )
+               CALL DCOPY( N, WR3, 1, WORK( IWR ), 1 )
+               CALL DCOPY( N, WI3, 1, WORK( IWI ), 1 )
+               CALL DLASCL( 'G', 0, 0, HNORM, TEMP1, N, 1, WORK( IWR ),
+     $                      N, IINFO )
+               CALL DLASCL( 'G', 0, 0, HNORM, TEMP1, N, 1, WORK( IWI ),
+     $                      N, IINFO )
+               DO 235 J = 1, N
+                  SELECT( J ) = .TRUE.
+  235          CONTINUE
+*
+               CALL DHSEIN( 'Right', 'Qr', 'Ninitv', SELECT, N, Z,
+     $                   LDU, WORK( IWR ), WORK( IWI ),
+     $                   DUMMA, LDU, EVECTR, LDU, N1, IN, WORK,
+     $                   IWORK, IWORK, IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'DHSEIN(R,S)', IINFO, N,
+     $               JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 )
+     $               GO TO 250
+                  RESULT( 12 ) = ULPINV
+               ELSE
+                  CALL DGET22( 'N', 'N', 'N', N, Z, LDU, EVECTR, LDU,
+     $                         WORK( IWR ), WORK( IWI ), WORK,
+     $                         DUMMA( 1 ) )
+                  IF( DUMMA( 1 ).LT.ULPINV ) THEN
+                     RESULT( 12 ) = MAX( RESULT( 12 ),
+     $                              DUMMA( 1 )*ANINV )
+                  ELSE
+                     RESULT( 12 ) = ULPINV
+                  END IF
+               END IF
+*
+               CALL DHSEIN( 'Left', 'Qr', 'Ninitv', SELECT, N, Z,
+     $                   LDU, WORK( IWR ), WORK( IWI ),
+     $                   EVECTL, LDU, DUMMA, LDU, N1, IN, WORK,
+     $                   IWORK, IWORK, IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'DHSEIN(L,S)', IINFO, N,
+     $               JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 )
+     $               GO TO 250
+                  RESULT( 13 ) = ULPINV
+               ELSE
+                  CALL DGET22( 'C', 'N', 'C', N, Z, LDU, EVECTL, LDU,
+     $                         WORK( IWR ), WORK( IWI ), WORK,
+     $                         DUMMA( 3 ) )
+                  IF( DUMMA( 3 ).LT.ULPINV ) THEN
+                     RESULT( 13 ) = MAX( RESULT( 13 ),
+     $                              DUMMA( 3 )*ANINV )
+                  ELSE
+                     RESULT( 13 ) = ULPINV
+                  END IF
                END IF
             END IF
 *
