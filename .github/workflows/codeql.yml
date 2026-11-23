@@ -14,11 +14,10 @@ on:
     - 'DOCS/**'
     - '**.md'
     - '**README'
+  # No paths-ignore here: the OpenSSF Scorecard SAST check counts every
+  # merged pull request, and a documentation-only pull request without a
+  # CodeQL run lowers the score.
   pull_request:
-    paths-ignore:
-    - 'DOCS/**'
-    - '**.md'
-    - '**README'
   # Rerun weekly so new CodeQL queries are applied to unchanged code.
   schedule:
   - cron: '17 4 * * 1'
