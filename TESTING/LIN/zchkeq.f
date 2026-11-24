@@ -66,6 +66,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE, TEN
       PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D+0, TEN = 1.0D1 )
       COMPLEX*16         CZERO
@@ -99,7 +101,7 @@
      $                   ZGEEQUB, ZPBEQU, ZPOEQU, ZPPEQU
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX, MIN
+      INTRINSIC          ABS, CMPLX, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -544,9 +546,10 @@
 *
 *     A finite matrix with an entry whose CABS1, |re| + |im|, overflows.
 *     The row and column holding it must be scaled down, not reported
-*     as zero or scaled up.
+*     as zero or scaled up, and the two factors together must bring the
+*     entry to order one instead of scaling it down twice to zero.
 *
-      A( 1, 1 ) = DCMPLX( XS( 3 ), XS( 3 ) )
+      A( 1, 1 ) = CMPLX( XS( 3 ), XS( 3 ), KIND=DP )
       A( 2, 1 ) = ONE
       A( 1, 2 ) = ONE
       A( 2, 2 ) = ONE
@@ -554,6 +557,8 @@
       IF( INFO.NE.0 .OR. .NOT.( NORM.GT.ZERO ) .OR.
      $    NORM.GT.XS( 3 ) .OR. R( 1 ).GE.ONE .OR. C( 1 ).GE.ONE )
      $   RESLTS( 6 ) = ONE
+      RATIO = ( XS( 3 )*R( 1 ) )*C( 1 )
+      IF( RATIO.LT.ONE / TEN .OR. RATIO.GT.TEN ) RESLTS( 6 ) = ONE
       AB( 1, 1 ) = ZERO
       AB( 2, 1 ) = A( 1, 1 )
       AB( 3, 1 ) = ONE
@@ -565,6 +570,8 @@
       IF( INFO.NE.0 .OR. .NOT.( NORM.GT.ZERO ) .OR.
      $    NORM.GT.XS( 3 ) .OR. R( 1 ).GE.ONE .OR. C( 1 ).GE.ONE )
      $   RESLTS( 7 ) = ONE
+      RATIO = ( XS( 3 )*R( 1 ) )*C( 1 )
+      IF( RATIO.LT.ONE / TEN .OR. RATIO.GT.TEN ) RESLTS( 7 ) = ONE
       RESLTS( 6 ) = RESLTS( 6 ) / EPS
       RESLTS( 7 ) = RESLTS( 7 ) / EPS
       OK = ( RESLTS( 1 ).LE.THRESH ) .AND.

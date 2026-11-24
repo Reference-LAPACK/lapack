@@ -285,11 +285,14 @@
    70 CONTINUE
 *
 *     Find the maximum element in each column,
-*     assuming the row scaling computed above.
+*     assuming the row scaling computed above.  Each part is scaled
+*     before the two are added: CABS1 of the unscaled entry can
+*     overflow although the entry is finite.
 *
       DO 90 J = 1, N
          DO 80 I = 1, M
-            C( J ) = MAX( C( J ), CABS1( A( I, J ) )*R( I ) )
+            C( J ) = MAX( C( J ), ABS( REAL( A( I, J ) ) )*R( I )+
+     $               ABS( AIMAG( A( I, J ) ) )*R( I ) )
    80    CONTINUE
          IF( C( J ).GT.ZERO ) THEN
             C( J ) = SCALE( ONE, INT( MAX( EMINR, MIN( EMAXR,
