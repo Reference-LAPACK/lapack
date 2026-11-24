@@ -30,4 +30,30 @@ LAPACKE_TEST(strevc)
             }
         }
     }
+
+    /* Check the row-major stride limits with MM = N, including N = 0. */
+    {
+        static const struct {
+            const char *label;
+            char side;
+            lapack_int n, ldvl, ldvr, expected;
+        } cases[] = {
+            {"both sides", 'B', 2, 2, 2, 0},
+            {"short VL", 'L', 2, 1, 1, -9},
+            {"short VR", 'R', 2, 1, 1, -11},
+            {"zero unused LDVL", 'R', 2, 0, 2, -9},
+            {"zero unused LDVR", 'L', 2, 2, 0, -11},
+            {"empty left", 'L', 0, 0, 0, 0},
+            {"empty right", 'R', 0, 0, 0, 0},
+        };
+        float vl[4] = {0}, vr[4] = {0};
+        lapack_int m;
+
+        for (size_t i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
+            lapack_int info = API_SUFFIX(LAPACKE_strevc)(
+                LAPACK_ROW_MAJOR, cases[i].side, 'A', select, cases[i].n,
+                t, 2, vl, cases[i].ldvl, vr, cases[i].ldvr, cases[i].n, &m);
+            lapacke_test_check("strevc", cases[i].label, info, cases[i].expected);
+        }
+    }
 }
