@@ -67,6 +67,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE, TWO, TEN
       PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D+0,
      $                   TWO = 2.0D+0, TEN = 1.0D1 )
@@ -103,7 +105,7 @@
      $                   ZLAQSB, ZLAQHE, ZLAQHP, ZLAQHB
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, AIMAG, DBLE, DCMPLX, MAX, MIN
+      INTRINSIC          ABS, AIMAG, CMPLX, DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -480,10 +482,10 @@
 *
 *        ZLAQGE
 *
-         A( 1, 1 ) = DCMPLX( TWO*DEN, ZERO )
-         A( 2, 1 ) = DCMPLX( ONE, ZERO )
-         A( 1, 2 ) = DCMPLX( DEN, ZERO )
-         A( 2, 2 ) = DCMPLX( 1.0D-20, ZERO )
+         A( 1, 1 ) = CMPLX( TWO*DEN, ZERO, KIND=DP )
+         A( 2, 1 ) = CMPLX( ONE, ZERO, KIND=DP )
+         A( 1, 2 ) = CMPLX( DEN, ZERO, KIND=DP )
+         A( 2, 2 ) = CMPLX( 1.0D-20, ZERO, KIND=DP )
          CALL ZGEEQU( 2, 2, A, NSZ, R, C, RCOND, CCOND, NORM,
      $                INFO )
          CALL ZLAQGE( 2, 2, A, NSZ, R, C, RCOND, CCOND, NORM,
@@ -501,10 +503,10 @@
 *
 *        ZLAQGB
 *
-         AB( 2, 1 ) = DCMPLX( TWO*DEN, ZERO )
-         AB( 3, 1 ) = DCMPLX( ONE, ZERO )
-         AB( 1, 2 ) = DCMPLX( DEN, ZERO )
-         AB( 2, 2 ) = DCMPLX( 1.0D-20, ZERO )
+         AB( 2, 1 ) = CMPLX( TWO*DEN, ZERO, KIND=DP )
+         AB( 3, 1 ) = CMPLX( ONE, ZERO, KIND=DP )
+         AB( 1, 2 ) = CMPLX( DEN, ZERO, KIND=DP )
+         AB( 2, 2 ) = CMPLX( 1.0D-20, ZERO, KIND=DP )
          CALL ZGBEQU( 2, 2, 1, 1, AB, NSZB, R, C, RCOND, CCOND,
      $                NORM, INFO )
          CALL ZLAQGB( 2, 2, 1, 1, AB, NSZB, R, C, RCOND, CCOND,
@@ -536,12 +538,12 @@
 *           ZLAQSY
 *
             DO 6110 I = 1, 3
-               A( I, 1 ) = DCMPLX( DEN, ZERO )
-               A( I, 2 ) = DCMPLX( DEN, ZERO )
-               A( I, 3 ) = DCMPLX( DEN, ZERO )
+               A( I, 1 ) = CMPLX( DEN, ZERO, KIND=DP )
+               A( I, 2 ) = CMPLX( DEN, ZERO, KIND=DP )
+               A( I, 3 ) = CMPLX( DEN, ZERO, KIND=DP )
  6110       CONTINUE
-            A( 1, 2 ) = DCMPLX( DEN, DEN )
-            A( 2, 1 ) = DCMPLX( DEN, DEN )
+            A( 1, 2 ) = CMPLX( DEN, DEN, KIND=DP )
+            A( 2, 1 ) = CMPLX( DEN, DEN, KIND=DP )
             CALL ZPOEQU( 2, A, NSZ, R, RCOND, NORM, INFO )
             CALL ZLAQSY( UPLO, 2, A, NSZ, R, RCOND, NORM,
      $                   EQUED )
@@ -570,9 +572,9 @@
 *           ZLAQSP
 *
             DO 6120 I = 1, 3
-               AP( I ) = DCMPLX( DEN, ZERO )
+               AP( I ) = CMPLX( DEN, ZERO, KIND=DP )
  6120       CONTINUE
-            AP( 2 ) = DCMPLX( DEN, DEN )
+            AP( 2 ) = CMPLX( DEN, DEN, KIND=DP )
             CALL ZPPEQU( UPLO, 2, AP, R, RCOND, NORM, INFO )
             CALL ZLAQSP( UPLO, 2, AP, R, RCOND, NORM,
      $                   EQUED )
@@ -593,13 +595,13 @@
 *           ZLAQSB
 *
             DO 6130 I = 1, 2
-               AB( 1, I ) = DCMPLX( DEN, ZERO )
-               AB( 2, I ) = DCMPLX( DEN, ZERO )
+               AB( 1, I ) = CMPLX( DEN, ZERO, KIND=DP )
+               AB( 2, I ) = CMPLX( DEN, ZERO, KIND=DP )
  6130       CONTINUE
             IF( K.EQ.1 ) THEN
-               AB( 1, 2 ) = DCMPLX( DEN, DEN )
+               AB( 1, 2 ) = CMPLX( DEN, DEN, KIND=DP )
             ELSE
-               AB( 2, 1 ) = DCMPLX( DEN, DEN )
+               AB( 2, 1 ) = CMPLX( DEN, DEN, KIND=DP )
             END IF
             CALL ZPBEQU( UPLO, 2, 1, AB, NSZB, R, RCOND, NORM,
      $                   INFO )
@@ -632,12 +634,12 @@
 *           ZLAQHE
 *
             DO 6140 I = 1, 3
-               A( I, 1 ) = DCMPLX( DEN, ZERO )
-               A( I, 2 ) = DCMPLX( DEN, ZERO )
-               A( I, 3 ) = DCMPLX( DEN, ZERO )
+               A( I, 1 ) = CMPLX( DEN, ZERO, KIND=DP )
+               A( I, 2 ) = CMPLX( DEN, ZERO, KIND=DP )
+               A( I, 3 ) = CMPLX( DEN, ZERO, KIND=DP )
  6140       CONTINUE
-            A( 1, 2 ) = DCMPLX( DEN, DEN )
-            A( 2, 1 ) = DCMPLX( DEN, DEN )
+            A( 1, 2 ) = CMPLX( DEN, DEN, KIND=DP )
+            A( 2, 1 ) = CMPLX( DEN, DEN, KIND=DP )
             CALL ZPOEQU( 2, A, NSZ, R, RCOND, NORM, INFO )
             CALL ZLAQHE( UPLO, 2, A, NSZ, R, RCOND, NORM,
      $                   EQUED )
@@ -666,9 +668,9 @@
 *           ZLAQHP
 *
             DO 6150 I = 1, 3
-               AP( I ) = DCMPLX( DEN, ZERO )
+               AP( I ) = CMPLX( DEN, ZERO, KIND=DP )
  6150       CONTINUE
-            AP( 2 ) = DCMPLX( DEN, DEN )
+            AP( 2 ) = CMPLX( DEN, DEN, KIND=DP )
             CALL ZPPEQU( UPLO, 2, AP, R, RCOND, NORM, INFO )
             CALL ZLAQHP( UPLO, 2, AP, R, RCOND, NORM,
      $                   EQUED )
@@ -689,13 +691,13 @@
 *           ZLAQHB
 *
             DO 6160 I = 1, 2
-               AB( 1, I ) = DCMPLX( DEN, ZERO )
-               AB( 2, I ) = DCMPLX( DEN, ZERO )
+               AB( 1, I ) = CMPLX( DEN, ZERO, KIND=DP )
+               AB( 2, I ) = CMPLX( DEN, ZERO, KIND=DP )
  6160       CONTINUE
             IF( K.EQ.1 ) THEN
-               AB( 1, 2 ) = DCMPLX( DEN, DEN )
+               AB( 1, 2 ) = CMPLX( DEN, DEN, KIND=DP )
             ELSE
-               AB( 2, 1 ) = DCMPLX( DEN, DEN )
+               AB( 2, 1 ) = CMPLX( DEN, DEN, KIND=DP )
             END IF
             CALL ZPBEQU( UPLO, 2, 1, AB, NSZB, R, RCOND, NORM,
      $                   INFO )
