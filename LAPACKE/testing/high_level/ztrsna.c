@@ -26,4 +26,32 @@ LAPACKE_TEST(ztrsna)
             }
         }
     }
+
+    /* Check the row-major stride limits with MM = N, including N = 0. */
+    {
+        static const struct {
+            const char *label;
+            char job;
+            lapack_int n, ldvl, ldvr, expected;
+        } cases[] = {
+            {"both read", 'E', 2, 2, 2, 0},
+            {"short VL", 'E', 2, 1, 2, -9},
+            {"short VR", 'B', 2, 2, 1, -11},
+            {"zero unused LDVL", 'V', 2, 0, 1, -9},
+            {"zero unused LDVR", 'V', 2, 1, 0, -11},
+            {"empty", 'V', 0, 0, 0, 0},
+        };
+        lapack_complex_double vec[4] = {0};
+        double s[2], sep[2];
+        lapack_int m;
+
+        vec[0] = vec[3] = t[0];  /* Eigenvectors of the diagonal T. */
+        for (size_t i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
+            lapack_int info = API_SUFFIX(LAPACKE_ztrsna)(
+                LAPACK_ROW_MAJOR, cases[i].job, 'A', select, cases[i].n,
+                t, 2, vec, cases[i].ldvl, vec, cases[i].ldvr,
+                s, sep, cases[i].n, &m);
+            lapacke_test_check("ztrsna", cases[i].label, info, cases[i].expected);
+        }
+    }
 }
