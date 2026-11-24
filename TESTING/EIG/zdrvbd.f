@@ -437,6 +437,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE, TWO, HALF
       PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0, TWO = 2.0D0,
      $                   HALF = 0.5D0 )
@@ -479,7 +481,7 @@
      $                   ZLACPY, ZLASET, ZLATMS, ZUNT01, ZUNT03
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, DBLE, MAX, MIN
+      INTRINSIC          ABS, CMPLX, DBLE, MAX, MIN
 *     ..
 *     .. Scalars in Common ..
       CHARACTER*32       SRNAMT
@@ -1319,7 +1321,7 @@
      $                  LSWORK = LOPT
                      LG = MIN( 8, LWORK-LSWORK )
                      DO 198 J = LSWORK + 1, LSWORK + LG
-                        WORK( J ) = DCMPLX( GUARD, GUARD )
+                        WORK( J ) = CMPLX( GUARD, GUARD, KIND=DP )
   198                CONTINUE
                      LERR = .FALSE.
 *
@@ -1337,7 +1339,8 @@
                      IF( LERR )
      $                  RESULT( 43 ) = ULPINV
                      DO 195 J = LSWORK + 1, LSWORK + LG
-                        IF( WORK( J ).NE.DCMPLX( GUARD, GUARD ) )
+                        IF( WORK( J ).NE.
+     $                      CMPLX( GUARD, GUARD, KIND=DP ) )
      $                     RESULT( 43 ) = ULPINV
   195                CONTINUE
 *
