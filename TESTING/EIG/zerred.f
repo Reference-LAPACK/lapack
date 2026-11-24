@@ -81,6 +81,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       INTEGER            NMAX, LW
       PARAMETER          ( NMAX = 4, LW = 15*NMAX )
       DOUBLE PRECISION   ZERO, ONE
@@ -110,7 +112,7 @@
       EXTERNAL           LSAMEN, ZSLECT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          LEN_TRIM, SQRT
+      INTRINSIC          CMPLX, LEN_TRIM, SQRT
 *     ..
 *     .. Arrays in Common ..
       LOGICAL            SELVAL( 20 )
@@ -512,7 +514,7 @@
      $                 NMAX, W, 20*NMAX, RW, LW, INFO )
          CALL CHKXER( 'ZGESVJ', INFOT, NOUT, LERR, OK )
          A( 2, 1 ) = ZERO
-         A( 2, 1 ) = DCMPLX( ZERO, RONE / RZERO )
+         A( 2, 1 ) = CMPLX( ZERO, RONE / RZERO, KIND=DP )
          CALL ZGESVJ( 'G', 'U', 'V', 2, 2, A, NMAX, S, 0, VT,
      $                 NMAX, W, 20*NMAX, RW, LW, INFO )
          CALL CHKXER( 'ZGESVJ', INFOT, NOUT, LERR, OK )
