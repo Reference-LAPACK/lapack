@@ -420,6 +420,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
       COMPLEX*16         CZERO, CONE
@@ -461,7 +463,7 @@
      $                   ZGET51, ZLAQZ0
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, CONJG, DBLE, MAX, MIN, SIGN
+      INTRINSIC          ABS, CMPLX, CONJG, DBLE, MAX, MIN, SIGN
 *     ..
 *     .. Data statements ..
       DATA               KCLASS / 15*1, 10*2, 1*3 /
@@ -893,14 +895,14 @@
                CALL ZLACPY( ' ', N, N, A, LDA, S, LDA )
                CALL ZLACPY( ' ', N, N, B, LDA, T, LDA )
                DO 245 I = 1, NGUARD
-                  WORK( N+I ) = DCMPLX( GUARD, GUARD )
+                  WORK( N+I ) = CMPLX( GUARD, GUARD, KIND=DP )
   245          CONTINUE
                CALL ZLAQZ0( 'S', 'I', 'I', N, 1, N, S, LDA, T, LDA,
      $                      ALPHA1, BETA1, Q, LDQ, Z, LDQ, WORK, N,
      $                      RWORK, 0, IERR )
                BADGRD = .FALSE.
                DO 246 I = 1, NGUARD
-                  IF( WORK( N+I ).NE.DCMPLX( GUARD, GUARD ) )
+                  IF( WORK( N+I ).NE.CMPLX( GUARD, GUARD, KIND=DP ) )
      $               BADGRD = .TRUE.
   246          CONTINUE
                IF( IERR.NE.0 .OR. BADGRD ) THEN
