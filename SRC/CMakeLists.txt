@@ -227,7 +227,6 @@ set(CLASRC
    claqsp.f claqsy.f clar1v.f clar2v.f ilaclr.f ilaclc.f
    clarf.f  clarf1f.f clarf1l.f clarfb.f clarfb_gett.f clarfg.f clarfgp.f clarft.f clarft_lvl2.f clarf0c2.f
    clarfx.f clarfy.f clargv.f clarnv.f clarrv.f clartg.f90 clartv.f
-   cgemcv.f
    clarz.f  clarzb.f clarzt.f clascl.f claset.f clasr.f  classq.f90
    claswp.f clasyf.f clasyf_rook.f clasyf_rk.f clasyf_aa.f
    clatbs.f clatdf.f clatps.f clatrd.f clatrs.f clatrs3.f clatrz.f
@@ -431,7 +430,6 @@ set(ZLASRC
    zlarcm.f zlarf.f  zlarfb.f zlarfb_gett.f zlarf1f.f zlarf1l.f zlarf0c2.f
    zlarfg.f zlarfgp.f zlarft.f zlarft_lvl2.f
    zlarfx.f zlarfy.f zlargv.f zlarnv.f zlarrv.f zlartg.f90 zlartv.f
-   zgemcv.f
    zlarz.f  zlarzb.f zlarzt.f zlascl.f zlaset.f zlasr.f
    zlassq.f90 zlaswp.f zlasyf.f zlasyf_rook.f zlasyf_rk.f zlasyf_aa.f
    zlatbs.f zlatdf.f zlatps.f zlatrd.f zlatrs.f zlatrs3.f zlatrz.f zlauu2.f
