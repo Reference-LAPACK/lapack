@@ -484,7 +484,7 @@
      $            C, LDC)
             END IF
          END IF
-      ELSE! IF( RQ ) THEN
+      ELSE IF( RQ ) THEN
 *
 *        The assumed 1 in V is last in storage: ie our refector
 *        is stored as [ v 1 ]

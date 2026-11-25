@@ -159,11 +159,7 @@
 *
 *     Quick return if possible
 *
-*     Note that if M=0, then N must also be 0, so it's sufficient to only test
-*     N=0. If we have 0 reflectors, then we define the matrix Q to be the
-*     m\times n `identity'
-*
-      IF( N.LE.0 ) THEN
+      IF( M.LE.0.OR.N.LE.0 ) THEN
          RETURN
       ELSE IF( K.LE.0 ) THEN
          CALL CLASET('All', M, N, ZERO, ONE, A, LDA)
@@ -174,13 +170,12 @@
 *     the left. Note that if n=k, we do nothing
 *
       IF( N.GT.K ) THEN
-         CALL CLARF0C2('Identity', 'Left', 'Forward', 'Columnwise',
+         CALL CLARF0C2('Identity', 'Left', 'First',
      $      M-K+1, N-K, TAU(K), A(K+1,K), 1, A(K,K+1), LDA)
       END IF
 *
 *     Now we compute the 1st non-zero column of H, which is given by
 *     A(k:m,k) = e_k - tau*v_k
-*     Analagous to orgkr for n=1 (but T is not used as it is a scalar)
 *
       A(K,K) = ONE - TAU(K)
       IF( M.GT.K ) THEN
@@ -191,12 +186,11 @@
 *
       IF( K.GT.1 ) THEN
          DO J = K-1, 1, -1
-           CALL CLARF0C2('General', 'Left', 'Forward',
-     $       'Columnwise',  M-J+1, N-J, TAU(J), A(J+1,J), 1,
+           CALL CLARF0C2('General', 'Left', 'First',
+     $       M-J+1, N-J, TAU(J), A(J+1,J), 1,
      $       A(J,J+1), LDA)
 *
 *          A(i:m,i) = e_i - tau*v_i
-*          Analagous to orgkr for n=1 (but T is not used as it is a scalar)
 *
            A(J,J) = ONE - TAU(J)
            CALL CSCAL(M-J, -TAU(J), A(J+1,J), 1)

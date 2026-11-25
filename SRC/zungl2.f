@@ -173,7 +173,7 @@
 *     the right. Note that if m=k, we do nothing
 *
       IF( M.GT.K ) THEN
-         CALL ZLARF0C2('Identity', 'Right', 'Forward', 'Rowwise',
+         CALL ZLARF0C2('Identity', 'Right', 'First',
      $      M-K, N-K+1, CONJG(TAU(K)), A(K,K+1), LDA, A(K+1,K), LDA)
       END IF
 *
@@ -187,7 +187,7 @@
       END IF
       IF( K.GT.1 ) THEN
          DO I = K-1, 1, -1
-            CALL ZLARF0C2('General', 'Right', 'Forward', 'Rowwise',
+            CALL ZLARF0C2('General', 'Right', 'First',
      $         M-I, N-I+1, CONJG(TAU(I)), A(I,I+1), LDA, A(I+1,I), LDA)
 *
 *           A(i,i:n) = (e_i - tau*v_i)'

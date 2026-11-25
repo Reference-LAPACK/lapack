@@ -173,7 +173,7 @@
 *     the left. Note that if n=k, we do nothing
 *
       IF( N.GT.K ) THEN
-         CALL SLARF0C2('Identity', 'Left', 'Forward', 'Columnwise',
+         CALL SLARF0C2('Identity', 'Left', 'First',
      $      M-K+1, N-K, TAU(K), A(K+1,K), 1, A(K,K+1), LDA)
       END IF
 *
@@ -190,8 +190,8 @@
 *
       IF( K.GT.1 ) THEN
          DO J = K-1, 1, -1
-           CALL SLARF0C2('General', 'Left', 'Forward',
-     $       'Columnwise',  M-J+1, N-J, TAU(J), A(J+1,J), 1,
+           CALL SLARF0C2('General', 'Left', 'First',
+     $       M-J+1, N-J, TAU(J), A(J+1,J), 1,
      $       A(J,J+1), LDA)
 *
 *          A(i:m,i) = e_i - tau*v_i

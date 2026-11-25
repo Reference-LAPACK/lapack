@@ -173,25 +173,25 @@
          RETURN
       END IF
 *
-*     Apply H(1) to the assumed identity matrix from the right
+*     Apply H(1)**H to the assumed identity matrix from the right
 *
-      CALL CLARF0C2('Identity', 'Right', 'Backward', 'Rowwise',
+      CALL CLARF0C2('Identity', 'Right', 'Last',
      $      M-K, N-K+1, CONJG(TAU(1)), A(M-K+1, 1), LDA, A, LDA)
 *
-*     Apply H(1) to v_1
+*     Apply H(1)**H to v_1
 *
       CALL CSCAL(N-K, -CONJG(TAU(1)), A(M-K+1, 1), LDA)
       A( M-K+1, N-K+1) = ONE - CONJG(TAU(1))
       IF( K.GT.1 ) THEN
          DO I = 2, K
 *
-*           Apply H(i) to A from the right
+*           Apply H(i)**H to A from the right
 *
-            CALL CLARF0C2('General', 'Right', 'Backward', 'Rowwise',
+            CALL CLARF0C2('General', 'Right', 'Last',
      $            M-K+I-1, N-K+I, CONJG(TAU(I)), A(M-K+I, 1), LDA,
      $            A, LDA)
 *
-*           Apply H(i) to v_i
+*           Apply H(i)**H to v_i
 *
             CALL CSCAL(N-K+I-1, -CONJG(TAU(I)), A(M-K+I, 1), LDA)
             A( M-K+I, N-K+I) = ONE - CONJG(TAU(I))

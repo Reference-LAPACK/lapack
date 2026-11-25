@@ -159,11 +159,7 @@
 *
 *     Quick return if possible
 *
-*     Note that if M=0, then N must also be 0, so it's sufficient to only test
-*     N=0. If we have 0 reflectors, then we define the matrix Q to be the
-*     m\times n `identity'
-*
-      IF( N.LE.0 ) THEN
+      IF( M.LE.0.OR.N.LE.0 ) THEN
          RETURN
       ELSE IF( K.LE.0 ) THEN
          CALL CLASET('ALL', M, N, ZERO, ZERO, A, LDA)
@@ -175,7 +171,7 @@
 *
 *     Apply H(1) to the assumed identity matrix from the left
 *
-      CALL CLARF0C2('Identity', 'Left', 'Backward', 'Columnwise',
+      CALL CLARF0C2('Identity', 'Left', 'Last',
      $      M-K+1, N-K, TAU(1), A(1, N-K+1), 1, A, LDA)
 *
 *     Apply H(1) to v_1
@@ -187,8 +183,8 @@
 *
 *           Apply H(j) to the leading n-k+j-1 columns of Q from the left
 *
-            CALL CLARF0C2('General', 'Left', 'Backward',
-     $         'Columnwise', M-K+J, N-K+J-1, TAU(J), A(1, N-K+J), 1,
+            CALL CLARF0C2('General', 'Left', 'Last',
+     $         M-K+J, N-K+J-1, TAU(J), A(1, N-K+J), 1,
      $         A, LDA)
 *
 *           Apply H(j) to v_j

@@ -158,11 +158,7 @@
 *
 *     Quick return if possible
 *
-*     Note that if N=0, then M must also be 0, so it's sufficient to only test
-*     M=0. If we have 0 reflectors, then we define the matrix Q to be the
-*     m\times n `identity'
-*
-      IF( M.LE.0 ) THEN
+      IF( M.LE.0.OR.N.LE.0 ) THEN
          RETURN
       ELSE IF( K.LE.0 ) THEN
          CALL CLASET('All', M, N, ZERO, ONE, A, LDA)
@@ -173,13 +169,12 @@
 *     the right. Note that if m=k, we do nothing
 *
       IF( M.GT.K ) THEN
-         CALL CLARF0C2('Identity', 'Right', 'Forward', 'Rowwise',
+         CALL CLARF0C2('Identity', 'Right', 'First',
      $      M-K, N-K+1, CONJG(TAU(K)), A(K,K+1), LDA, A(K+1,K), LDA)
       END IF
 *
 *     Now we compute the 1st non-zero row of H, which is given by
 *     A(k,k:n) = (e_k - tau*v_k)'
-*     Analagous to orglk for n=1 (but T is not used as it is a scalar)
 *
       A(K,K) = ONE - CONJG(TAU(K))
       IF( N.GT.K ) THEN
@@ -187,11 +182,10 @@
       END IF
       IF( K.GT.1 ) THEN
          DO I = K-1, 1, -1
-            CALL CLARF0C2('General', 'Right', 'Forward', 'Rowwise',
+            CALL CLARF0C2('General', 'Right', 'First',
      $         M-I, N-I+1, CONJG(TAU(I)), A(I,I+1), LDA, A(I+1,I), LDA)
 *
 *           A(i,i:n) = (e_i - tau*v_i)'
-*           Analagous to orglk for n=1 (but T is not used as it is a scalar)
 *
             A(I,I) = ONE - CONJG(TAU(I))
             CALL CSCAL(N-I, -CONJG(TAU(I)), A(I,I+1), LDA)

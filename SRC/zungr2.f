@@ -175,7 +175,7 @@
 *
 *     Apply H(1) to the assumed identity matrix from the right
 *
-      CALL ZLARF0C2('Identity', 'Right', 'Backward', 'Rowwise',
+      CALL ZLARF0C2('Identity', 'Right', 'Last',
      $      M-K, N-K+1, CONJG(TAU(1)), A(M-K+1, 1), LDA, A, LDA)
 *
 *     Apply H(1) to v_1
@@ -187,7 +187,7 @@
 *
 *           Apply H(i) to A from the right
 *
-            CALL ZLARF0C2('General', 'Right', 'Backward', 'Rowwise',
+            CALL ZLARF0C2('General', 'Right', 'Last',
      $            M-K+I-1, N-K+I, CONJG(TAU(I)), A(M-K+I, 1), LDA,
      $            A, LDA)
 *
