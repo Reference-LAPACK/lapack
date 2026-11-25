@@ -174,7 +174,7 @@
 *
 *     Apply H(1) to the assumed identity matrix from the left
 *
-      CALL DLARF0C2('Identity', 'Left', 'Backward', 'Columnwise',
+      CALL DLARF0C2('Identity', 'Left', 'Last',
      $      M-K+1, N-K, TAU(1), A(1, N-K+1), 1, A, LDA)
 *
 *     Apply H(1) to v_1
@@ -186,9 +186,8 @@
 *
 *           Apply H(j) to the leading n-k+j-1 columns of Q from the left
 *
-            CALL DLARF0C2('General', 'Left', 'Backward',
-     $         'Columnwise', M-K+J, N-K+J-1, TAU(J), A(1, N-K+J), 1,
-     $         A, LDA)
+            CALL DLARF0C2('General', 'Left', 'Last',
+     $         M-K+J, N-K+J-1, TAU(J), A(1, N-K+J), 1, A, LDA)
 *
 *           Apply H(j) to v_j
 *

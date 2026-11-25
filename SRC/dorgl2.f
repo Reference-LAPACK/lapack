@@ -172,13 +172,12 @@
 *     the right. Note that if m=k, we do nothing
 *
       IF( M.GT.K ) THEN
-         CALL DLARF0C2('Identity', 'Right', 'Forward', 'Rowwise',
+         CALL DLARF0C2('Identity', 'Right', 'First',
      $      M-K, N-K+1, TAU(K), A(K,K+1), LDA, A(K+1,K), LDA)
       END IF
 *
 *     Now we compute the 1st non-zero row of H, which is given by
 *     A(k,k:n) = (e_k - tau*v_k)'
-*     Analagous to orglk for n=1 (but T is not used as it is a scalar)
 *
       A(K,K) = ONE - TAU(K)
       IF( N.GT.K ) THEN
@@ -186,11 +185,10 @@
       END IF
       IF( K.GT.1 ) THEN
          DO I = K-1, 1, -1
-            CALL DLARF0C2('General', 'Right', 'Forward', 'Rowwise',
+            CALL DLARF0C2('General', 'Right', 'First',
      $         M-I, N-I+1, TAU(I), A(I,I+1), LDA, A(I+1,I), LDA)
 *
 *           A(i,i:n) = (e_i - tau*v_i)'
-*           Analagous to orglk for n=1 (but T is not used as it is a scalar)
 *
             A(I,I) = ONE - TAU(I)
             CALL DSCAL(N-I, -TAU(I), A(I,I+1), LDA)
