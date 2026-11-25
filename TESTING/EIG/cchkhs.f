@@ -460,8 +460,11 @@
      $                   CONE = ( 1.0E+0, 0.0E+0 ) )
       INTEGER            MAXTYP
       PARAMETER          ( MAXTYP = 21 )
+      REAL               GUARD
+      PARAMETER          ( GUARD = -1.0E+37 )
 *     ..
 *     .. Local Scalars ..
+      INTEGER            IQ, LWQ
       LOGICAL            BADNN, MATCH
       INTEGER            I, IHI, IINFO, ILO, IMODE, IN, ITYPE, J, JCOL,
      $                   JJ, JSIZE, JTYPE, K, MTYPES, N, N1, NERRS,
@@ -739,6 +742,36 @@
             END IF
 *
   100       CONTINUE
+*
+*           With ILO = IHI there is nothing to reduce, but CGEHRD
+*           must still accept exactly the workspace its query returns.
+*           Two entries of WORK after that workspace must not change.
+*
+            IF( N.GE.2 ) THEN
+               IQ = ( N+1 ) / 2
+               CALL CLACPY( ' ', N, N, A, LDA, T1, LDA )
+               CALL CGEHRD( N, IQ, IQ, T1, LDA, WORK, WORK( N+1 ), -1,
+     $                      IINFO )
+               LWQ = INT( WORK( N+1 ) )
+               WORK( N+LWQ+1 ) = GUARD
+               WORK( N+LWQ+2 ) = GUARD
+               CALL CGEHRD( N, IQ, IQ, T1, LDA, WORK, WORK( N+1 ),
+     $                      LWQ, IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  NTEST = 1
+                  RESULT( 1 ) = ULPINV
+                  WRITE( NOUNIT, FMT = 9999 )'CGEHRD', IINFO, N,
+     $               JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  GO TO 240
+               END IF
+               IF( WORK( N+LWQ+1 ).NE.GUARD .OR.
+     $             WORK( N+LWQ+2 ).NE.GUARD ) THEN
+                  NTEST = 1
+                  RESULT( 1 ) = ULPINV
+                  GO TO 240
+               END IF
+            END IF
 *
 *           Call CGEHRD to compute H and U, do tests.
 *
