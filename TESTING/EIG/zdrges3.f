@@ -19,7 +19,7 @@
 *       .. Array Arguments ..
 *       LOGICAL            BWORK( * ), DOTYPE( * )
 *       INTEGER            ISEED( 4 ), NN( * )
-*       DOUBLE PRECISION   RESULT( 13 ), RWORK( * )
+*       DOUBLE PRECISION   RESULT( 14 ), RWORK( * )
 *       COMPLEX*16         A( LDA, * ), ALPHA( * ), B( LDA, * ),
 *      $                   BETA( * ), Q( LDQ, * ), S( LDA, * ),
 *      $                   T( LDA, * ), WORK( * ), Z( LDQ, * )
@@ -49,7 +49,7 @@
 *> When ZDRGES3 is called, a number of matrix "sizes" ("N's") and a
 *> number of matrix "TYPES" are specified.  For each size ("N")
 *> and each TYPE of matrix, a pair of matrices (A, B) will be generated
-*> and used for testing. For each matrix pair, the following 13 tests
+*> and used for testing. For each matrix pair, the following 14 tests
 *> will be performed and compared with the threshold THRESH except
 *> the tests (5), (11) and (13).
 *>
@@ -98,6 +98,15 @@
 *>
 *> (12)  if sorting worked and SDIM is the number of eigenvalues
 *>       which were CELECTed.
+*>
+*> (13)  is not used.
+*>
+*> (14)  ZGGHD3 called with LWORK = 1 and with LWORK = 18*N, much
+*>       less than its optimum, with NB = 4 and NX = N+1: the rest
+*>       of WORK must be unchanged, INFO must be 0, the reduced
+*>       matrices must be upper Hessenberg and upper triangular, and
+*>       A = Q S Z', B = Q T Z' and the orthogonality of Q and Z must
+*>       hold to the accuracy of tests (1) to (4).
 *>
 *> Test Matrices
 *> =============
@@ -392,7 +401,7 @@
 *     .. Array Arguments ..
       LOGICAL            BWORK( * ), DOTYPE( * )
       INTEGER            ISEED( 4 ), NN( * )
-      DOUBLE PRECISION   RESULT( 13 ), RWORK( * )
+      DOUBLE PRECISION   RESULT( 14 ), RWORK( * )
       COMPLEX*16         A( LDA, * ), ALPHA( * ), B( LDA, * ),
      $                   BETA( * ), Q( LDQ, * ), S( LDA, * ),
      $                   T( LDA, * ), WORK( * ), Z( LDQ, * )
@@ -416,7 +425,10 @@
      $                   JTYPE, KNTEIG, MAXWRK, MINWRK, MTYPES, N, N1,
      $                   NB, NERRS, NMATS, NMAX, NTEST, NTESTT, RSUB,
      $                   SDIM
+      INTEGER            ILW, LWG, NBMSAV, NBSAVE, NXSAVE
       DOUBLE PRECISION   SAFMAX, SAFMIN, TEMP1, TEMP2, ULP, ULPINV
+      DOUBLE PRECISION   SENT
+      COMPLEX*16         CSENT
       COMPLEX*16         CTEMP, X
 *     ..
 *     .. Local Arrays ..
@@ -438,6 +450,7 @@
 *     .. External Subroutines ..
       EXTERNAL           ALASVM, XER_REPLACE, ZGET51, ZGET54, ZGGES3,
      $                   ZLACPY, ZLARFG, ZLASET, ZLATM4, ZUNM2R, XLAENV
+      EXTERNAL           ZGGHD3
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, AIMAG, CONJG, DBLE, MAX, MIN, SIGN
@@ -836,6 +849,72 @@
 *
   150       CONTINUE
 *
+*           Test ZGGHD3 with less workspace than its optimum.
+*           The blocksize is set so that the blocked code is preferred
+*           and the crossover point above N, and ZGGHD3 is given
+*           LWORK = 1 and then 18*N, less than the 6*N*NB it needs for
+*           the full blocksize. The rest of WORK is a guard that must
+*           stay unchanged. Test 14 also checks the reduction.
+*
+            NBSAVE = ILAENV( 1, 'ZGGHD3', ' ', N, 1, N, -1 )
+            NBMSAV = ILAENV( 2, 'ZGGHD3', ' ', N, 1, N, -1 )
+            NXSAVE = ILAENV( 3, 'ZGGHD3', ' ', N, 1, N, -1 )
+            CALL XLAENV( 1, 4 )
+            CALL XLAENV( 2, 2 )
+            CALL XLAENV( 3, N+1 )
+            SENT = 7.77D+0
+            CSENT = SENT
+            NTEST = 14
+            RESULT( 14 ) = ZERO
+            IF( N.GT.1 )
+     $         CALL ZLASET( 'Lower', N-1, N-1, CZERO, CZERO,
+     $                      B( 2, 1 ), LDA )
+            DO 144 ILW = 1, 2
+               IF( ILW.EQ.1 ) THEN
+                  LWG = 1
+               ELSE
+                  LWG = MAX( 1, MIN( 18*N, LWORK ) )
+               END IF
+               CALL ZLACPY( 'Full', N, N, A, LDA, S, LDA )
+               CALL ZLACPY( 'Full', N, N, B, LDA, T, LDA )
+               DO 141 I = 1, LWORK
+                  WORK( I ) = CSENT
+  141          CONTINUE
+               CALL ZGGHD3( 'I', 'I', N, 1, N, S, LDA, T, LDA, Q, LDQ,
+     $                      Z, LDQ, WORK, LWG, IINFO )
+               IF( IINFO.NE.0 )
+     $            RESULT( 14 ) = ULPINV
+               DO 142 I = LWG + 1, LWORK
+                  IF( WORK( I ).NE.CSENT )
+     $               RESULT( 14 ) = ULPINV
+  142          CONTINUE
+               DO 143 J = 1, N - 2
+                  DO 145 I = J + 2, N
+                     IF( S( I, J ).NE.CZERO )
+     $                  RESULT( 14 ) = ULPINV
+  145             CONTINUE
+  143          CONTINUE
+               DO 147 J = 1, N - 1
+                  DO 148 I = J + 1, N
+                     IF( T( I, J ).NE.CZERO )
+     $                  RESULT( 14 ) = ULPINV
+  148             CONTINUE
+  147          CONTINUE
+               CALL ZGET51( 1, N, A, LDA, S, LDA, Q, LDQ, Z, LDQ, WORK,
+     $                      RWORK, TEMP1 )
+               CALL ZGET51( 1, N, B, LDA, T, LDA, Q, LDQ, Z, LDQ, WORK,
+     $                      RWORK, TEMP2 )
+               RESULT( 14 ) = MAX( RESULT( 14 ), TEMP1, TEMP2 )
+               CALL ZGET51( 3, N, B, LDA, T, LDA, Q, LDQ, Q, LDQ, WORK,
+     $                      RWORK, TEMP1 )
+               CALL ZGET51( 3, N, B, LDA, T, LDA, Z, LDQ, Z, LDQ, WORK,
+     $                      RWORK, TEMP2 )
+               RESULT( 14 ) = MAX( RESULT( 14 ), TEMP1, TEMP2 )
+  144       CONTINUE
+            CALL XLAENV( 1, NBSAVE )
+            CALL XLAENV( 2, NBMSAV )
+            CALL XLAENV( 3, NXSAVE )
+*
 *           End of Loop -- Check for RESULT(j) > THRESH
 *
   160       CONTINUE
@@ -934,7 +1013,9 @@
      $      ' | / ( n ulp )', / ' 10 = A is in Schur form S',
      $      / ' 11 = difference between (alpha,beta) and diagonals',
      $      ' of (S,T)', / ' 12 = SDIM is the correct number of ',
-     $      'selected eigenvalues', / )
+     $      'selected eigenvalues',
+     $      / ' 14 = ', 'ZGGHD3 with LWORK = 1 and 18*N: ',
+     $      'guard, INFO, shape, residuals', / )
  9992 FORMAT( ' Matrix order=', I5, ', type=', I2, ', seed=',
      $      4( I4, ',' ), ' result ', I2, ' is', 0P, F8.2 )
  9991 FORMAT( ' Matrix order=', I5, ', type=', I2, ', seed=',
