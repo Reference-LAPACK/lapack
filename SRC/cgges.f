@@ -534,10 +534,10 @@
 *        Undo scaling on eigenvalues before selecting
 *
          IF( ILASCL )
-     $      CALL CLASCL( 'G', 0, 0, ANRM, ANRMTO, N, 1, ALPHA, N,
+     $      CALL CLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHA, N,
      $                   IERR )
          IF( ILBSCL )
-     $      CALL CLASCL( 'G', 0, 0, BNRM, BNRMTO, N, 1, BETA, N,
+     $      CALL CLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N,
      $                   IERR )
 *
 *        Select eigenvalues

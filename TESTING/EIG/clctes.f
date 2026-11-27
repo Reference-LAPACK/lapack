@@ -103,3 +103,84 @@
 *     End of CLCTES
 *
       END
+*
+*  =====================================================================
+*> \brief \b CLCTSM
+*>
+*> \par Purpose:
+*  =============
+*>
+*> \verbatim
+*>
+*> CLCTSM returns .TRUE. if the eigenvalue Z/D is to be selected
+*> (specifically, in this subroutine, if the real part of Z is
+*> negative, D is nonzero (the eigenvalue is finite) and Z or D is far
+*> outside the range [sqrt(safe minimum), 1/sqrt(safe minimum)] that a
+*> well scaled problem lies in), and otherwise it returns .FALSE..
+*>
+*> Unlike CLCTES, whose choice depends only on signs, this choice
+*> depends on the magnitudes of Z and D. It is used by the test
+*> routines CDRGES and CDRGES3 to test that CGGES and CGGES3 pass
+*> the selection function the eigenvalues in the units of the input
+*> matrices when they have scaled the matrices.
+*> \endverbatim
+*>
+*> \param[in] Z
+*> \verbatim
+*>          Z is COMPLEX
+*>          The numerator part of a complex eigenvalue Z/D.
+*> \endverbatim
+*>
+*> \param[in] D
+*> \verbatim
+*>          D is COMPLEX
+*>          The denominator part of a complex eigenvalue Z/D.
+*> \endverbatim
+*
+*> \ingroup complex_eig
+*
+*  =====================================================================
+      LOGICAL          FUNCTION CLCTSM( Z, D )
+      IMPLICIT NONE
+*
+*  -- LAPACK test routine --
+*  -- LAPACK is a software package provided by Univ. of Tennessee,    --
+*  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+*
+*     .. Scalar Arguments ..
+      COMPLEX            D, Z
+*     ..
+*
+*  =====================================================================
+*
+*     .. Parameters ..
+      REAL               ZERO, ONE
+      PARAMETER          ( ZERO = 0.0E+0, ONE = 1.0E+0 )
+*     ..
+*     .. Local Scalars ..
+      REAL               BIG, CABS1D, SMALL, CABS1Z
+*     ..
+*     .. External Functions ..
+      REAL               SLAMCH
+      EXTERNAL           SLAMCH
+*     ..
+*     .. Intrinsic Functions ..
+      INTRINSIC          ABS, AIMAG, REAL, SQRT
+*     ..
+*     .. Executable Statements ..
+*
+      SMALL = SQRT( SLAMCH( 'Safe minimum' ) )
+      BIG = ONE / SMALL
+      CABS1Z = ABS( REAL( Z ) ) + ABS( AIMAG( Z ) )
+      CABS1D = ABS( REAL( D ) ) + ABS( AIMAG( D ) )
+*
+      CLCTSM = ( REAL( Z ).LT.ZERO ) .AND. ( CABS1D.GT.ZERO ) .AND.
+     $         ( CABS1Z.GT.BIG .OR. CABS1D.GT.BIG .OR.
+     $         ( CABS1Z.GT.ZERO .AND. CABS1Z.LT.SMALL ) .OR.
+     $         ( CABS1D.GT.ZERO .AND. CABS1D.LT.SMALL ) )
+*
+      RETURN
+*
+*     End of CLCTSM
+*
+      END
