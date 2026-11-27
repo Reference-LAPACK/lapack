@@ -599,7 +599,7 @@
                      CALL SLARFG( 3, ALPHA, VT( 2 ), 1, VT( 1 ) )
                      T1 = VT( 1 )
                      T2 = T1*VT( 2 )
-                     T3 = T2*VT( 3 )
+                     T3 = T1*VT( 3 )
                      REFSUM = H( K+1, K )+VT( 2 )*H( K+2, K )
 *
                      IF( ABS( H( K+2, K )-REFSUM*T2 )+
