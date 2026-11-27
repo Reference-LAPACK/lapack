@@ -404,20 +404,19 @@
                CALL ZSCAL( P-I+1, CMPLX( Z1, 0.0D0, KIND=DP ), X11(I,I),
      $                     1 )
             ELSE
-               CALL ZSCAL( P-I+1, CMPLX( Z1*COS(PHI(I-1)), 0.0D0,
-     $                     KIND=DP ), X11(I,I), 1 )
-               CALL ZAXPY( P-I+1, CMPLX( -Z1*Z3*Z4*SIN(PHI(I-1)), 0.0D0,
-     $                     KIND=DP ), X12(I,I-1), 1, X11(I,I), 1 )
+               CALL ZAXPBY( P-I+1, CMPLX( -Z1*Z3*Z4*SIN(PHI(I-1)),
+     $                      0.0D0, KIND=DP ), X12(I,I-1), 1,
+     $                      CMPLX( Z1*COS(PHI(I-1)), 0.0D0, KIND=DP ),
+     $                      X11(I,I), 1 )
             END IF
             IF( I .EQ. 1 ) THEN
                CALL ZSCAL( M-P-I+1, CMPLX( Z2, 0.0D0, KIND=DP ),
      $                     X21(I,I), 1 )
             ELSE
-               CALL ZSCAL( M-P-I+1, CMPLX( Z2*COS(PHI(I-1)), 0.0D0,
-     $                     KIND=DP ), X21(I,I), 1 )
-               CALL ZAXPY( M-P-I+1, CMPLX( -Z2*Z3*Z4*SIN(PHI(I-1)),
-     $                     0.0D0, KIND=DP ), X22(I,I-1), 1, X21(I,I),
-     $                     1 )
+               CALL ZAXPBY( M-P-I+1, CMPLX( -Z2*Z3*Z4*SIN(PHI(I-1)),
+     $                      0.0D0, KIND=DP ), X22(I,I-1), 1,
+     $                      CMPLX( Z2*COS(PHI(I-1)), 0.0D0, KIND=DP ),
+     $                      X21(I,I), 1 )
             END IF
 *
             THETA(I) = ATAN2( DZNRM2( M-P-I+1, X21(I,I), 1 ),
@@ -453,16 +452,15 @@
             END IF
 *
             IF( I .LT. Q ) THEN
-               CALL ZSCAL( Q-I, CMPLX( -Z1*Z3*SIN(THETA(I)), 0.0D0,
-     $                     KIND=DP ), X11(I,I+1), LDX11 )
-               CALL ZAXPY( Q-I, CMPLX( Z2*Z3*COS(THETA(I)), 0.0D0,
-     $                     KIND=DP ), X21(I,I+1), LDX21, X11(I,I+1),
-     $                     LDX11 )
+               CALL ZAXPBY( Q-I, CMPLX( Z2*Z3*COS(THETA(I)), 0.0D0,
+     $                      KIND=DP ), X21(I,I+1), LDX21,
+     $                      CMPLX( -Z1*Z3*SIN(THETA(I)), 0.0D0,
+     $                      KIND=DP ), X11(I,I+1), LDX11 )
             END IF
-            CALL ZSCAL( M-Q-I+1, CMPLX( -Z1*Z4*SIN(THETA(I)), 0.0D0,
-     $                  KIND=DP ), X12(I,I), LDX12 )
-            CALL ZAXPY( M-Q-I+1, CMPLX( Z2*Z4*COS(THETA(I)), 0.0D0,
-     $                  KIND=DP ), X22(I,I), LDX22, X12(I,I), LDX12 )
+            CALL ZAXPBY( M-Q-I+1, CMPLX( Z2*Z4*COS(THETA(I)),
+     $                   0.0D0, KIND=DP ), X22(I,I), LDX22,
+     $                   CMPLX( -Z1*Z4*SIN(THETA(I)), 0.0D0,
+     $                   KIND=DP ), X12(I,I), LDX12 )
 *
             IF( I .LT. Q )
      $         PHI(I) = ATAN2( DZNRM2( Q-I, X11(I,I+1), LDX11 ),
@@ -568,21 +566,19 @@
                CALL ZSCAL( P-I+1, CMPLX( Z1, 0.0D0, KIND=DP ), X11(I,I),
      $                     LDX11 )
             ELSE
-               CALL ZSCAL( P-I+1, CMPLX( Z1*COS(PHI(I-1)), 0.0D0,
-     $                     KIND=DP ), X11(I,I), LDX11 )
-               CALL ZAXPY( P-I+1, CMPLX( -Z1*Z3*Z4*SIN(PHI(I-1)), 0.0D0,
-     $                     KIND=DP ), X12(I-1,I), LDX12, X11(I,I),
-     $                     LDX11 )
+               CALL ZAXPBY( P-I+1, CMPLX( -Z1*Z3*Z4*SIN(PHI(I-1)),
+     $                      0.0D0, KIND=DP ), X12(I-1,I), LDX12,
+     $                      CMPLX( Z1*COS(PHI(I-1)), 0.0D0, KIND=DP ),
+     $                      X11(I,I), LDX11 )
             END IF
             IF( I .EQ. 1 ) THEN
                CALL ZSCAL( M-P-I+1, CMPLX( Z2, 0.0D0, KIND=DP ),
      $                     X21(I,I), LDX21 )
             ELSE
-               CALL ZSCAL( M-P-I+1, CMPLX( Z2*COS(PHI(I-1)), 0.0D0,
-     $                     KIND=DP ), X21(I,I), LDX21 )
-               CALL ZAXPY( M-P-I+1, CMPLX( -Z2*Z3*Z4*SIN(PHI(I-1)),
-     $                     0.0D0, KIND=DP ), X22(I-1,I), LDX22,
-     $                     X21(I,I), LDX21 )
+               CALL ZAXPBY( M-P-I+1, CMPLX( -Z2*Z3*Z4*SIN(PHI(I-1)),
+     $                      0.0D0, KIND=DP ), X22(I-1,I), LDX22,
+     $                      CMPLX( Z2*COS(PHI(I-1)), 0.0D0, KIND=DP ),
+     $                      X21(I,I), LDX21 )
             END IF
 *
             THETA(I) = ATAN2( DZNRM2( M-P-I+1, X21(I,I), LDX21 ),
@@ -615,15 +611,15 @@
             CALL ZLACGV( M-P-I+1, X21(I,I), LDX21 )
 *
             IF( I .LT. Q ) THEN
-               CALL ZSCAL( Q-I, CMPLX( -Z1*Z3*SIN(THETA(I)), 0.0D0,
-     $                     KIND=DP ), X11(I+1,I), 1 )
-               CALL ZAXPY( Q-I, CMPLX( Z2*Z3*COS(THETA(I)), 0.0D0,
-     $                     KIND=DP ), X21(I+1,I), 1, X11(I+1,I), 1 )
+               CALL ZAXPBY( Q-I, CMPLX( Z2*Z3*COS(THETA(I)), 0.0D0,
+     $                      KIND=DP ), X21(I+1,I), 1,
+     $                      CMPLX( -Z1*Z3*SIN(THETA(I)), 0.0D0,
+     $                      KIND=DP ), X11(I+1,I), 1 )
             END IF
-            CALL ZSCAL( M-Q-I+1, CMPLX( -Z1*Z4*SIN(THETA(I)), 0.0D0,
-     $                  KIND=DP ), X12(I,I), 1 )
-            CALL ZAXPY( M-Q-I+1, CMPLX( Z2*Z4*COS(THETA(I)), 0.0D0,
-     $                  KIND=DP ), X22(I,I), 1, X12(I,I), 1 )
+            CALL ZAXPBY( M-Q-I+1, CMPLX( Z2*Z4*COS(THETA(I)),
+     $                   0.0D0, KIND=DP ), X22(I,I), 1,
+     $                   CMPLX( -Z1*Z4*SIN(THETA(I)), 0.0D0,
+     $                   KIND=DP ), X12(I,I), 1 )
 *
             IF( I .LT. Q )
      $         PHI(I) = ATAN2( DZNRM2( Q-I, X11(I+1,I), 1 ),
