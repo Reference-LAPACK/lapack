@@ -100,8 +100,12 @@
 *>            is at least sqrt(ulp); s = 1 for a normal matrix
 *>
 *>    (12)    | HX - XW | / ( |H| |X| ulp )
+*>            For the types 9 to 11, the result also covers H and
+*>            W scaled to the norm 0.01*UNFL/(N*ULP).
 *>
 *>    (13)    | Y**H H - W**H Y | / ( |H| |Y| ulp )
+*>            For the types 9 to 11, the result also covers H and
+*>            W scaled to the norm 0.01*UNFL/(N*ULP).
 *>
 *>    (14)    | AX - XW | / ( |A| |X| ulp )
 *>
@@ -466,9 +470,10 @@
       INTEGER            I, IHI, IINFO, ILO, IMODE, IN, ITYPE, J, JCOL,
      $                   JJ, JSIZE, JTYPE, K, MTYPES, N, N1, NERRS,
      $                   NMATS, NMAX, NTEST, NTESTT
-      DOUBLE PRECISION   ANINV, ANORM, COND, CONDS, OVFL, RTOVFL, RTULP,
-     $                   RTULPI, RTUNFL, SJ, TEMP1, TEMP2, ULP, ULPINV,
-     $                   UNFL, XNORM, YNORM
+      INTEGER            IWR
+      DOUBLE PRECISION   ANINV, ANORM, COND, CONDS, HNORM, OVFL, RTOVFL,
+     $                   RTULP, RTULPI, RTUNFL, SJ, TEMP1, TEMP2, ULP,
+     $                   ULPINV, UNFL, XNORM, YNORM
 *     ..
 *     .. Local Arrays ..
       INTEGER            IDUMMA( 1 ), IOLDSD( 4 ), KCONDS( MAXTYP ),
@@ -478,15 +483,15 @@
       COMPLEX*16         CDUMMA( 4 )
 *     ..
 *     .. External Functions ..
-      DOUBLE PRECISION   DLAMCH, DZNRM2
+      DOUBLE PRECISION   DLAMCH, DZNRM2, ZLANHS
       COMPLEX*16         ZDOTC
-      EXTERNAL           DLAMCH, DZNRM2, ZDOTC
+      EXTERNAL           DLAMCH, DZNRM2, ZDOTC, ZLANHS
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DLAFTS, DLASUM, XER_REPLACE, ZCOPY, ZGEHRD,
      $                   ZGEMM, ZGET10, ZGET22, ZHSEIN, ZHSEQR, ZHST01,
-     $                   ZLACPY, ZLASET, ZLATME, ZLATMR, ZLATMS, ZTREVC,
-     $                   ZTREVC3, ZUNGHR, ZUNMHR
+     $                   ZLACPY, ZLASCL, ZLASET, ZLATME, ZLATMR, ZLATMS,
+     $                   ZTREVC, ZTREVC3, ZUNGHR, ZUNMHR
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, MIN, SQRT
@@ -1071,6 +1076,76 @@
                IF( DUMMA( 4 ).GT.THRESH ) THEN
                   WRITE( NOUNIT, FMT = 9998 )'Left', 'ZHSEIN',
      $               DUMMA( 4 ), N, JTYPE, IOLDSD
+               END IF
+            END IF
+*
+*           For the types 9 to 11, whose entries are not much smaller
+*           than the norm, repeat tests 12 and 13 with H and its
+*           eigenvalues scaled down so that N*ULP*norm(H) is a small
+*           fraction of the underflow threshold, but all entries are
+*           still normal.  The growth threshold of the inverse
+*           iteration must not overflow there.  The scaled matrix is
+*           kept in Z and the scaled eigenvalues in WORK( IWR ), which
+*           are not needed any more.  The EPS3 of xHSEIN is about
+*           0.01*UNFL/N, a subnormal number: where subnormal numbers
+*           are flushed to zero it is zero, the inverse iteration
+*           rightly fails, and the check is skipped.
+*
+            HNORM = ZLANHS( 'I', N, H, LDA, RWORK )
+            TEMP1 = ( UNFL*ULPINV*1.0D-2 )*ANINV
+            IF( JTYPE.GE.9 .AND. JTYPE.LE.11 .AND.
+     $          HNORM.GT.TEMP1 .AND. TEMP1*ULP.GT.ZERO ) THEN
+               IWR = N*N + 1
+               CALL ZLACPY( ' ', N, N, H, LDA, Z, LDU )
+               CALL ZLASCL( 'G', 0, 0, HNORM, TEMP1, N, N, Z, LDU,
+     $                      IINFO )
+               CALL ZCOPY( N, W3, 1, WORK( IWR ), 1 )
+               CALL ZLASCL( 'G', 0, 0, HNORM, TEMP1, N, 1, WORK( IWR ),
+     $                      N, IINFO )
+               DO 235 J = 1, N
+                  SELECT( J ) = .TRUE.
+  235          CONTINUE
+*
+               CALL ZHSEIN( 'Right', 'Qr', 'Ninitv', SELECT, N, Z,
+     $                   LDU, WORK( IWR ), CDUMMA, LDU, EVECTR, LDU, N1,
+     $                   IN, WORK, RWORK, IWORK, IWORK, IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'ZHSEIN(R,S)', IINFO, N,
+     $               JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 )
+     $               GO TO 240
+                  RESULT( 12 ) = ULPINV
+               ELSE
+                  CALL ZGET22( 'N', 'N', 'N', N, Z, LDU, EVECTR, LDU,
+     $                         WORK( IWR ), WORK, RWORK, DUMMA( 1 ) )
+                  IF( DUMMA( 1 ).LT.ULPINV ) THEN
+                     RESULT( 12 ) = MAX( RESULT( 12 ),
+     $                              DUMMA( 1 )*ANINV )
+                  ELSE
+                     RESULT( 12 ) = ULPINV
+                  END IF
+               END IF
+*
+               CALL ZHSEIN( 'Left', 'Qr', 'Ninitv', SELECT, N, Z,
+     $                   LDU, WORK( IWR ), EVECTL, LDU, CDUMMA, LDU, N1,
+     $                   IN, WORK, RWORK, IWORK, IWORK, IINFO )
+               IF( IINFO.NE.0 ) THEN
+                  WRITE( NOUNIT, FMT = 9999 )'ZHSEIN(L,S)', IINFO, N,
+     $               JTYPE, IOLDSD
+                  INFO = ABS( IINFO )
+                  IF( IINFO.LT.0 )
+     $               GO TO 240
+                  RESULT( 13 ) = ULPINV
+               ELSE
+                  CALL ZGET22( 'C', 'N', 'C', N, Z, LDU, EVECTL, LDU,
+     $                         WORK( IWR ), WORK, RWORK, DUMMA( 3 ) )
+                  IF( DUMMA( 3 ).LT.ULPINV ) THEN
+                     RESULT( 13 ) = MAX( RESULT( 13 ),
+     $                              DUMMA( 3 )*ANINV )
+                  ELSE
+                     RESULT( 13 ) = ULPINV
+                  END IF
                END IF
             END IF
 *
