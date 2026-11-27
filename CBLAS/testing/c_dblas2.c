@@ -455,6 +455,55 @@ void F77_dsbmv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_INT *k, doubl
 		 *beta, y, *incy );
 }
 
+void F77_dskewsbmv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, CBLAS_INT *k, double *alpha,
+	      double *a, CBLAS_INT *lda, double *x, CBLAS_INT *incx, double *beta,
+	      double *y, CBLAS_INT *incy
+#ifdef BLAS_FORTRAN_STRLEN_END
+  , FORTRAN_STRLEN uplow_len
+#endif
+) {
+  double *A;
+  CBLAS_INT i,j,irow,jcol,LDA;
+  CBLAS_UPLO uplo;
+
+  get_uplo_type(uplow,&uplo);
+
+  if (*layout == TEST_ROW_MJR) {
+     LDA = *k+1;
+     A   = ( double* )malloc( (*n+*k)*LDA*sizeof( double ) );
+     if (uplo == CblasUpper) {
+        for( i=0; i<*k; i++ ){
+           irow=*k-i;
+           jcol=(*k)-i;
+           for( j=jcol; j<*n; j++ )
+        A[ LDA*(j-jcol)+irow ]=a[ (*lda)*j+i ];
+        }
+        i=*k;
+        irow=*k-i;
+        for( j=0; j<*n; j++ )
+           A[ LDA*j+irow ]=a[ (*lda)*j+i ];
+     }
+     else {
+        i=0;
+        irow=*k-i;
+        for( j=0; j<*n; j++ )
+           A[ LDA*j+irow ]=a[ (*lda)*j+i ];
+        for( i=1; i<*k+1; i++ ){
+           irow=*k-i;
+           jcol=i;
+           for( j=jcol; j<(*n+*k); j++ )
+              A[ LDA*j+irow ]=a[ (*lda)*(j-jcol)+i ];
+        }
+     }
+     API_SUFFIX(cblas_dskewsbmv)(CblasRowMajor, uplo, *n, *k, *alpha, A, LDA, x, *incx,
+		 *beta, y, *incy );
+     free(A);
+   }
+   else
+     API_SUFFIX(cblas_dskewsbmv)(CblasColMajor, uplo, *n, *k, *alpha, a, *lda, x, *incx,
+		 *beta, y, *incy );
+}
+
 void F77_dspmv(CBLAS_INT *layout, char *uplow, CBLAS_INT *n, double *alpha, double *ap,
 	      double *x, CBLAS_INT *incx, double *beta, double *y, CBLAS_INT *incy
 #ifdef BLAS_FORTRAN_STRLEN_END

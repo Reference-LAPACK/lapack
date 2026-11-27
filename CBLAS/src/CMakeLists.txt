@@ -63,14 +63,14 @@ set(SLEV2
   cblas_sgemv.c cblas_sgbmv.c cblas_sger.c cblas_ssbmv.c cblas_sspmv.c
   cblas_sspr.c cblas_sspr2.c cblas_ssymv.c cblas_ssyr.c cblas_ssyr2.c
   cblas_stbmv.c cblas_stbsv.c cblas_stpmv.c cblas_stpsv.c cblas_strmv.c
-  cblas_strsv.c cblas_sskewsymv.c cblas_sskewsyr2.c)
+  cblas_strsv.c cblas_sskewsymv.c cblas_sskewsbmv.c cblas_sskewsyr2.c)
 
 # Files for level 2 double precision real
 set(DLEV2
   cblas_dgemv.c cblas_dgbmv.c cblas_dger.c cblas_dsbmv.c cblas_dspmv.c
   cblas_dspr.c cblas_dspr2.c cblas_dsymv.c cblas_dsyr.c cblas_dsyr2.c
   cblas_dtbmv.c cblas_dtbsv.c cblas_dtpmv.c cblas_dtpsv.c cblas_dtrmv.c
-  cblas_dtrsv.c cblas_dskewsymv.c cblas_dskewsyr2.c)
+  cblas_dtrsv.c cblas_dskewsymv.c cblas_dskewsbmv.c cblas_dskewsyr2.c)
 
 # Files for level 2 single precision complex
 set(CLEV2
