@@ -554,7 +554,7 @@
             AAPP = ZERO
             AAQQ = ONE
             CALL CLASSQ( M-p+1, A( p, p ), 1, AAPP, AAQQ )
-            IF( AAPP.GT.BIG ) THEN
+            IF( AAQQ.GT.SLAMCH( 'Overflow' ) ) THEN
                INFO = -6
                CALL XERBLA( 'CGESVJ', -INFO )
                RETURN
@@ -581,7 +581,7 @@
             AAPP = ZERO
             AAQQ = ONE
             CALL CLASSQ( p, A( 1, p ), 1, AAPP, AAQQ )
-            IF( AAPP.GT.BIG ) THEN
+            IF( AAQQ.GT.SLAMCH( 'Overflow' ) ) THEN
                INFO = -6
                CALL XERBLA( 'CGESVJ', -INFO )
                RETURN
@@ -608,7 +608,7 @@
             AAPP = ZERO
             AAQQ = ONE
             CALL CLASSQ( M, A( 1, p ), 1, AAPP, AAQQ )
-            IF( AAPP.GT.BIG ) THEN
+            IF( AAQQ.GT.SLAMCH( 'Overflow' ) ) THEN
                INFO = -6
                CALL XERBLA( 'CGESVJ', -INFO )
                RETURN

@@ -81,6 +81,8 @@
 *  =====================================================================
 *
 *     .. Parameters ..
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
       INTEGER            NMAX, LW
       PARAMETER          ( NMAX = 4, LW = 15*NMAX )
       DOUBLE PRECISION   ZERO, ONE
@@ -102,6 +104,7 @@
 *     .. External Subroutines ..
       EXTERNAL           CHKXER, ZGEES, ZGEESX, ZGEEV, ZGEEVX, ZGEJSV,
      $                   ZGESDD, ZGESVD, ZGESVDX, ZGESVDQ,
+     $                   ZGESVJ,
      $                   ZGESVDMR3
 *     ..
 *     .. External Functions ..
@@ -109,7 +112,7 @@
       EXTERNAL           LSAMEN, ZSLECT
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          LEN_TRIM, SQRT
+      INTRINSIC          CMPLX, LEN_TRIM, SQRT
 *     ..
 *     .. Arrays in Common ..
       LOGICAL            SELVAL( 20 )
@@ -475,6 +478,48 @@
      $                 W, 1, RW, 1, IW, INFO)
          CALL CHKXER( 'ZGEJSV', INFOT, NOUT, LERR, OK )
          NT = 11
+         IF( OK ) THEN
+            WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
+     $           NT
+         ELSE
+            WRITE( NOUT, FMT = 9998 )SRNAMT( 1:LEN_TRIM( SRNAMT ) )
+         END IF
+*
+*        Test ZGESVJ
+*
+*        ZGESVJ must report INFO = -6 through XERBLA when A contains
+*        an infinity, for each of the lower, upper and general storage
+*        options.
+*
+         SRNAMT = 'ZGESVJ'
+         RONE = ONE
+         RZERO = ZERO
+         A( 1, 1 ) = ONE
+         A( 2, 1 ) = ZERO
+         A( 1, 2 ) = ZERO
+         A( 2, 2 ) = ONE
+         INFOT = 6
+         A( 2, 1 ) = RONE / RZERO
+         CALL ZGESVJ( 'L', 'U', 'V', 2, 2, A, NMAX, S, 0, VT,
+     $                 NMAX, W, 20*NMAX, RW, LW, INFO )
+         CALL CHKXER( 'ZGESVJ', INFOT, NOUT, LERR, OK )
+         A( 2, 1 ) = ZERO
+         A( 1, 2 ) = RONE / RZERO
+         CALL ZGESVJ( 'U', 'U', 'V', 2, 2, A, NMAX, S, 0, VT,
+     $                 NMAX, W, 20*NMAX, RW, LW, INFO )
+         CALL CHKXER( 'ZGESVJ', INFOT, NOUT, LERR, OK )
+         A( 1, 2 ) = ZERO
+         A( 2, 1 ) = RONE / RZERO
+         CALL ZGESVJ( 'G', 'U', 'V', 2, 2, A, NMAX, S, 0, VT,
+     $                 NMAX, W, 20*NMAX, RW, LW, INFO )
+         CALL CHKXER( 'ZGESVJ', INFOT, NOUT, LERR, OK )
+         A( 2, 1 ) = ZERO
+         A( 2, 1 ) = CMPLX( ZERO, RONE / RZERO, KIND=DP )
+         CALL ZGESVJ( 'G', 'U', 'V', 2, 2, A, NMAX, S, 0, VT,
+     $                 NMAX, W, 20*NMAX, RW, LW, INFO )
+         CALL CHKXER( 'ZGESVJ', INFOT, NOUT, LERR, OK )
+         A( 2, 1 ) = ZERO
+         NT = 4
          IF( OK ) THEN
             WRITE( NOUT, FMT = 9999 )SRNAMT( 1:LEN_TRIM( SRNAMT ) ),
      $           NT
