@@ -68,16 +68,17 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      INTEGER            NMAX, LW
-      PARAMETER          ( NMAX = 3, LW = 6*NMAX )
+      INTEGER            NMAX, LW, LWQ, NQ
+      PARAMETER          ( NMAX = 3, LW = 6*NMAX, LWQ = 100, NQ = 4 )
       DOUBLE PRECISION   ZERO, ONE
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
 *     ..
 *     .. Local Scalars ..
       CHARACTER*2        C2
       INTEGER            DUMMYK, DUMMYL, I, IFST, ILO, IHI, ILST, INFO,
-     $                   J, M, NCYCLE, NT, SDIM, LWORK
+     $                   J, K, M, NCYCLE, NT, SDIM, LWORK
       DOUBLE PRECISION   ANRM, BNRM, DIF, SCALE, TOLA, TOLB
+      DOUBLE PRECISION   BIG, EALPHA, EBETA, RNAN, RONE, TINY, TOL
 *     ..
 *     .. Local Arrays ..
       LOGICAL            BW( NMAX ), SEL( NMAX )
@@ -87,6 +88,9 @@
      $                   R3( NMAX ), RCE( 2 ), RCV( 2 ), RS( NMAX ),
      $                   TAU( NMAX ), U( NMAX, NMAX ), V( NMAX, NMAX ),
      $                   W( LW ), Z( NMAX, NMAX )
+      LOGICAL            BWQ( NQ )
+      DOUBLE PRECISION   AQ( NQ, NQ ), ARQ( NQ ), AIQ( NQ ), BEQ( NQ ),
+     $                   BQ( NQ, NQ ), WQ( LWQ )
 *     ..
 *     .. External Functions ..
       LOGICAL            DLCTES, DLCTSX, LSAMEN
@@ -857,6 +861,93 @@
          CALL CHKXER( 'DGGESX', INFOT, NOUT, LERR, OK )
          NT = NT + 13
 *
+*        When the QZ iteration fails, DGGES, DGGES3 and DGGESX must
+*        still return the eigenvalues that were computed in the units
+*        of the input.  The leading 3-by-3 block of A is dense, the
+*        entry (4,4) is isolated, and B has a NaN in its 3-by-3 block,
+*        so the QZ iteration fails with INFO = 1, 2 or 3 and
+*        ALPHAR(4), ALPHAI(4) and BETA(4) are correct for the isolated
+*        eigenvalue.  The case J = 1 scales A up, J = 2 scales B up
+*        (with the NaN in A) and J = 3 scales A down.  A and B
+*        themselves are left unchanged.
+*
+         RONE = ONE
+         RNAN = SQRT( -RONE )
+         BIG = 1.0D+300
+         TINY = 1.0D-300
+         TOL = 1.0D-10
+         DO 42 J = 1, 3
+            DO 41 K = 1, 3
+               DO 35 I = 1, NQ
+                  DO 34 M = 1, NQ
+                     AQ( I, M ) = ZERO
+                     BQ( I, M ) = ZERO
+   34             CONTINUE
+   35          CONTINUE
+               DO 37 I = 1, 3
+                  DO 36 M = 1, 3
+                     AQ( I, M ) = ONE
+   36             CONTINUE
+                  BQ( I, I ) = ONE
+   37          CONTINUE
+               AQ( 1, 1 ) = 2.0D+0
+               AQ( 2, 2 ) = 3.0D+0
+               AQ( 3, 3 ) = 4.0D+0
+               AQ( 4, 4 ) = 5.0D+0
+               BQ( 4, 4 ) = 2.0D+0
+               IF( J.EQ.2 ) THEN
+                  AQ( 2, 3 ) = RNAN
+                  BQ( 1, 1 ) = BIG
+                  BQ( 2, 2 ) = BIG
+                  BQ( 3, 3 ) = BIG
+                  BQ( 4, 4 ) = 2.0D+0*BIG
+               ELSE
+                  BQ( 2, 3 ) = RNAN
+                  DO 39 I = 1, NQ
+                     DO 38 M = 1, NQ
+                        IF( J.EQ.1 ) THEN
+                           AQ( I, M ) = AQ( I, M )*BIG
+                        ELSE
+                           AQ( I, M ) = AQ( I, M )*TINY
+                        END IF
+   38                CONTINUE
+   39             CONTINUE
+               END IF
+               EALPHA = AQ( 4, 4 )
+               EBETA = BQ( 4, 4 )
+               INFOT = 0
+               LERR = .FALSE.
+               IF( K.EQ.1 ) THEN
+                  SRNAMT = 'DGGES '
+                  CALL DGGES( 'N', 'N', 'S', DLCTES, NQ, AQ, NQ, BQ,
+     $                        NQ, SDIM, ARQ, AIQ, BEQ, Q, 1, U, 1,
+     $                        WQ, LWQ, BWQ, INFO )
+               ELSE IF( K.EQ.2 ) THEN
+                  SRNAMT = 'DGGES3'
+                  CALL DGGES3( 'N', 'N', 'S', DLCTES, NQ, AQ, NQ,
+     $                         BQ, NQ, SDIM, ARQ, AIQ, BEQ, Q, 1, U, 1,
+     $                         WQ, LWQ, BWQ, INFO )
+               ELSE
+                  SRNAMT = 'DGGESX'
+                  CALL DGGESX( 'N', 'N', 'S', DLCTES, 'N', NQ, AQ,
+     $                         NQ, BQ, NQ, SDIM, ARQ, AIQ, BEQ, Q, 1,
+     $                         U, 1, RCE, RCV, WQ, LWQ, IW, 1, BWQ,
+     $                         INFO )
+               END IF
+               IF( LERR .OR. INFO.LT.1 .OR. INFO.GT.3 .OR.
+     $             AIQ( 4 ).NE.ZERO .OR.
+     $             .NOT.( ABS( ARQ( 4 )-EALPHA ).LE.
+     $                    TOL*ABS( EALPHA ) ) .OR.
+     $             .NOT.( ABS( BEQ( 4 )-EBETA ).LE.
+     $                    TOL*ABS( EBETA ) ) ) THEN
+                  WRITE( NOUT, FMT = 9997 )SRNAMT( 1: 6 ), J, INFO,
+     $               ARQ( 4 ), BEQ( 4 )
+                  OK = .FALSE.
+               END IF
+   41       CONTINUE
+   42    CONTINUE
+         NT = NT + 9
+*
 *        DGGEV
 *
          SRNAMT = 'DGGEV '
@@ -1226,6 +1317,10 @@
      $      I3, ' tests done)' )
  9998 FORMAT( ' *** ', A3, ' routines failed the tests of the error ',
      $      'exits ***' )
+ 9997 FORMAT( ' *** ', A, ' did not return the computed eigenvalue ',
+     $      '4 in the units of the input after a QZ failure (case ', I1,
+     $      ', INFO = ', I3, ', ALPHA = ', 1P, E12.4, ', BETA = ',
+     $      E12.4, ') ***' )
 *
       RETURN
 *

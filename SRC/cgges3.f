@@ -306,6 +306,7 @@
       INTEGER            I, ICOLS, IERR, IHI, IJOBVL, IJOBVR, ILEFT,
      $                   ILO, IRIGHT, IROWS, IRWRK, ITAU, IWRK, LWKOPT,
      $                   LWKMIN
+      INTEGER            IFIRST
       REAL               ANRM, ANRMTO, BIGNUM, BNRM, BNRMTO, EPS, PVSL,
      $                   PVSR, SMLNUM
 *     ..
@@ -517,6 +518,7 @@
 *
 *     Perform QZ algorithm, computing Schur vectors if desired
 *
+      IFIRST = 1
       IWRK = ITAU
       CALL CLAQZ0( 'S', JOBVSL, JOBVSR, N, ILO, IHI, A, LDA, B, LDB,
      $             ALPHA, BETA, VSL, LDVSL, VSR, LDVSR, WORK( IWRK ),
@@ -529,7 +531,10 @@
          ELSE
             INFO = N + 1
          END IF
-         GO TO 30
+         IF( INFO.GE.N )
+     $      GO TO 30
+         IFIRST = INFO + 1
+         GO TO 15
       END IF
 *
 *     Sort eigenvalues ALPHA/BETA if desired
@@ -569,17 +574,30 @@
      $   CALL CGGBAK( 'P', 'R', N, ILO, IHI, RWORK( ILEFT ),
      $                RWORK( IRIGHT ), N, VSR, LDVSR, IERR )
 *
+   15 CONTINUE
+*
 *     Undo scaling
 *
       IF( ILASCL ) THEN
-         CALL CLASCL( 'U', 0, 0, ANRMTO, ANRM, N, N, A, LDA, IERR )
-         CALL CLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHA, N, IERR )
+         IF( IFIRST.EQ.1 )
+     $      CALL CLASCL( 'U', 0, 0, ANRMTO, ANRM, N, N, A, LDA,
+     $                   IERR )
+         CALL CLASCL( 'G', 0, 0, ANRMTO, ANRM, N-IFIRST+1, 1,
+     $                ALPHA( IFIRST ), N, IERR )
       END IF
 *
       IF( ILBSCL ) THEN
-         CALL CLASCL( 'U', 0, 0, BNRMTO, BNRM, N, N, B, LDB, IERR )
-         CALL CLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N, IERR )
+         IF( IFIRST.EQ.1 )
+     $      CALL CLASCL( 'U', 0, 0, BNRMTO, BNRM, N, N, B, LDB,
+     $                   IERR )
+         CALL CLASCL( 'G', 0, 0, BNRMTO, BNRM, N-IFIRST+1, 1,
+     $                BETA( IFIRST ), N, IERR )
       END IF
+*
+*     If the QZ iteration failed, nothing was reordered or selected.
+*
+      IF( INFO.GE.1 .AND. INFO.LE.N+1 )
+     $   GO TO 30
 *
       IF( WANTST ) THEN
 *

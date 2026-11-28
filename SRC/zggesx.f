@@ -369,6 +369,7 @@
       INTEGER            I, ICOLS, IERR, IHI, IJOB, IJOBVL, IJOBVR,
      $                   ILEFT, ILO, IRIGHT, IROWS, IRWRK, ITAU, IWRK,
      $                   LIWMIN, LWRK, MAXWRK, MINWRK
+      INTEGER            IFIRST
       DOUBLE PRECISION   ANRM, ANRMTO, BIGNUM, BNRM, BNRMTO, EPS, PL,
      $                   PR, SMLNUM
 *     ..
@@ -611,6 +612,7 @@
 *     (Complex Workspace: need N)
 *     (Real Workspace:    need N)
 *
+      IFIRST = 1
       IWRK = ITAU
       CALL ZHGEQZ( 'S', JOBVSL, JOBVSR, N, ILO, IHI, A, LDA, B, LDB,
      $             ALPHA, BETA, VSL, LDVSL, VSR, LDVSR, WORK( IWRK ),
@@ -623,7 +625,10 @@
          ELSE
             INFO = N + 1
          END IF
-         GO TO 40
+         IF( INFO.GE.N )
+     $      GO TO 40
+         IFIRST = INFO + 1
+         GO TO 15
       END IF
 *
 *     Sort eigenvalues ALPHA/BETA and compute the reciprocal of
@@ -689,17 +694,30 @@
      $   CALL ZGGBAK( 'P', 'R', N, ILO, IHI, RWORK( ILEFT ),
      $                RWORK( IRIGHT ), N, VSR, LDVSR, IERR )
 *
+   15 CONTINUE
+*
 *     Undo scaling
 *
       IF( ILASCL ) THEN
-         CALL ZLASCL( 'U', 0, 0, ANRMTO, ANRM, N, N, A, LDA, IERR )
-         CALL ZLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHA, N, IERR )
+         IF( IFIRST.EQ.1 )
+     $      CALL ZLASCL( 'U', 0, 0, ANRMTO, ANRM, N, N, A, LDA,
+     $                   IERR )
+         CALL ZLASCL( 'G', 0, 0, ANRMTO, ANRM, N-IFIRST+1, 1,
+     $                ALPHA( IFIRST ), N, IERR )
       END IF
 *
       IF( ILBSCL ) THEN
-         CALL ZLASCL( 'U', 0, 0, BNRMTO, BNRM, N, N, B, LDB, IERR )
-         CALL ZLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N, IERR )
+         IF( IFIRST.EQ.1 )
+     $      CALL ZLASCL( 'U', 0, 0, BNRMTO, BNRM, N, N, B, LDB,
+     $                   IERR )
+         CALL ZLASCL( 'G', 0, 0, BNRMTO, BNRM, N-IFIRST+1, 1,
+     $                BETA( IFIRST ), N, IERR )
       END IF
+*
+*     If the QZ iteration failed, nothing was reordered or selected.
+*
+      IF( INFO.GE.1 .AND. INFO.LE.N+1 )
+     $   GO TO 40
 *
       IF( WANTST ) THEN
 *

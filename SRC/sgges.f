@@ -317,6 +317,7 @@
       INTEGER            I, ICOLS, IERR, IHI, IJOBVL, IJOBVR, ILEFT,
      $                   ILO, IP, IRIGHT, IROWS, ITAU, IWRK, MAXWRK,
      $                   MINWRK
+      INTEGER            IFIRST
       REAL               ANRM, ANRMTO, BIGNUM, BNRM, BNRMTO, EPS, PVSL,
      $                   PVSR, SAFMAX, SAFMIN, SMLNUM
 *     ..
@@ -522,6 +523,7 @@
 *     Perform QZ algorithm, computing Schur vectors if desired
 *     (Workspace: need N)
 *
+      IFIRST = 1
       IWRK = ITAU
       CALL SHGEQZ( 'S', JOBVSL, JOBVSR, N, ILO, IHI, A, LDA, B, LDB,
      $             ALPHAR, ALPHAI, BETA, VSL, LDVSL, VSR, LDVSR,
@@ -534,7 +536,10 @@
          ELSE
             INFO = N + 1
          END IF
-         GO TO 40
+         IF( INFO.GE.N )
+     $      GO TO 40
+         IFIRST = INFO + 1
+         GO TO 15
       END IF
 *
 *     Sort eigenvalues ALPHA/BETA if desired
@@ -583,12 +588,14 @@
      $   CALL SGGBAK( 'P', 'R', N, ILO, IHI, WORK( ILEFT ),
      $                WORK( IRIGHT ), N, VSR, LDVSR, IERR )
 *
+   15 CONTINUE
+*
 *     Check if unscaling would cause over/underflow, if so, rescale
 *     (ALPHAR(I),ALPHAI(I),BETA(I)) so BETA(I) is on the order of
 *     B(I,I) and ALPHAR(I) and ALPHAI(I) are on the order of A(I,I)
 *
       IF( ILASCL )THEN
-         DO 50 I = 1, N
+         DO 50 I = IFIRST, N
             IF( ALPHAI( I ).NE.ZERO ) THEN
                IF( ( ALPHAR( I )/SAFMAX ).GT.( ANRMTO/ANRM ) .OR.
      $             ( SAFMIN/ALPHAR( I ) ).GT.( ANRM/ANRMTO ) ) THEN
@@ -608,7 +615,7 @@
       END IF
 *
       IF( ILBSCL )THEN
-         DO 60 I = 1, N
+         DO 60 I = IFIRST, N
             IF( ALPHAI( I ).NE.ZERO ) THEN
                 IF( ( BETA( I )/SAFMAX ).GT.( BNRMTO/BNRM ) .OR.
      $              ( SAFMIN/BETA( I ) ).GT.( BNRM/BNRMTO ) ) THEN
@@ -624,17 +631,27 @@
 *     Undo scaling
 *
       IF( ILASCL ) THEN
-         CALL SLASCL( 'H', 0, 0, ANRMTO, ANRM, N, N, A, LDA, IERR )
-         CALL SLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAR, N,
-     $                IERR )
-         CALL SLASCL( 'G', 0, 0, ANRMTO, ANRM, N, 1, ALPHAI, N,
-     $                IERR )
+         IF( IFIRST.EQ.1 )
+     $      CALL SLASCL( 'H', 0, 0, ANRMTO, ANRM, N, N, A, LDA,
+     $                   IERR )
+         CALL SLASCL( 'G', 0, 0, ANRMTO, ANRM, N-IFIRST+1, 1,
+     $                ALPHAR( IFIRST ), N, IERR )
+         CALL SLASCL( 'G', 0, 0, ANRMTO, ANRM, N-IFIRST+1, 1,
+     $                ALPHAI( IFIRST ), N, IERR )
       END IF
 *
       IF( ILBSCL ) THEN
-         CALL SLASCL( 'U', 0, 0, BNRMTO, BNRM, N, N, B, LDB, IERR )
-         CALL SLASCL( 'G', 0, 0, BNRMTO, BNRM, N, 1, BETA, N, IERR )
+         IF( IFIRST.EQ.1 )
+     $      CALL SLASCL( 'U', 0, 0, BNRMTO, BNRM, N, N, B, LDB,
+     $                   IERR )
+         CALL SLASCL( 'G', 0, 0, BNRMTO, BNRM, N-IFIRST+1, 1,
+     $                BETA( IFIRST ), N, IERR )
       END IF
+*
+*     If the QZ iteration failed, nothing was reordered or selected.
+*
+      IF( INFO.GE.1 .AND. INFO.LE.N+1 )
+     $   GO TO 40
 *
       IF( WANTST ) THEN
 *
