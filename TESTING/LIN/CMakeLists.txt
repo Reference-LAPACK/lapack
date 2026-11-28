@@ -268,6 +268,10 @@ function(add_lin_executable name)
 
   if(BUILD_DEFAULT_API)
     add_executable(${name} ${sources})
+    # Test drivers bundle their own copies of library routines (e.g.
+    # ilaenv/ilaenv2stage, xerbla); a unity batch would pull both
+    # definitions at link time, so keep test objects fine-grained.
+    set_target_properties(${name} PROPERTIES UNITY_BUILD OFF)
     target_link_libraries(${name} PRIVATE ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
     lapack_add_coverage(${name})
     if(LIN_TEST)
@@ -281,6 +285,8 @@ function(add_lin_executable name)
     lapack_nag_disable_constant_propagation(${ext_sources_64})
 
     add_executable(${name}_64 ${ext_sources_64})
+    # See above: test drivers must stay fine-grained.
+    set_target_properties(${name}_64 PROPERTIES UNITY_BUILD OFF)
     target_compile_options(${name}_64 PRIVATE ${FOPT_ILP64})
     target_link_libraries(${name}_64 PRIVATE ${TMGLIB} ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
     lapack_add_coverage(${name}_64)
