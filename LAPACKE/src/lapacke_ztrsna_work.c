@@ -58,18 +58,21 @@ lapack_int API_SUFFIX(LAPACKE_ztrsna_work)( int matrix_layout, char job, char ho
         lapack_complex_double* t_t = NULL;
         lapack_complex_double* vl_t = NULL;
         lapack_complex_double* vr_t = NULL;
+        /* JOB = 'V' leaves both eigenvector matrices unused. */
+        lapack_int min_ldv = API_SUFFIX(LAPACKE_lsame)( job, 'v' ) ?
+                             MIN(1,mm) : mm;
         /* Check leading dimension(s) */
         if( ldt < n ) {
             info = -7;
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztrsna_work", info );
             return info;
         }
-        if( ldvl < mm ) {
+        if( ldvl < min_ldv ) {
             info = -9;
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztrsna_work", info );
             return info;
         }
-        if( ldvr < mm ) {
+        if( ldvr < min_ldv ) {
             info = -11;
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztrsna_work", info );
             return info;
