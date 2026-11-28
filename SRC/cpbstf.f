@@ -174,8 +174,8 @@
       REAL               AJJ
 *     ..
 *     .. External Functions ..
-      LOGICAL            LSAME
-      EXTERNAL           LSAME
+      LOGICAL            LSAME, SISNAN
+      EXTERNAL           LSAME, SISNAN
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CHER, CLACGV, CSSCAL, XERBLA
@@ -223,7 +223,7 @@
 *           Compute s(j,j) and test for non-positive-definiteness.
 *
             AJJ = REAL( AB( KD+1, J ) )
-            IF( AJJ.LE.ZERO ) THEN
+            IF( AJJ.LE.ZERO.OR.SISNAN( AJJ ) ) THEN
                AB( KD+1, J ) = AJJ
                GO TO 50
             END IF
@@ -246,7 +246,7 @@
 *           Compute s(j,j) and test for non-positive-definiteness.
 *
             AJJ = REAL( AB( KD+1, J ) )
-            IF( AJJ.LE.ZERO ) THEN
+            IF( AJJ.LE.ZERO.OR.SISNAN( AJJ ) ) THEN
                AB( KD+1, J ) = AJJ
                GO TO 50
             END IF
@@ -274,7 +274,7 @@
 *           Compute s(j,j) and test for non-positive-definiteness.
 *
             AJJ = REAL( AB( 1, J ) )
-            IF( AJJ.LE.ZERO ) THEN
+            IF( AJJ.LE.ZERO.OR.SISNAN( AJJ ) ) THEN
                AB( 1, J ) = AJJ
                GO TO 50
             END IF
@@ -299,7 +299,7 @@
 *           Compute s(j,j) and test for non-positive-definiteness.
 *
             AJJ = REAL( AB( 1, J ) )
-            IF( AJJ.LE.ZERO ) THEN
+            IF( AJJ.LE.ZERO.OR.SISNAN( AJJ ) ) THEN
                AB( 1, J ) = AJJ
                GO TO 50
             END IF
