@@ -196,7 +196,7 @@
       COMPLEX*16         CZERO
       PARAMETER          ( CZERO = ( 0.0D+0, 0.0D+0 ) )
       INTEGER            NTYPES
-      PARAMETER          ( NTYPES = 10 )
+      PARAMETER          ( NTYPES = 11 )
       INTEGER            NTESTS
       PARAMETER          ( NTESTS = 9 )
 *     ..
@@ -208,19 +208,26 @@
      $                   IUPLO, IZERO, J, K, KL, KU, LDA, LWORK, MODE,
      $                   N, NB, NERRS, NFAIL, NIMAT, NRHS, NRUN, NT
       DOUBLE PRECISION   ANORM, CNDNUM
+      DOUBLE PRECISION   SUBNRM
 *     ..
 *     .. Local Arrays ..
       CHARACTER          UPLOS( 2 )
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
       DOUBLE PRECISION   RESULT( NTESTS )
 *     ..
+*     .. External Functions ..
+      LOGICAL            DISNAN
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DISNAN, DLAMCH
+*     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, ZERRSY, ZLACPY, ZLARHS,
      $                   ZLATB4, ZLATMS, ZSYT02, ZSYT01_AA, ZSYTRF_AA,
      $                   ZSYTRS_AA, XLAENV
+      EXTERNAL           ZDSCAL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX, MIN
+      INTRINSIC          HUGE, MAX, MIN
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -400,6 +407,19 @@
                   IZERO = 0
                END IF
 *
+*              Type 11:  scale the type 2 matrix into the
+*              subnormal range, below the safe minimum, so
+*              that the pivots are subnormal.  Forming the
+*              multipliers through the reciprocal of such a
+*              pivot overflows.  The matrix carries too few bits
+*              for its residual to be compared with THRESH, so
+*              the test is only that the factorization is finite.
+*
+               IF( IMAT.EQ.11 ) THEN
+                  SUBNRM = DLAMCH( 'Safe minimum' ) / 8
+                  CALL ZDSCAL( N*N, SUBNRM, A, 1 )
+               END IF
+*
 *              End generate the test matrix A.
 *
 *              Do for each value of NB in NBVAL
@@ -468,7 +488,11 @@ c                  END IF
 *                 the threshold.
 *
                   DO 110 K = 1, NT
-                     IF( RESULT( K ).GE.THRESH ) THEN
+                     IF( ( IMAT.NE.11 .AND.
+     $                     RESULT( K ).GE.THRESH ) .OR.
+     $                   DISNAN( RESULT( K ) ) .OR.
+     $                   RESULT( K ).GT.HUGE( RESULT( K ) ) )
+     $                  THEN
                         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
      $                     CALL ALAHD( NOUT, PATH )
                         WRITE( NOUT, FMT = 9999 )UPLO, N, NB, IMAT, K,
@@ -480,7 +504,7 @@ c                  END IF
 *
 *                 Skip solver test if INFO is not 0.
 *
-                  IF( INFO.NE.0 ) THEN
+                  IF( INFO.NE.0 .OR. IMAT.EQ.11 ) THEN
                      GO TO 140
                   END IF
 *

@@ -163,20 +163,24 @@
 *     .. Local Scalars ..
       INTEGER      J, K, K1, I1, I2, MJ
       COMPLEX      PIV, ALPHA
+      REAL         SFMIN
 *     ..
 *     .. External Functions ..
       LOGICAL      LSAME
+      REAL         SLAMCH
       INTEGER      ICAMAX
-      EXTERNAL     LSAME, ICAMAX
+      EXTERNAL     LSAME, SLAMCH, ICAMAX
 *     ..
 *     .. External Subroutines ..
       EXTERNAL     CLACGV, CGEMV, CSCAL, CAXPY,
-     $             CCOPY, CSWAP, CLASET
+     $             CCOPY, CRSCL, CSWAP, CLASET
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC    REAL, CONJG, MAX
+      INTRINSIC    ABS, REAL, CONJG, MAX
 *     ..
 *     .. Executable Statements ..
+*
+      SFMIN = SLAMCH( 'S' )
 *
       J = 1
 *
@@ -327,9 +331,14 @@
 *
             IF( J.LT.(M-1) ) THEN
                IF( A( K, J+1 ).NE.ZERO ) THEN
-                  ALPHA = ONE / A( K, J+1 )
                   CALL CCOPY( M-J-1, WORK( 3 ), 1, A( K, J+2 ), LDA )
-                  CALL CSCAL( M-J-1, ALPHA, A( K, J+2 ), LDA )
+                  IF( ABS( A( K, J+1 ) ).GE.SFMIN ) THEN
+                     ALPHA = ONE / A( K, J+1 )
+                     CALL CSCAL( M-J-1, ALPHA, A( K, J+2 ), LDA )
+                  ELSE
+                     CALL CRSCL( M-J-1, A( K, J+1 ), A( K, J+2 ),
+     $                           LDA )
+                  END IF
                ELSE
                   CALL CLASET( 'Full', 1, M-J-1, ZERO, ZERO,
      $                         A( K, J+2 ), LDA)
@@ -482,9 +491,13 @@
 *
             IF( J.LT.(M-1) ) THEN
                IF( A( J+1, K ).NE.ZERO ) THEN
-                  ALPHA = ONE / A( J+1, K )
                   CALL CCOPY( M-J-1, WORK( 3 ), 1, A( J+2, K ), 1 )
-                  CALL CSCAL( M-J-1, ALPHA, A( J+2, K ), 1 )
+                  IF( ABS( A( J+1, K ) ).GE.SFMIN ) THEN
+                     ALPHA = ONE / A( J+1, K )
+                     CALL CSCAL( M-J-1, ALPHA, A( J+2, K ), 1 )
+                  ELSE
+                     CALL CRSCL( M-J-1, A( J+1, K ), A( J+2, K ), 1 )
+                  END IF
                ELSE
                   CALL CLASET( 'Full', M-J-1, 1, ZERO, ZERO,
      $                         A( J+2, K ), LDA )

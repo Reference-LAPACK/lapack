@@ -25,7 +25,7 @@ ZPT   13               List types on next line if 0 < NTYPES < 13
 ZHE   10               List types on next line if 0 < NTYPES < 10
 ZHR   10               List types on next line if 0 < NTYPES < 10
 ZHK   10               List types on next line if 0 < NTYPES < 10
-ZHA   10               List types on next line if 0 < NTYPES < 10
+ZHA   11               List types on next line if 0 < NTYPES < 11
 ZH2   10               List types on next line if 0 < NTYPES < 10
 ZSA   11               List types on next line if 0 < NTYPES < 10
 ZS2   11               List types on next line if 0 < NTYPES < 10

@@ -161,22 +161,26 @@
       PARAMETER          ( ZERO = 0.0D+0, ONE = 1.0D+0 )
 *
 *     .. Local Scalars ..
-      INTEGER            J, K, K1, I1, I2, MJ
+      INTEGER            I, J, K, K1, I1, I2, MJ
       DOUBLE PRECISION   PIV, ALPHA
+      DOUBLE PRECISION   SFMIN
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
+      DOUBLE PRECISION   DLAMCH
       INTEGER            IDAMAX
-      EXTERNAL           LSAME, IDAMAX
+      EXTERNAL           LSAME, DLAMCH, IDAMAX
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGEMV, DAXPY, DCOPY,
      $                   DSWAP, DSCAL, DLASET
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          MAX
+      INTRINSIC          ABS, MAX
 *     ..
 *     .. Executable Statements ..
+*
+      SFMIN = DLAMCH( 'S' )
 *
       J = 1
 *
@@ -323,9 +327,15 @@
 *
             IF( J.LT.(M-1) ) THEN
                IF( A( K, J+1 ).NE.ZERO ) THEN
-                  ALPHA = ONE / A( K, J+1 )
                   CALL DCOPY( M-J-1, WORK( 3 ), 1, A( K, J+2 ), LDA )
-                  CALL DSCAL( M-J-1, ALPHA, A( K, J+2 ), LDA )
+                  IF( ABS( A( K, J+1 ) ).GE.SFMIN ) THEN
+                     ALPHA = ONE / A( K, J+1 )
+                     CALL DSCAL( M-J-1, ALPHA, A( K, J+2 ), LDA )
+                  ELSE
+                     DO 15 I = J+2, M
+                        A( K, I ) = A( K, I ) / A( K, J+1 )
+   15                CONTINUE
+                  END IF
                ELSE
                   CALL DLASET( 'Full', 1, M-J-1, ZERO, ZERO,
      $                         A( K, J+2 ), LDA)
@@ -474,9 +484,15 @@
 *
             IF( J.LT.(M-1) ) THEN
                IF( A( J+1, K ).NE.ZERO ) THEN
-                  ALPHA = ONE / A( J+1, K )
                   CALL DCOPY( M-J-1, WORK( 3 ), 1, A( J+2, K ), 1 )
-                  CALL DSCAL( M-J-1, ALPHA, A( J+2, K ), 1 )
+                  IF( ABS( A( J+1, K ) ).GE.SFMIN ) THEN
+                     ALPHA = ONE / A( J+1, K )
+                     CALL DSCAL( M-J-1, ALPHA, A( J+2, K ), 1 )
+                  ELSE
+                     DO 35 I = J+2, M
+                        A( I, K ) = A( I, K ) / A( J+1, K )
+   35                CONTINUE
+                  END IF
                ELSE
                   CALL DLASET( 'Full', M-J-1, 1, ZERO, ZERO,
      $                         A( J+2, K ), LDA )
