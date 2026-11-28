@@ -180,7 +180,7 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, J
-      DOUBLE PRECISION   CJ, LARGE, SMALL
+      DOUBLE PRECISION   CJ, HUGEV, LARGE, SMALL, T
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH
@@ -202,6 +202,7 @@
 *
       SMALL = DLAMCH( 'Safe minimum' ) / DLAMCH( 'Precision' )
       LARGE = ONE / SMALL
+      HUGEV = DLAMCH( 'Overflow' )
 *
       IF( ROWCND.GE.THRESH .AND. AMAX.GE.SMALL .AND. AMAX.LE.LARGE )
      $     THEN
@@ -242,7 +243,14 @@
          DO 60 J = 1, N
             CJ = C( J )
             DO 50 I = MAX( 1, J-KU ), MIN( M, J+KL )
-               AB( KU+1+I-J, J ) = CJ*R( I )*AB( KU+1+I-J, J )
+               T = CJ*R( I )
+               IF( T.GT.HUGEV ) THEN
+                  AB( KU+1+I-J, J ) =
+     $                MIN( CJ, R( I ) )*
+     $                ( MAX( CJ, R( I ) )*AB( KU+1+I-J, J ) )
+               ELSE
+                  AB( KU+1+I-J, J ) = T*AB( KU+1+I-J, J )
+               END IF
    50       CONTINUE
    60    CONTINUE
          EQUED = 'B'

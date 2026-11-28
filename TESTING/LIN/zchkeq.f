@@ -22,6 +22,8 @@
 *> \verbatim
 *>
 *> ZCHKEQ tests ZGEEQU, ZGBEQU, ZPOEQU, ZPPEQU and ZPBEQU
+*> and the scaling routines ZLAQGE, ZLAQGB, ZLAQSY, ZLAQSP and ZLAQSB,
+*> ZLAQHE, ZLAQHP and ZLAQHB
 *> \endverbatim
 *
 *  Arguments:
@@ -65,8 +67,11 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   ZERO, ONE, TEN
-      PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D+0, TEN = 1.0D1 )
+      INTEGER            DP
+      PARAMETER          ( DP = KIND( 0.0D0 ) )
+      DOUBLE PRECISION   ZERO, ONE, TWO, TEN
+      PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D+0,
+     $                   TWO = 2.0D+0, TEN = 1.0D1 )
       COMPLEX*16         CZERO
       PARAMETER          ( CZERO = ( 0.0D0, 0.0D0 ) )
       COMPLEX*16         CONE
@@ -80,11 +85,13 @@
 *     .. Local Scalars ..
       LOGICAL            OK
       CHARACTER*3        PATH
-      INTEGER            I, INFO, J, KL, KU, M, N
+      CHARACTER          EQUED, UPLO
+      INTEGER            I, INFO, J, K, KL, KU, M, N
       DOUBLE PRECISION   CCOND, EPS, NORM, RATIO, RCMAX, RCMIN, RCOND
+      DOUBLE PRECISION DEN, E( 4 ), PREC, V( 4 ), X
 *     ..
 *     .. Local Arrays ..
-      DOUBLE PRECISION   C( NSZ ), POW( NPOW ), R( NSZ ), RESLTS( 5 ),
+      DOUBLE PRECISION   C( NSZ ), POW( NPOW ), R( NSZ ), RESLTS( 6 ),
      $                   RPOW( NPOW )
       COMPLEX*16         A( NSZ, NSZ ), AB( NSZB, NSZ ), AP( NSZP )
 *     ..
@@ -94,9 +101,11 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZGBEQU, ZGEEQU, ZPBEQU, ZPOEQU, ZPPEQU
+      EXTERNAL           ZLAQGE, ZLAQGB, ZLAQSY, ZLAQSP,
+     $                   ZLAQSB, ZLAQHE, ZLAQHP, ZLAQHB
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX, MIN
+      INTRINSIC          ABS, AIMAG, CMPLX, DBLE, MAX, MIN
 *     ..
 *     .. Executable Statements ..
 *
@@ -104,7 +113,7 @@
       PATH( 2: 3 ) = 'EQ'
 *
       EPS = DLAMCH( 'P' )
-      DO 10 I = 1, 5
+      DO 10 I = 1, 6
          RESLTS( I ) = ZERO
    10 CONTINUE
       DO 20 I = 1, NPOW
@@ -454,10 +463,277 @@
   450    CONTINUE
   460 CONTINUE
       RESLTS( 5 ) = RESLTS( 5 ) / EPS
+*
+*     Test the ZLAQ* scaling routines with subnormal
+*     entries.  The product of two scale factors can overflow
+*     although every scaled entry is O(1).
+*
+      RESLTS( 6 ) = ZERO
+      DEN = DLAMCH( 'Safe minimum' )*DLAMCH( 'Precision' )
+      IF( DEN.GT.ZERO .AND. DEN.LT.DLAMCH( 'Safe minimum' ) ) THEN
+*
+*        Expected values for the general matrices
+*
+         PREC = DLAMCH( 'Precision' )
+         E( 1 ) = TWO*PREC
+         E( 2 ) = ONE
+         E( 3 ) = ONE
+         E( 4 ) = 1.0D-20 / PREC
+*
+*        ZLAQGE
+*
+         A( 1, 1 ) = CMPLX( TWO*DEN, ZERO, KIND=DP )
+         A( 2, 1 ) = CMPLX( ONE, ZERO, KIND=DP )
+         A( 1, 2 ) = CMPLX( DEN, ZERO, KIND=DP )
+         A( 2, 2 ) = CMPLX( 1.0D-20, ZERO, KIND=DP )
+         CALL ZGEEQU( 2, 2, A, NSZ, R, C, RCOND, CCOND, NORM,
+     $                INFO )
+         CALL ZLAQGE( 2, 2, A, NSZ, R, C, RCOND, CCOND, NORM,
+     $                EQUED )
+         IF( INFO.NE.0 .OR. EQUED.NE.'B' ) RESLTS( 6 ) = ONE / EPS
+         V( 1 ) = DBLE( A( 1, 1 ) )
+         V( 2 ) = DBLE( A( 2, 1 ) )
+         V( 3 ) = DBLE( A( 1, 2 ) )
+         V( 4 ) = DBLE( A( 2, 2 ) )
+         DO 601 I = 1, 4
+            RATIO = ABS( V( I )-E( I ) ) / ABS( E( I ) ) / EPS
+            IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+            RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+  601    CONTINUE
+*
+*        ZLAQGB
+*
+         AB( 2, 1 ) = CMPLX( TWO*DEN, ZERO, KIND=DP )
+         AB( 3, 1 ) = CMPLX( ONE, ZERO, KIND=DP )
+         AB( 1, 2 ) = CMPLX( DEN, ZERO, KIND=DP )
+         AB( 2, 2 ) = CMPLX( 1.0D-20, ZERO, KIND=DP )
+         CALL ZGBEQU( 2, 2, 1, 1, AB, NSZB, R, C, RCOND, CCOND,
+     $                NORM, INFO )
+         CALL ZLAQGB( 2, 2, 1, 1, AB, NSZB, R, C, RCOND, CCOND,
+     $                NORM, EQUED )
+         IF( INFO.NE.0 .OR. EQUED.NE.'B' ) RESLTS( 6 ) = ONE / EPS
+         V( 1 ) = DBLE( AB( 2, 1 ) )
+         V( 2 ) = DBLE( AB( 3, 1 ) )
+         V( 3 ) = DBLE( AB( 1, 2 ) )
+         V( 4 ) = DBLE( AB( 2, 2 ) )
+         DO 602 I = 1, 4
+            RATIO = ABS( V( I )-E( I ) ) / ABS( E( I ) ) / EPS
+            IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+            RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+  602    CONTINUE
+*
+*        Symmetric and Hermitian matrices with all entries equal
+*        to DEN.  The scaled matrix has all entries equal to one.
+*
+         DO 6010 K = 1, 2
+            DO 6900 I = 1, 3
+               E( I ) = ONE
+ 6900       CONTINUE
+            IF( K.EQ.1 ) THEN
+               UPLO = 'U'
+            ELSE
+               UPLO = 'L'
+            END IF
+*
+*           ZLAQSY
+*
+            DO 6110 I = 1, 3
+               A( I, 1 ) = CMPLX( DEN, ZERO, KIND=DP )
+               A( I, 2 ) = CMPLX( DEN, ZERO, KIND=DP )
+               A( I, 3 ) = CMPLX( DEN, ZERO, KIND=DP )
+ 6110       CONTINUE
+            A( 1, 2 ) = CMPLX( DEN, DEN, KIND=DP )
+            A( 2, 1 ) = CMPLX( DEN, DEN, KIND=DP )
+            CALL ZPOEQU( 2, A, NSZ, R, RCOND, NORM, INFO )
+            CALL ZLAQSY( UPLO, 2, A, NSZ, R, RCOND, NORM,
+     $                   EQUED )
+            IF( INFO.NE.0 .OR. EQUED.NE.'Y' ) RESLTS( 6 ) = ONE / EPS
+            V( 1 ) = DBLE( A( 1, 1 ) )
+            V( 2 ) = DBLE( A( 2, 2 ) )
+            IF( K.EQ.1 ) THEN
+               V( 3 ) = DBLE( A( 1, 2 ) )
+            ELSE
+               V( 3 ) = DBLE( A( 2, 1 ) )
+            END IF
+            DO 603 I = 1, 3
+               RATIO = ABS( V( I )-E( I ) ) / ABS( E( I ) ) / EPS
+               IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+               RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+  603       CONTINUE
+            IF( K.EQ.1 ) THEN
+               X = AIMAG( A( 1, 2 ) )
+            ELSE
+               X = AIMAG( A( 2, 1 ) )
+            END IF
+            RATIO = ABS( X-ONE ) / EPS
+            IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+            RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+*
+*           ZLAQSP
+*
+            DO 6120 I = 1, 3
+               AP( I ) = CMPLX( DEN, ZERO, KIND=DP )
+ 6120       CONTINUE
+            AP( 2 ) = CMPLX( DEN, DEN, KIND=DP )
+            CALL ZPPEQU( UPLO, 2, AP, R, RCOND, NORM, INFO )
+            CALL ZLAQSP( UPLO, 2, AP, R, RCOND, NORM,
+     $                   EQUED )
+            IF( INFO.NE.0 .OR. EQUED.NE.'Y' ) RESLTS( 6 ) = ONE / EPS
+            V( 1 ) = DBLE( AP( 1 ) )
+            V( 2 ) = DBLE( AP( 2 ) )
+            V( 3 ) = DBLE( AP( 3 ) )
+            DO 604 I = 1, 3
+               RATIO = ABS( V( I )-E( I ) ) / ABS( E( I ) ) / EPS
+               IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+               RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+  604       CONTINUE
+            X = AIMAG( AP( 2 ) )
+            RATIO = ABS( X-ONE ) / EPS
+            IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+            RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+*
+*           ZLAQSB
+*
+            DO 6130 I = 1, 2
+               AB( 1, I ) = CMPLX( DEN, ZERO, KIND=DP )
+               AB( 2, I ) = CMPLX( DEN, ZERO, KIND=DP )
+ 6130       CONTINUE
+            IF( K.EQ.1 ) THEN
+               AB( 1, 2 ) = CMPLX( DEN, DEN, KIND=DP )
+            ELSE
+               AB( 2, 1 ) = CMPLX( DEN, DEN, KIND=DP )
+            END IF
+            CALL ZPBEQU( UPLO, 2, 1, AB, NSZB, R, RCOND, NORM,
+     $                   INFO )
+            CALL ZLAQSB( UPLO, 2, 1, AB, NSZB, R, RCOND,
+     $                   NORM, EQUED )
+            IF( INFO.NE.0 .OR. EQUED.NE.'Y' ) RESLTS( 6 ) = ONE / EPS
+            IF( K.EQ.1 ) THEN
+               V( 1 ) = DBLE( AB( 2, 1 ) )
+               V( 2 ) = DBLE( AB( 2, 2 ) )
+               V( 3 ) = DBLE( AB( 1, 2 ) )
+            ELSE
+               V( 1 ) = DBLE( AB( 1, 1 ) )
+               V( 2 ) = DBLE( AB( 1, 2 ) )
+               V( 3 ) = DBLE( AB( 2, 1 ) )
+            END IF
+            DO 605 I = 1, 3
+               RATIO = ABS( V( I )-E( I ) ) / ABS( E( I ) ) / EPS
+               IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+               RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+  605       CONTINUE
+            IF( K.EQ.1 ) THEN
+               X = AIMAG( AB( 1, 2 ) )
+            ELSE
+               X = AIMAG( AB( 2, 1 ) )
+            END IF
+            RATIO = ABS( X-ONE ) / EPS
+            IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+            RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+*
+*           ZLAQHE
+*
+            DO 6140 I = 1, 3
+               A( I, 1 ) = CMPLX( DEN, ZERO, KIND=DP )
+               A( I, 2 ) = CMPLX( DEN, ZERO, KIND=DP )
+               A( I, 3 ) = CMPLX( DEN, ZERO, KIND=DP )
+ 6140       CONTINUE
+            A( 1, 2 ) = CMPLX( DEN, DEN, KIND=DP )
+            A( 2, 1 ) = CMPLX( DEN, DEN, KIND=DP )
+            CALL ZPOEQU( 2, A, NSZ, R, RCOND, NORM, INFO )
+            CALL ZLAQHE( UPLO, 2, A, NSZ, R, RCOND, NORM,
+     $                   EQUED )
+            IF( INFO.NE.0 .OR. EQUED.NE.'Y' ) RESLTS( 6 ) = ONE / EPS
+            V( 1 ) = DBLE( A( 1, 1 ) )
+            V( 2 ) = DBLE( A( 2, 2 ) )
+            IF( K.EQ.1 ) THEN
+               V( 3 ) = DBLE( A( 1, 2 ) )
+            ELSE
+               V( 3 ) = DBLE( A( 2, 1 ) )
+            END IF
+            DO 606 I = 1, 3
+               RATIO = ABS( V( I )-E( I ) ) / ABS( E( I ) ) / EPS
+               IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+               RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+  606       CONTINUE
+            IF( K.EQ.1 ) THEN
+               X = AIMAG( A( 1, 2 ) )
+            ELSE
+               X = AIMAG( A( 2, 1 ) )
+            END IF
+            RATIO = ABS( X-ONE ) / EPS
+            IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+            RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+*
+*           ZLAQHP
+*
+            DO 6150 I = 1, 3
+               AP( I ) = CMPLX( DEN, ZERO, KIND=DP )
+ 6150       CONTINUE
+            AP( 2 ) = CMPLX( DEN, DEN, KIND=DP )
+            CALL ZPPEQU( UPLO, 2, AP, R, RCOND, NORM, INFO )
+            CALL ZLAQHP( UPLO, 2, AP, R, RCOND, NORM,
+     $                   EQUED )
+            IF( INFO.NE.0 .OR. EQUED.NE.'Y' ) RESLTS( 6 ) = ONE / EPS
+            V( 1 ) = DBLE( AP( 1 ) )
+            V( 2 ) = DBLE( AP( 2 ) )
+            V( 3 ) = DBLE( AP( 3 ) )
+            DO 607 I = 1, 3
+               RATIO = ABS( V( I )-E( I ) ) / ABS( E( I ) ) / EPS
+               IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+               RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+  607       CONTINUE
+            X = AIMAG( AP( 2 ) )
+            RATIO = ABS( X-ONE ) / EPS
+            IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+            RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+*
+*           ZLAQHB
+*
+            DO 6160 I = 1, 2
+               AB( 1, I ) = CMPLX( DEN, ZERO, KIND=DP )
+               AB( 2, I ) = CMPLX( DEN, ZERO, KIND=DP )
+ 6160       CONTINUE
+            IF( K.EQ.1 ) THEN
+               AB( 1, 2 ) = CMPLX( DEN, DEN, KIND=DP )
+            ELSE
+               AB( 2, 1 ) = CMPLX( DEN, DEN, KIND=DP )
+            END IF
+            CALL ZPBEQU( UPLO, 2, 1, AB, NSZB, R, RCOND, NORM,
+     $                   INFO )
+            CALL ZLAQHB( UPLO, 2, 1, AB, NSZB, R, RCOND,
+     $                   NORM, EQUED )
+            IF( INFO.NE.0 .OR. EQUED.NE.'Y' ) RESLTS( 6 ) = ONE / EPS
+            IF( K.EQ.1 ) THEN
+               V( 1 ) = DBLE( AB( 2, 1 ) )
+               V( 2 ) = DBLE( AB( 2, 2 ) )
+               V( 3 ) = DBLE( AB( 1, 2 ) )
+            ELSE
+               V( 1 ) = DBLE( AB( 1, 1 ) )
+               V( 2 ) = DBLE( AB( 1, 2 ) )
+               V( 3 ) = DBLE( AB( 2, 1 ) )
+            END IF
+            DO 608 I = 1, 3
+               RATIO = ABS( V( I )-E( I ) ) / ABS( E( I ) ) / EPS
+               IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+               RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+  608       CONTINUE
+            IF( K.EQ.1 ) THEN
+               X = AIMAG( AB( 1, 2 ) )
+            ELSE
+               X = AIMAG( AB( 2, 1 ) )
+            END IF
+            RATIO = ABS( X-ONE ) / EPS
+            IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+            RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+ 6010    CONTINUE
+      END IF
       OK = ( RESLTS( 1 ).LE.THRESH ) .AND.
      $     ( RESLTS( 2 ).LE.THRESH ) .AND.
      $     ( RESLTS( 3 ).LE.THRESH ) .AND.
-     $     ( RESLTS( 4 ).LE.THRESH ) .AND. ( RESLTS( 5 ).LE.THRESH )
+     $     ( RESLTS( 4 ).LE.THRESH ) .AND.
+     $     ( RESLTS( 5 ).LE.THRESH ) .AND.
+     $     ( RESLTS( 6 ).LE.THRESH )
       WRITE( NOUT, FMT = * )
       IF( OK ) THEN
          WRITE( NOUT, FMT = 9999 )PATH
@@ -472,6 +748,8 @@
      $      WRITE( NOUT, FMT = 9995 )RESLTS( 4 ), THRESH
          IF( RESLTS( 5 ).GT.THRESH )
      $      WRITE( NOUT, FMT = 9994 )RESLTS( 5 ), THRESH
+         IF( RESLTS( 6 ).GT.THRESH )
+     $      WRITE( NOUT, FMT = 9993 )RESLTS( 6 ), THRESH
       END IF
  9999 FORMAT( 1X, 'All tests for ', A3,
      $      ' routines passed the threshold' )
@@ -484,6 +762,8 @@
  9995 FORMAT( ' ZPPEQU failed test with value ', D10.3, ' exceeding',
      $      ' threshold ', D10.3 )
  9994 FORMAT( ' ZPBEQU failed test with value ', D10.3, ' exceeding',
+     $      ' threshold ', D10.3 )
+ 9993 FORMAT( ' ZLAQ* failed test with value ', D10.3, ' exceeding',
      $      ' threshold ', D10.3 )
       RETURN
 *

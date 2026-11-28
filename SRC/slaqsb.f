@@ -159,7 +159,7 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, J
-      REAL               CJ, LARGE, SMALL
+      REAL               CJ, HUGEV, LARGE, SMALL, T
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -182,6 +182,7 @@
 *
       SMALL = SLAMCH( 'Safe minimum' ) / SLAMCH( 'Precision' )
       LARGE = ONE / SMALL
+      HUGEV = SLAMCH( 'Overflow' )
 *
       IF( SCOND.GE.THRESH .AND. AMAX.GE.SMALL .AND. AMAX.LE.LARGE ) THEN
 *
@@ -199,7 +200,14 @@
             DO 20 J = 1, N
                CJ = S( J )
                DO 10 I = MAX( 1, J-KD ), J
-                  AB( KD+1+I-J, J ) = CJ*S( I )*AB( KD+1+I-J, J )
+                  T = CJ*S( I )
+                  IF( T.GT.HUGEV ) THEN
+                     AB( KD+1+I-J, J ) =
+     $                   MIN( CJ, S( I ) )*
+     $                   ( MAX( CJ, S( I ) )*AB( KD+1+I-J, J ) )
+                  ELSE
+                     AB( KD+1+I-J, J ) = T*AB( KD+1+I-J, J )
+                  END IF
    10          CONTINUE
    20       CONTINUE
          ELSE
@@ -209,7 +217,14 @@
             DO 40 J = 1, N
                CJ = S( J )
                DO 30 I = J, MIN( N, J+KD )
-                  AB( 1+I-J, J ) = CJ*S( I )*AB( 1+I-J, J )
+                  T = CJ*S( I )
+                  IF( T.GT.HUGEV ) THEN
+                     AB( 1+I-J, J ) =
+     $                   MIN( CJ, S( I ) )*
+     $                   ( MAX( CJ, S( I ) )*AB( 1+I-J, J ) )
+                  ELSE
+                     AB( 1+I-J, J ) = T*AB( 1+I-J, J )
+                  END IF
    30          CONTINUE
    40       CONTINUE
          END IF

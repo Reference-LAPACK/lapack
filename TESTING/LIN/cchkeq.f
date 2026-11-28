@@ -22,6 +22,8 @@
 *> \verbatim
 *>
 *> CCHKEQ tests CGEEQU, CGBEQU, CPOEQU, CPPEQU and CPBEQU
+*> and the scaling routines CLAQGE, CLAQGB, CLAQSY, CLAQSP and CLAQSB,
+*> CLAQHE, CLAQHP and CLAQHB
 *> \endverbatim
 *
 *  Arguments:
@@ -65,8 +67,9 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      REAL               ZERO, ONE, TEN
-      PARAMETER          ( ZERO = 0.0E0, ONE = 1.0E+0, TEN = 1.0E1 )
+      REAL               ZERO, ONE, TWO, TEN
+      PARAMETER          ( ZERO = 0.0E0, ONE = 1.0E+0,
+     $                   TWO = 2.0E+0, TEN = 1.0E1 )
       COMPLEX            CZERO
       PARAMETER          ( CZERO = ( 0.0E0, 0.0E0 ) )
       COMPLEX            CONE
@@ -80,11 +83,13 @@
 *     .. Local Scalars ..
       LOGICAL            OK
       CHARACTER*3        PATH
-      INTEGER            I, INFO, J, KL, KU, M, N
+      CHARACTER          EQUED, UPLO
+      INTEGER            I, INFO, J, K, KL, KU, M, N
       REAL               CCOND, EPS, NORM, RATIO, RCMAX, RCMIN, RCOND
+      REAL              DEN, E( 4 ), PREC, V( 4 ), X
 *     ..
 *     .. Local Arrays ..
-      REAL               C( NSZ ), POW( NPOW ), R( NSZ ), RESLTS( 5 ),
+      REAL               C( NSZ ), POW( NPOW ), R( NSZ ), RESLTS( 6 ),
      $                   RPOW( NPOW )
       COMPLEX            A( NSZ, NSZ ), AB( NSZB, NSZ ), AP( NSZP )
 *     ..
@@ -94,9 +99,11 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           CGBEQU, CGEEQU, CPBEQU, CPOEQU, CPPEQU
+      EXTERNAL           CLAQGE, CLAQGB, CLAQSY, CLAQSP,
+     $                   CLAQSB, CLAQHE, CLAQHP, CLAQHB
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX, MIN
+      INTRINSIC          ABS, AIMAG, CMPLX, MAX, MIN, REAL
 *     ..
 *     .. Executable Statements ..
 *
@@ -104,7 +111,7 @@
       PATH( 2:3 ) = 'EQ'
 *
       EPS = SLAMCH( 'P' )
-      DO 10 I = 1, 5
+      DO 10 I = 1, 6
          RESLTS( I ) = ZERO
    10 CONTINUE
       DO 20 I = 1, NPOW
@@ -454,10 +461,277 @@
   450    CONTINUE
   460 CONTINUE
       RESLTS( 5 ) = RESLTS( 5 ) / EPS
+*
+*     Test the CLAQ* scaling routines with subnormal
+*     entries.  The product of two scale factors can overflow
+*     although every scaled entry is O(1).
+*
+      RESLTS( 6 ) = ZERO
+      DEN = SLAMCH( 'Safe minimum' )*SLAMCH( 'Precision' )
+      IF( DEN.GT.ZERO .AND. DEN.LT.SLAMCH( 'Safe minimum' ) ) THEN
+*
+*        Expected values for the general matrices
+*
+         PREC = SLAMCH( 'Precision' )
+         E( 1 ) = TWO*PREC
+         E( 2 ) = ONE
+         E( 3 ) = ONE
+         E( 4 ) = 1.0E-20 / PREC
+*
+*        CLAQGE
+*
+         A( 1, 1 ) = CMPLX( TWO*DEN, ZERO )
+         A( 2, 1 ) = CMPLX( ONE, ZERO )
+         A( 1, 2 ) = CMPLX( DEN, ZERO )
+         A( 2, 2 ) = CMPLX( 1.0E-20, ZERO )
+         CALL CGEEQU( 2, 2, A, NSZ, R, C, RCOND, CCOND, NORM,
+     $                INFO )
+         CALL CLAQGE( 2, 2, A, NSZ, R, C, RCOND, CCOND, NORM,
+     $                EQUED )
+         IF( INFO.NE.0 .OR. EQUED.NE.'B' ) RESLTS( 6 ) = ONE / EPS
+         V( 1 ) = REAL( A( 1, 1 ) )
+         V( 2 ) = REAL( A( 2, 1 ) )
+         V( 3 ) = REAL( A( 1, 2 ) )
+         V( 4 ) = REAL( A( 2, 2 ) )
+         DO 601 I = 1, 4
+            RATIO = ABS( V( I )-E( I ) ) / ABS( E( I ) ) / EPS
+            IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+            RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+  601    CONTINUE
+*
+*        CLAQGB
+*
+         AB( 2, 1 ) = CMPLX( TWO*DEN, ZERO )
+         AB( 3, 1 ) = CMPLX( ONE, ZERO )
+         AB( 1, 2 ) = CMPLX( DEN, ZERO )
+         AB( 2, 2 ) = CMPLX( 1.0E-20, ZERO )
+         CALL CGBEQU( 2, 2, 1, 1, AB, NSZB, R, C, RCOND, CCOND,
+     $                NORM, INFO )
+         CALL CLAQGB( 2, 2, 1, 1, AB, NSZB, R, C, RCOND, CCOND,
+     $                NORM, EQUED )
+         IF( INFO.NE.0 .OR. EQUED.NE.'B' ) RESLTS( 6 ) = ONE / EPS
+         V( 1 ) = REAL( AB( 2, 1 ) )
+         V( 2 ) = REAL( AB( 3, 1 ) )
+         V( 3 ) = REAL( AB( 1, 2 ) )
+         V( 4 ) = REAL( AB( 2, 2 ) )
+         DO 602 I = 1, 4
+            RATIO = ABS( V( I )-E( I ) ) / ABS( E( I ) ) / EPS
+            IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+            RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+  602    CONTINUE
+*
+*        Symmetric and Hermitian matrices with all entries equal
+*        to DEN.  The scaled matrix has all entries equal to one.
+*
+         DO 6010 K = 1, 2
+            DO 6900 I = 1, 3
+               E( I ) = ONE
+ 6900       CONTINUE
+            IF( K.EQ.1 ) THEN
+               UPLO = 'U'
+            ELSE
+               UPLO = 'L'
+            END IF
+*
+*           CLAQSY
+*
+            DO 6110 I = 1, 3
+               A( I, 1 ) = CMPLX( DEN, ZERO )
+               A( I, 2 ) = CMPLX( DEN, ZERO )
+               A( I, 3 ) = CMPLX( DEN, ZERO )
+ 6110       CONTINUE
+            A( 1, 2 ) = CMPLX( DEN, DEN )
+            A( 2, 1 ) = CMPLX( DEN, DEN )
+            CALL CPOEQU( 2, A, NSZ, R, RCOND, NORM, INFO )
+            CALL CLAQSY( UPLO, 2, A, NSZ, R, RCOND, NORM,
+     $                   EQUED )
+            IF( INFO.NE.0 .OR. EQUED.NE.'Y' ) RESLTS( 6 ) = ONE / EPS
+            V( 1 ) = REAL( A( 1, 1 ) )
+            V( 2 ) = REAL( A( 2, 2 ) )
+            IF( K.EQ.1 ) THEN
+               V( 3 ) = REAL( A( 1, 2 ) )
+            ELSE
+               V( 3 ) = REAL( A( 2, 1 ) )
+            END IF
+            DO 603 I = 1, 3
+               RATIO = ABS( V( I )-E( I ) ) / ABS( E( I ) ) / EPS
+               IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+               RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+  603       CONTINUE
+            IF( K.EQ.1 ) THEN
+               X = AIMAG( A( 1, 2 ) )
+            ELSE
+               X = AIMAG( A( 2, 1 ) )
+            END IF
+            RATIO = ABS( X-ONE ) / EPS
+            IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+            RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+*
+*           CLAQSP
+*
+            DO 6120 I = 1, 3
+               AP( I ) = CMPLX( DEN, ZERO )
+ 6120       CONTINUE
+            AP( 2 ) = CMPLX( DEN, DEN )
+            CALL CPPEQU( UPLO, 2, AP, R, RCOND, NORM, INFO )
+            CALL CLAQSP( UPLO, 2, AP, R, RCOND, NORM,
+     $                   EQUED )
+            IF( INFO.NE.0 .OR. EQUED.NE.'Y' ) RESLTS( 6 ) = ONE / EPS
+            V( 1 ) = REAL( AP( 1 ) )
+            V( 2 ) = REAL( AP( 2 ) )
+            V( 3 ) = REAL( AP( 3 ) )
+            DO 604 I = 1, 3
+               RATIO = ABS( V( I )-E( I ) ) / ABS( E( I ) ) / EPS
+               IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+               RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+  604       CONTINUE
+            X = AIMAG( AP( 2 ) )
+            RATIO = ABS( X-ONE ) / EPS
+            IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+            RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+*
+*           CLAQSB
+*
+            DO 6130 I = 1, 2
+               AB( 1, I ) = CMPLX( DEN, ZERO )
+               AB( 2, I ) = CMPLX( DEN, ZERO )
+ 6130       CONTINUE
+            IF( K.EQ.1 ) THEN
+               AB( 1, 2 ) = CMPLX( DEN, DEN )
+            ELSE
+               AB( 2, 1 ) = CMPLX( DEN, DEN )
+            END IF
+            CALL CPBEQU( UPLO, 2, 1, AB, NSZB, R, RCOND, NORM,
+     $                   INFO )
+            CALL CLAQSB( UPLO, 2, 1, AB, NSZB, R, RCOND,
+     $                   NORM, EQUED )
+            IF( INFO.NE.0 .OR. EQUED.NE.'Y' ) RESLTS( 6 ) = ONE / EPS
+            IF( K.EQ.1 ) THEN
+               V( 1 ) = REAL( AB( 2, 1 ) )
+               V( 2 ) = REAL( AB( 2, 2 ) )
+               V( 3 ) = REAL( AB( 1, 2 ) )
+            ELSE
+               V( 1 ) = REAL( AB( 1, 1 ) )
+               V( 2 ) = REAL( AB( 1, 2 ) )
+               V( 3 ) = REAL( AB( 2, 1 ) )
+            END IF
+            DO 605 I = 1, 3
+               RATIO = ABS( V( I )-E( I ) ) / ABS( E( I ) ) / EPS
+               IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+               RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+  605       CONTINUE
+            IF( K.EQ.1 ) THEN
+               X = AIMAG( AB( 1, 2 ) )
+            ELSE
+               X = AIMAG( AB( 2, 1 ) )
+            END IF
+            RATIO = ABS( X-ONE ) / EPS
+            IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+            RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+*
+*           CLAQHE
+*
+            DO 6140 I = 1, 3
+               A( I, 1 ) = CMPLX( DEN, ZERO )
+               A( I, 2 ) = CMPLX( DEN, ZERO )
+               A( I, 3 ) = CMPLX( DEN, ZERO )
+ 6140       CONTINUE
+            A( 1, 2 ) = CMPLX( DEN, DEN )
+            A( 2, 1 ) = CMPLX( DEN, DEN )
+            CALL CPOEQU( 2, A, NSZ, R, RCOND, NORM, INFO )
+            CALL CLAQHE( UPLO, 2, A, NSZ, R, RCOND, NORM,
+     $                   EQUED )
+            IF( INFO.NE.0 .OR. EQUED.NE.'Y' ) RESLTS( 6 ) = ONE / EPS
+            V( 1 ) = REAL( A( 1, 1 ) )
+            V( 2 ) = REAL( A( 2, 2 ) )
+            IF( K.EQ.1 ) THEN
+               V( 3 ) = REAL( A( 1, 2 ) )
+            ELSE
+               V( 3 ) = REAL( A( 2, 1 ) )
+            END IF
+            DO 606 I = 1, 3
+               RATIO = ABS( V( I )-E( I ) ) / ABS( E( I ) ) / EPS
+               IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+               RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+  606       CONTINUE
+            IF( K.EQ.1 ) THEN
+               X = AIMAG( A( 1, 2 ) )
+            ELSE
+               X = AIMAG( A( 2, 1 ) )
+            END IF
+            RATIO = ABS( X-ONE ) / EPS
+            IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+            RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+*
+*           CLAQHP
+*
+            DO 6150 I = 1, 3
+               AP( I ) = CMPLX( DEN, ZERO )
+ 6150       CONTINUE
+            AP( 2 ) = CMPLX( DEN, DEN )
+            CALL CPPEQU( UPLO, 2, AP, R, RCOND, NORM, INFO )
+            CALL CLAQHP( UPLO, 2, AP, R, RCOND, NORM,
+     $                   EQUED )
+            IF( INFO.NE.0 .OR. EQUED.NE.'Y' ) RESLTS( 6 ) = ONE / EPS
+            V( 1 ) = REAL( AP( 1 ) )
+            V( 2 ) = REAL( AP( 2 ) )
+            V( 3 ) = REAL( AP( 3 ) )
+            DO 607 I = 1, 3
+               RATIO = ABS( V( I )-E( I ) ) / ABS( E( I ) ) / EPS
+               IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+               RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+  607       CONTINUE
+            X = AIMAG( AP( 2 ) )
+            RATIO = ABS( X-ONE ) / EPS
+            IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+            RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+*
+*           CLAQHB
+*
+            DO 6160 I = 1, 2
+               AB( 1, I ) = CMPLX( DEN, ZERO )
+               AB( 2, I ) = CMPLX( DEN, ZERO )
+ 6160       CONTINUE
+            IF( K.EQ.1 ) THEN
+               AB( 1, 2 ) = CMPLX( DEN, DEN )
+            ELSE
+               AB( 2, 1 ) = CMPLX( DEN, DEN )
+            END IF
+            CALL CPBEQU( UPLO, 2, 1, AB, NSZB, R, RCOND, NORM,
+     $                   INFO )
+            CALL CLAQHB( UPLO, 2, 1, AB, NSZB, R, RCOND,
+     $                   NORM, EQUED )
+            IF( INFO.NE.0 .OR. EQUED.NE.'Y' ) RESLTS( 6 ) = ONE / EPS
+            IF( K.EQ.1 ) THEN
+               V( 1 ) = REAL( AB( 2, 1 ) )
+               V( 2 ) = REAL( AB( 2, 2 ) )
+               V( 3 ) = REAL( AB( 1, 2 ) )
+            ELSE
+               V( 1 ) = REAL( AB( 1, 1 ) )
+               V( 2 ) = REAL( AB( 1, 2 ) )
+               V( 3 ) = REAL( AB( 2, 1 ) )
+            END IF
+            DO 608 I = 1, 3
+               RATIO = ABS( V( I )-E( I ) ) / ABS( E( I ) ) / EPS
+               IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+               RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+  608       CONTINUE
+            IF( K.EQ.1 ) THEN
+               X = AIMAG( AB( 1, 2 ) )
+            ELSE
+               X = AIMAG( AB( 2, 1 ) )
+            END IF
+            RATIO = ABS( X-ONE ) / EPS
+            IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+            RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+ 6010    CONTINUE
+      END IF
       OK = ( RESLTS( 1 ).LE.THRESH ) .AND.
      $     ( RESLTS( 2 ).LE.THRESH ) .AND.
      $     ( RESLTS( 3 ).LE.THRESH ) .AND.
-     $     ( RESLTS( 4 ).LE.THRESH ) .AND. ( RESLTS( 5 ).LE.THRESH )
+     $     ( RESLTS( 4 ).LE.THRESH ) .AND.
+     $     ( RESLTS( 5 ).LE.THRESH ) .AND.
+     $     ( RESLTS( 6 ).LE.THRESH )
       WRITE( NOUT, FMT = * )
       IF( OK ) THEN
          WRITE( NOUT, FMT = 9999 )PATH
@@ -472,6 +746,8 @@
      $      WRITE( NOUT, FMT = 9995 )RESLTS( 4 ), THRESH
          IF( RESLTS( 5 ).GT.THRESH )
      $      WRITE( NOUT, FMT = 9994 )RESLTS( 5 ), THRESH
+         IF( RESLTS( 6 ).GT.THRESH )
+     $      WRITE( NOUT, FMT = 9993 )RESLTS( 6 ), THRESH
       END IF
  9999 FORMAT( 1X, 'All tests for ', A3,
      $      ' routines passed the threshold' )
@@ -484,6 +760,8 @@
  9995 FORMAT( ' CPPEQU failed test with value ', E10.3, ' exceeding',
      $      ' threshold ', E10.3 )
  9994 FORMAT( ' CPBEQU failed test with value ', E10.3, ' exceeding',
+     $      ' threshold ', E10.3 )
+ 9993 FORMAT( ' CLAQ* failed test with value ', E10.3, ' exceeding',
      $      ' threshold ', E10.3 )
       RETURN
 *

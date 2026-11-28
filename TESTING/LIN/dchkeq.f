@@ -22,6 +22,7 @@
 *> \verbatim
 *>
 *> DCHKEQ tests DGEEQU, DGBEQU, DPOEQU, DPPEQU and DPBEQU
+*> and the scaling routines DLAQGE, DLAQGB, DLAQSY, DLAQSP and DLAQSB
 *> \endverbatim
 *
 *  Arguments:
@@ -65,8 +66,9 @@
 *  =====================================================================
 *
 *     .. Parameters ..
-      DOUBLE PRECISION   ZERO, ONE, TEN
-      PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D+0, TEN = 1.0D1 )
+      DOUBLE PRECISION   ZERO, ONE, TWO, TEN
+      PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D+0,
+     $                   TWO = 2.0D+0, TEN = 1.0D1 )
       INTEGER            NSZ, NSZB
       PARAMETER          ( NSZ = 5, NSZB = 3*NSZ-2 )
       INTEGER            NSZP, NPOW
@@ -76,12 +78,14 @@
 *     .. Local Scalars ..
       LOGICAL            OK
       CHARACTER*3        PATH
-      INTEGER            I, INFO, J, KL, KU, M, N
+      CHARACTER          EQUED, UPLO
+      INTEGER            I, INFO, J, K, KL, KU, M, N
       DOUBLE PRECISION   CCOND, EPS, NORM, RATIO, RCMAX, RCMIN, RCOND
+      DOUBLE PRECISION DEN, E( 4 ), PREC, V( 4 ), X
 *     ..
 *     .. Local Arrays ..
       DOUBLE PRECISION   A( NSZ, NSZ ), AB( NSZB, NSZ ), AP( NSZP ),
-     $                   C( NSZ ), POW( NPOW ), R( NSZ ), RESLTS( 5 ),
+     $                   C( NSZ ), POW( NPOW ), R( NSZ ), RESLTS( 6 ),
      $                   RPOW( NPOW )
 *     ..
 *     .. External Functions ..
@@ -90,6 +94,8 @@
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           DGBEQU, DGEEQU, DPBEQU, DPOEQU, DPPEQU
+      EXTERNAL           DLAQGE, DLAQGB, DLAQSY, DLAQSP,
+     $                   DLAQSB
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, MAX, MIN
@@ -100,7 +106,7 @@
       PATH( 2: 3 ) = 'EQ'
 *
       EPS = DLAMCH( 'P' )
-      DO 10 I = 1, 5
+      DO 10 I = 1, 6
          RESLTS( I ) = ZERO
    10 CONTINUE
       DO 20 I = 1, NPOW
@@ -450,10 +456,153 @@
   450    CONTINUE
   460 CONTINUE
       RESLTS( 5 ) = RESLTS( 5 ) / EPS
+*
+*     Test the DLAQ* scaling routines with subnormal
+*     entries.  The product of two scale factors can overflow
+*     although every scaled entry is O(1).
+*
+      RESLTS( 6 ) = ZERO
+      DEN = DLAMCH( 'Safe minimum' )*DLAMCH( 'Precision' )
+      IF( DEN.GT.ZERO .AND. DEN.LT.DLAMCH( 'Safe minimum' ) ) THEN
+*
+*        Expected values for the general matrices
+*
+         PREC = DLAMCH( 'Precision' )
+         E( 1 ) = TWO*PREC
+         E( 2 ) = ONE
+         E( 3 ) = ONE
+         E( 4 ) = 1.0D-20 / PREC
+*
+*        DLAQGE
+*
+         A( 1, 1 ) = TWO*DEN
+         A( 2, 1 ) = ONE
+         A( 1, 2 ) = DEN
+         A( 2, 2 ) = 1.0D-20
+         CALL DGEEQU( 2, 2, A, NSZ, R, C, RCOND, CCOND, NORM,
+     $                INFO )
+         CALL DLAQGE( 2, 2, A, NSZ, R, C, RCOND, CCOND, NORM,
+     $                EQUED )
+         IF( INFO.NE.0 .OR. EQUED.NE.'B' ) RESLTS( 6 ) = ONE / EPS
+         V( 1 ) = A( 1, 1 )
+         V( 2 ) = A( 2, 1 )
+         V( 3 ) = A( 1, 2 )
+         V( 4 ) = A( 2, 2 )
+         DO 601 I = 1, 4
+            RATIO = ABS( V( I )-E( I ) ) / ABS( E( I ) ) / EPS
+            IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+            RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+  601    CONTINUE
+*
+*        DLAQGB
+*
+         AB( 2, 1 ) = TWO*DEN
+         AB( 3, 1 ) = ONE
+         AB( 1, 2 ) = DEN
+         AB( 2, 2 ) = 1.0D-20
+         CALL DGBEQU( 2, 2, 1, 1, AB, NSZB, R, C, RCOND, CCOND,
+     $                NORM, INFO )
+         CALL DLAQGB( 2, 2, 1, 1, AB, NSZB, R, C, RCOND, CCOND,
+     $                NORM, EQUED )
+         IF( INFO.NE.0 .OR. EQUED.NE.'B' ) RESLTS( 6 ) = ONE / EPS
+         V( 1 ) = AB( 2, 1 )
+         V( 2 ) = AB( 3, 1 )
+         V( 3 ) = AB( 1, 2 )
+         V( 4 ) = AB( 2, 2 )
+         DO 602 I = 1, 4
+            RATIO = ABS( V( I )-E( I ) ) / ABS( E( I ) ) / EPS
+            IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+            RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+  602    CONTINUE
+*
+*        Symmetric and Hermitian matrices with all entries equal
+*        to DEN.  The scaled matrix has all entries equal to one.
+*
+         DO 6010 K = 1, 2
+            DO 6900 I = 1, 3
+               E( I ) = ONE
+ 6900       CONTINUE
+            IF( K.EQ.1 ) THEN
+               UPLO = 'U'
+            ELSE
+               UPLO = 'L'
+            END IF
+*
+*           DLAQSY
+*
+            DO 6110 I = 1, 3
+               A( I, 1 ) = DEN
+               A( I, 2 ) = DEN
+               A( I, 3 ) = DEN
+ 6110       CONTINUE
+            CALL DPOEQU( 2, A, NSZ, R, RCOND, NORM, INFO )
+            CALL DLAQSY( UPLO, 2, A, NSZ, R, RCOND, NORM,
+     $                   EQUED )
+            IF( INFO.NE.0 .OR. EQUED.NE.'Y' ) RESLTS( 6 ) = ONE / EPS
+            V( 1 ) = A( 1, 1 )
+            V( 2 ) = A( 2, 2 )
+            IF( K.EQ.1 ) THEN
+               V( 3 ) = A( 1, 2 )
+            ELSE
+               V( 3 ) = A( 2, 1 )
+            END IF
+            DO 603 I = 1, 3
+               RATIO = ABS( V( I )-E( I ) ) / ABS( E( I ) ) / EPS
+               IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+               RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+  603       CONTINUE
+*
+*           DLAQSP
+*
+            DO 6120 I = 1, 3
+               AP( I ) = DEN
+ 6120       CONTINUE
+            CALL DPPEQU( UPLO, 2, AP, R, RCOND, NORM, INFO )
+            CALL DLAQSP( UPLO, 2, AP, R, RCOND, NORM,
+     $                   EQUED )
+            IF( INFO.NE.0 .OR. EQUED.NE.'Y' ) RESLTS( 6 ) = ONE / EPS
+            V( 1 ) = AP( 1 )
+            V( 2 ) = AP( 2 )
+            V( 3 ) = AP( 3 )
+            DO 604 I = 1, 3
+               RATIO = ABS( V( I )-E( I ) ) / ABS( E( I ) ) / EPS
+               IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+               RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+  604       CONTINUE
+*
+*           DLAQSB
+*
+            DO 6130 I = 1, 2
+               AB( 1, I ) = DEN
+               AB( 2, I ) = DEN
+ 6130       CONTINUE
+            CALL DPBEQU( UPLO, 2, 1, AB, NSZB, R, RCOND, NORM,
+     $                   INFO )
+            CALL DLAQSB( UPLO, 2, 1, AB, NSZB, R, RCOND,
+     $                   NORM, EQUED )
+            IF( INFO.NE.0 .OR. EQUED.NE.'Y' ) RESLTS( 6 ) = ONE / EPS
+            IF( K.EQ.1 ) THEN
+               V( 1 ) = AB( 2, 1 )
+               V( 2 ) = AB( 2, 2 )
+               V( 3 ) = AB( 1, 2 )
+            ELSE
+               V( 1 ) = AB( 1, 1 )
+               V( 2 ) = AB( 1, 2 )
+               V( 3 ) = AB( 2, 1 )
+            END IF
+            DO 605 I = 1, 3
+               RATIO = ABS( V( I )-E( I ) ) / ABS( E( I ) ) / EPS
+               IF( RATIO.NE.RATIO ) RATIO = ONE / EPS
+               RESLTS( 6 ) = MAX( RESLTS( 6 ), RATIO )
+  605       CONTINUE
+ 6010    CONTINUE
+      END IF
       OK = ( RESLTS( 1 ).LE.THRESH ) .AND.
      $     ( RESLTS( 2 ).LE.THRESH ) .AND.
      $     ( RESLTS( 3 ).LE.THRESH ) .AND.
-     $     ( RESLTS( 4 ).LE.THRESH ) .AND. ( RESLTS( 5 ).LE.THRESH )
+     $     ( RESLTS( 4 ).LE.THRESH ) .AND.
+     $     ( RESLTS( 5 ).LE.THRESH ) .AND.
+     $     ( RESLTS( 6 ).LE.THRESH )
       WRITE( NOUT, FMT = * )
       IF( OK ) THEN
          WRITE( NOUT, FMT = 9999 )PATH
@@ -468,6 +617,8 @@
      $      WRITE( NOUT, FMT = 9995 )RESLTS( 4 ), THRESH
          IF( RESLTS( 5 ).GT.THRESH )
      $      WRITE( NOUT, FMT = 9994 )RESLTS( 5 ), THRESH
+         IF( RESLTS( 6 ).GT.THRESH )
+     $      WRITE( NOUT, FMT = 9993 )RESLTS( 6 ), THRESH
       END IF
  9999 FORMAT( 1X, 'All tests for ', A3,
      $      ' routines passed the threshold' )
@@ -480,6 +631,8 @@
  9995 FORMAT( ' DPPEQU failed test with value ', D10.3, ' exceeding',
      $      ' threshold ', D10.3 )
  9994 FORMAT( ' DPBEQU failed test with value ', D10.3, ' exceeding',
+     $      ' threshold ', D10.3 )
+ 9993 FORMAT( ' DLAQ* failed test with value ', D10.3, ' exceeding',
      $      ' threshold ', D10.3 )
       RETURN
 *

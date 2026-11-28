@@ -153,7 +153,7 @@
 *     ..
 *     .. Local Scalars ..
       INTEGER            I, J
-      REAL               CJ, LARGE, SMALL
+      REAL               CJ, HUGEV, LARGE, SMALL, T
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
@@ -161,7 +161,7 @@
       EXTERNAL           LSAME, SLAMCH
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          REAL
+      INTRINSIC          MAX, MIN, REAL
 *     ..
 *     .. Executable Statements ..
 *
@@ -176,6 +176,7 @@
 *
       SMALL = SLAMCH( 'Safe minimum' ) / SLAMCH( 'Precision' )
       LARGE = ONE / SMALL
+      HUGEV = SLAMCH( 'Overflow' )
 *
       IF( SCOND.GE.THRESH .AND. AMAX.GE.SMALL .AND. AMAX.LE.LARGE ) THEN
 *
@@ -193,9 +194,21 @@
             DO 20 J = 1, N
                CJ = S( J )
                DO 10 I = 1, J - 1
-                  A( I, J ) = CJ*S( I )*A( I, J )
+                  T = CJ*S( I )
+                  IF( T.GT.HUGEV ) THEN
+                     A( I, J ) =
+     $                   MIN( CJ, S( I ) )*
+     $                   ( MAX( CJ, S( I ) )*A( I, J ) )
+                  ELSE
+                     A( I, J ) = T*A( I, J )
+                  END IF
    10          CONTINUE
-               A( J, J ) = CJ*CJ*REAL( A( J, J ) )
+               T = CJ*CJ
+               IF( T.GT.HUGEV ) THEN
+                  A( J, J ) = CJ*( CJ*REAL( A( J, J ) ) )
+               ELSE
+                  A( J, J ) = T*REAL( A( J, J ) )
+               END IF
    20       CONTINUE
          ELSE
 *
@@ -203,9 +216,21 @@
 *
             DO 40 J = 1, N
                CJ = S( J )
-               A( J, J ) = CJ*CJ*REAL( A( J, J ) )
+               T = CJ*CJ
+               IF( T.GT.HUGEV ) THEN
+                  A( J, J ) = CJ*( CJ*REAL( A( J, J ) ) )
+               ELSE
+                  A( J, J ) = T*REAL( A( J, J ) )
+               END IF
                DO 30 I = J + 1, N
-                  A( I, J ) = CJ*S( I )*A( I, J )
+                  T = CJ*S( I )
+                  IF( T.GT.HUGEV ) THEN
+                     A( I, J ) =
+     $                   MIN( CJ, S( I ) )*
+     $                   ( MAX( CJ, S( I ) )*A( I, J ) )
+                  ELSE
+                     A( I, J ) = T*A( I, J )
+                  END IF
    30          CONTINUE
    40       CONTINUE
          END IF
