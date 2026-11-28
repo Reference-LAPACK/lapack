@@ -50,7 +50,7 @@ set(SCLAUX
    sbdsqr.f sdisna.f slabad.f slacpy.f sladiv.f slae2.f  slaebz.f
    slaed0.f slaed1.f slaed2.f slaed3.f slaed4.f slaed5.f slaed6.f
    slaed7.f slaed8.f slaed9.f slaeda.f slaev2.f slagtf.f
-   slagts.f slamrg.f slanst.f
+   slagts.f slagtsi.f slamrg.f slanst.f
    slapy2.f slapy3.f slarnv.f
    slarra.f slarrb.f slarrc.f slarrd.f slarre.f slarrf.f slarrj.f
    slarrk.f slarrr.f slaneg.f
@@ -73,7 +73,7 @@ set(DZLAUX
    dlabad.f dlacpy.f dladiv.f dlae2.f  dlaebz.f
    dlaed0.f dlaed1.f dlaed2.f dlaed3.f dlaed4.f dlaed5.f dlaed6.f
    dlaed7.f dlaed8.f dlaed9.f dlaeda.f dlaev2.f dlagtf.f
-   dlagts.f dlamrg.f dlanst.f
+   dlagts.f dlagtsi.f dlamrg.f dlanst.f
    dlapy2.f dlapy3.f dlarnv.f
    dlarra.f dlarrb.f dlarrc.f dlarrd.f dlarre.f dlarrf.f dlarrj.f
    dlarrk.f dlarrr.f dlaneg.f
