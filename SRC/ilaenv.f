@@ -364,7 +364,7 @@
             ELSE
                NB = 64
             END IF
-         ELSE IF( SUBNAM( 4: 7 ).EQ.'QP3RK' ) THEN
+         ELSE IF( SUBNAM( 4: 8 ).EQ.'QP3RK' ) THEN
             IF( SNAME ) THEN
                NB = 32
             ELSE
@@ -562,7 +562,7 @@
             ELSE
                NBMIN = 2
             END IF
-         ELSE IF( SUBNAM( 4: 7 ).EQ.'QP3RK' ) THEN
+         ELSE IF( SUBNAM( 4: 8 ).EQ.'QP3RK' ) THEN
             IF( SNAME ) THEN
                NBMIN = 2
             ELSE
@@ -646,7 +646,7 @@
             ELSE
                NX = 128
             END IF
-         ELSE IF( SUBNAM( 4: 7 ).EQ.'QP3RK' ) THEN
+         ELSE IF( SUBNAM( 4: 8 ).EQ.'QP3RK' ) THEN
             IF( SNAME ) THEN
                NX = 128
             ELSE

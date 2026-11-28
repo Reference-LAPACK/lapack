@@ -152,7 +152,9 @@
 *> \param[out] WORK
 *> \verbatim
 *>          WORK is DOUBLE PRECISION array, dimension
-*>                      (MMAX*NMAX + 4*NMAX + MMAX)
+*>                      (MAXDIM*( MAXDIM+MAXNS+10 )), where MAXDIM is
+*>                      the largest value in MVAL and NVAL and MAXNS
+*>                      the largest in NSVAL
 *> \endverbatim
 *>
 *> \param[out] IWORK
@@ -205,10 +207,12 @@
       INTEGER            NTYPES
       PARAMETER          ( NTYPES = 19 )
       INTEGER            NTESTS
-      PARAMETER          ( NTESTS = 5 )
+      PARAMETER          ( NTESTS = 7 )
       DOUBLE PRECISION   ONE, ZERO, BIGNUM
       PARAMETER          ( ONE = 1.0D+0, ZERO = 0.0D+0,
      $                     BIGNUM = 1.0D+38 )
+      DOUBLE PRECISION   GUARD
+      PARAMETER          ( GUARD = -1.0D+300 )
 *     ..
 *     .. Local Scalars ..
       CHARACTER          DIST, TYPE
@@ -220,9 +224,12 @@
      $                   KFACT, KL, KMAX, KU, LDA, LW, LWORK,
      $                   LWORK_MQR, M, MINMN, MINMNB_GEN, MODE, N,
      $                   NB, NB_ZERO, NERRS, NFAIL, NB_GEN, NRHS,
-     $                   NRUN, NX, T
+     $                   NRUN, NX, T, IWS, KFACT2, LW2, LG,
+     $                   LWBND, MAXDIM, MAXNS
+      LOGICAL            OVERRN
       DOUBLE PRECISION   ANORM, CNDNUM, EPS, ABSTOL, RELTOL,
-     $                   DTEMP, MAXC2NRMK, RELMAXC2NRMK
+     $                   DTEMP, MAXC2NRMK, RELMAXC2NRMK,
+     $                   MAXC2NRMK2, RELMAXC2NRMK2
 *     ..
 *     .. Local Arrays ..
       INTEGER            ISEED( 4 ), ISEEDY( 4 )
@@ -261,6 +268,24 @@
       PATH( 2: 3 ) = 'QK'
       NRUN = 0
       NFAIL = 0
+*
+*     The WORK arrays of the callers have at least
+*     MAXDIM*( MAXDIM+MAXNS+10 ) entries, where MAXDIM is the largest
+*     M or N and MAXNS the largest NRHS to be tested. Test 6 stays
+*     within that.
+*
+      MAXDIM = 0
+      DO I = 1, NM
+         MAXDIM = MAX( MAXDIM, MVAL( I ) )
+      END DO
+      DO I = 1, NN
+         MAXDIM = MAX( MAXDIM, NVAL( I ) )
+      END DO
+      MAXNS = 0
+      DO I = 1, NNS
+         MAXNS = MAX( MAXNS, NSVAL( I ) )
+      END DO
+      LWBND = MAXDIM*( MAXDIM+MAXNS+10 )
       NERRS = 0
       DO I = 1, 4
          ISEED( I ) = ISEEDY( I )
@@ -612,6 +637,12 @@
                   ABSTOL = -1.0
                   RELTOL = -1.0
 *
+*                 Preset the outputs that the routine must set to
+*                 zero when it factorizes all MIN(M,N) columns.
+*
+                  MAXC2NRMK = ONE
+                  RELMAXC2NRMK = ONE
+*
 *                 Compute the QR factorization with pivoting of A
 *
                   LW = MAX( 1, MAX( 2*N + NB*( N+NRHS+1 ),
@@ -744,6 +775,80 @@
 *                    End compute test 5.
 *
                   END IF
+*
+*                 Compute test 6:
+*
+*                 This test checks that DGEQP3RK stays within the LWORK
+*                 entries of WORK that it is given when LWORK is one less
+*                 than the optimal size 2*N + NB*( N+NRHS+1 ), so that it
+*                 has to reduce the block size. The N+NRHS+1 entries of
+*                 WORK after the first LWORK entries are a guard that
+*                 the call must leave unchanged. The overrun is
+*                 contiguous, so the first entry catches it. The test
+*                 is skipped if LWORK plus the guard exceeds LWBND.
+*
+                  IF( MINMN.GT.0 .AND. KMAX.EQ.MINMN ) THEN
+*
+                     IWS = 3*N + NRHS - 1
+                     LW2 = 2*N + NB*( N+NRHS+1 ) - 1
+                     LG = N + NRHS + 1
+*
+                     IF( LW2.GE.IWS .AND. LW2+LG.LE.LWBND ) THEN
+*
+                        CALL DLACPY( 'All', M, N, COPYA, LDA, A, LDA )
+                        CALL DLACPY( 'All', M, NRHS, COPYB, LDA,
+     $                               A( LDA*N + 1 ),  LDA )
+                        CALL ICOPY( N, IWORK( 1 ), 1, IWORK( N+1 ), 1 )
+*
+                        DO J = LW2 + 1, LW2 + LG
+                           WORK( J ) = GUARD
+                        END DO
+*
+                        ABSTOL = -1.0
+                        RELTOL = -1.0
+*
+                        SRNAMT = 'DGEQP3RK'
+                        CALL DGEQP3RK( M, N, NRHS, KMAX, ABSTOL,
+     $                                 RELTOL, A, LDA, KFACT2,
+     $                                 MAXC2NRMK2, RELMAXC2NRMK2,
+     $                                 IWORK( N+1 ), TAU,
+     $                                 WORK, LW2, IWORK( 2*N+1 ), INFO )
+*
+                        IF( INFO.LT.0 )
+     $                     CALL ALAERH( PATH, 'DGEQP3RK', INFO, 0, ' ',
+     $                                  M, N, NX, -1, NB, IMAT,
+     $                                  NFAIL, NERRS, NOUT )
+*
+                        OVERRN = .FALSE.
+                        DO J = LW2 + 1, LW2 + LG
+                           IF( WORK( J ).NE.GUARD ) OVERRN = .TRUE.
+                        END DO
+                        IF( OVERRN ) RESULT( 6 ) = BIGNUM
+*
+                        NRUN = NRUN + 1
+*
+                     END IF
+*
+                  END IF
+*
+*                 End test 6.
+*
+*                 Compute test 7:
+*
+*                 When DGEQP3RK has factorized all MIN(M,N) columns,
+*                 there is no residual matrix and MAXC2NRMK and
+*                 RELMAXC2NRMK must be ZERO.
+*
+                  IF( KFACT.EQ.MINMN ) THEN
+*
+                     IF( MAXC2NRMK.NE.ZERO .OR.
+     $                   RELMAXC2NRMK.NE.ZERO ) RESULT( 7 ) = BIGNUM
+*
+                     NRUN = NRUN + 1
+*
+                  END IF
+*
+*                 End test 7.
 *
 *                 Print information about the tests that did not
 *                 pass the threshold.

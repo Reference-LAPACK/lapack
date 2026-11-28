@@ -889,7 +889,7 @@
 *              is currently stored in NB.
 *              Reduce NB and determine the minimum value of NB.
 *
-               NB = ( LWORK-2*N ) / ( N+1 )
+               NB = ( LWORK-2*N ) / ( N+NRHS+1 )
                NBMIN = MAX( 2, ILAENV( INBMIN, 'DGEQP3RK', ' ', M, N,
      $                 -1, -1 ) )
 *
@@ -1057,6 +1057,10 @@
             DO J = K + 1, MINMN
                TAU( J ) = ZERO
             END DO
+*
+         ELSE
+            MAXC2NRMK = ZERO
+            RELMAXC2NRMK = ZERO
 *
          END IF
 *
