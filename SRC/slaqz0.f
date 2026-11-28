@@ -261,6 +261,10 @@
 *> \verbatim
 *>          LWORK is INTEGER
 *>          The dimension of the array WORK.  LWORK >= max(1,N).
+*>          If N is at least the crossover point (ILAENV with ISPEC = 12)
+*>          and LWORK is smaller than the optimal value returned by a
+*>          workspace query, the routine uses the double-shift algorithm
+*>          of SHGEQZ, which is slower for large N.
 *>
 *>          If LWORK = -1, then a workspace query is assumed; the routine
 *>          only calculates the optimal size of the WORK array, returns
@@ -466,10 +470,20 @@
          WORK( 1 ) = SROUNDUP_LWORK( LWORKREQ )
          RETURN
       ELSE IF ( LWORK .LT. LWORKREQ ) THEN
-         INFO = -19
-      END IF
-      IF( INFO.NE.0 ) THEN
-         CALL XERBLA( 'SLAQZ0', -INFO )
+*
+*        Not enough workspace for the multishift code with aggressive
+*        early deflation. Fall back to SHGEQZ, which needs only N.
+*
+         IF( LWORK .LT. MAX( 1, N ) ) THEN
+            INFO = -19
+            CALL XERBLA( 'SLAQZ0', -INFO )
+            RETURN
+         END IF
+         CALL SHGEQZ( WANTS, WANTQ, WANTZ, N, ILO, IHI, A, LDA, B,
+     $                LDB,
+     $                ALPHAR, ALPHAI, BETA, Q, LDQ, Z, LDZ, WORK,
+     $                LWORK, INFO )
+         WORK( 1 ) = SROUNDUP_LWORK( LWORKREQ )
          RETURN
       END IF
 *
