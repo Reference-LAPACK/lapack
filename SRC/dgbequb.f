@@ -44,6 +44,9 @@
 *> SMLNUM = smallest safe number and BIGNUM = largest safe number.  Use
 *> of these scaling factors is not guaranteed to reduce the condition
 *> number of A but works well in practice.
+*> The scale factors are limited to SMLNUM and BIGNUM as in DGEEQU, so a
+*> row or column whose largest entry is smaller than SMLNUM is scaled as
+*> if that entry were SMLNUM, and is not reported as zero.
 *>
 *> This routine differs from DGEEQU by restricting the scaling factors
 *> to a power of the radix.  Barring over- and underflow, scaling by
@@ -179,6 +182,7 @@
 *     .. Local Scalars ..
       INTEGER            I, J, KD
       DOUBLE PRECISION   BIGNUM, RCMAX, RCMIN, SMLNUM, RADIX, LOGRDX
+      DOUBLE PRECISION   EMAXR, EMINR
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH
@@ -188,7 +192,9 @@
       EXTERNAL           XERBLA
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          ABS, MAX, MIN, LOG
+      INTRINSIC          ABS, MAX, MIN, LOG, DBLE,
+     $                   DIGITS, INT, MAXEXPONENT, MINEXPONENT,
+     $                   SCALE
 *     ..
 *     .. Executable Statements ..
 *
@@ -226,6 +232,8 @@
       BIGNUM = ONE / SMLNUM
       RADIX = DLAMCH( 'B' )
       LOGRDX = LOG(RADIX)
+      EMINR = DBLE( MINEXPONENT( ONE ) - DIGITS( ONE ) )
+      EMAXR = DBLE( MAXEXPONENT( ONE ) - 1 )
 *
 *     Compute row scale factors.
 *
@@ -243,7 +251,8 @@
    30 CONTINUE
       DO I = 1, M
          IF( R( I ).GT.ZERO ) THEN
-            R( I ) = RADIX**INT( LOG( R( I ) ) / LOGRDX )
+            R( I ) = SCALE( ONE, INT( MAX( EMINR, MIN( EMAXR,
+     $                LOG( R( I ) ) / LOGRDX ) ) ) )
          END IF
       END DO
 *
@@ -294,7 +303,8 @@
             C( J ) = MAX( C( J ), ABS( AB( KD+I-J, J ) )*R( I ) )
    80    CONTINUE
          IF( C( J ).GT.ZERO ) THEN
-            C( J ) = RADIX**INT( LOG( C( J ) ) / LOGRDX )
+            C( J ) = SCALE( ONE, INT( MAX( EMINR, MIN( EMAXR,
+     $                LOG( C( J ) ) / LOGRDX ) ) ) )
          END IF
    90 CONTINUE
 *
