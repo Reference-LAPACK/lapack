@@ -162,7 +162,9 @@
 *>               -1 : the routine fell back to full precision for
 *>                    implementation- or machine-specific reasons
 *>               -2 : narrowing the precision induced an overflow,
-*>                    the routine fell back to full precision
+*>                    or the single precision solution or its
+*>                    residual was not finite (Inf or NaN), the
+*>                    routine fell back to full precision
 *>               -3 : failure of SPOTRF
 *>               -31: stop the iterative refinement after the 30th
 *>                    iterations
@@ -227,7 +229,7 @@
 *
 *     .. Local Scalars ..
       INTEGER            I, IITER, PTSA, PTSX
-      DOUBLE PRECISION   ANRM, CTE, EPS, RNRM, XNRM
+      DOUBLE PRECISION   ANRM, CTE, EPS, OVFL, RNRM, XNRM
 *
 *     .. External Subroutines ..
       EXTERNAL           DAXPY, DSYMM, DLACPY, DLAT2S, DLAG2S,
@@ -236,9 +238,9 @@
 *     ..
 *     .. External Functions ..
       INTEGER            IDAMAX
-      DOUBLE PRECISION   DLAMCH, DLANSY
+      DOUBLE PRECISION   DLAMCH, DLANGE, DLANSY
       LOGICAL            LSAME
-      EXTERNAL           IDAMAX, DLAMCH, DLANSY, LSAME
+      EXTERNAL           IDAMAX, DLAMCH, DLANGE, DLANSY, LSAME
 *     ..
 *     .. Intrinsic Functions ..
       INTRINSIC          ABS, DBLE, MAX, SQRT
@@ -286,6 +288,7 @@
 *
       ANRM = DLANSY( 'I', UPLO, N, A, LDA, WORK )
       EPS = DLAMCH( 'Epsilon' )
+      OVFL = DLAMCH( 'Overflow' )
       CTE = ANRM*EPS*SQRT( DBLE( N ) )*BWDMAX
 *
 *     Set the indices PTSA, PTSX for referencing SA and SX in SWORK.
@@ -342,6 +345,12 @@
 *     stopping criterion. If yes, set ITER=0 and return.
 *
       DO I = 1, NRHS
+         XNRM = DLANGE( 'M', N, 1, X( 1, I ), LDX, WORK )
+         RNRM = DLANGE( 'M', N, 1, WORK( 1, I ), N, WORK )
+         IF( .NOT.( XNRM.LE.OVFL .AND. RNRM.LE.OVFL ) ) THEN
+            ITER = -2
+            GO TO 40
+         END IF
          XNRM = ABS( X( IDAMAX( N, X( 1, I ), 1 ), I ) )
          RNRM = ABS( WORK( IDAMAX( N, WORK( 1, I ), 1 ), I ) )
          IF( RNRM.GT.XNRM*CTE )
@@ -394,6 +403,12 @@
 *        stopping criterion. If yes, set ITER=IITER>0 and return.
 *
          DO I = 1, NRHS
+            XNRM = DLANGE( 'M', N, 1, X( 1, I ), LDX, WORK )
+            RNRM = DLANGE( 'M', N, 1, WORK( 1, I ), N, WORK )
+            IF( .NOT.( XNRM.LE.OVFL .AND. RNRM.LE.OVFL ) ) THEN
+               ITER = -2
+               GO TO 40
+            END IF
             XNRM = ABS( X( IDAMAX( N, X( 1, I ), 1 ), I ) )
             RNRM = ABS( WORK( IDAMAX( N, WORK( 1, I ), 1 ), I ) )
             IF( RNRM.GT.XNRM*CTE )

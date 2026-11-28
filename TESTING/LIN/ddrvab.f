@@ -191,13 +191,18 @@
 *     ..
 *     .. Local Variables ..
       INTEGER            ITER, KASE
+      INTEGER            TI, TINFO, TITER
+      LOGICAL            TBAD
+      DOUBLE PRECISION   TA( 2, 2 ), TB( 2, 1 ), TW( 2, 1 ), TX( 2, 1 )
+      REAL               TSW( 6 )
+      INTEGER            TIP( 2 )
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, DGET08, DLACPY, DLARHS, DLASET,
      $                   DLATB4, DLATMS, DSGESV
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          DBLE, MAX, MIN, SQRT
+      INTRINSIC          ABS, DBLE, MAX, MIN, SQRT
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -382,6 +387,35 @@
   100    CONTINUE
   120 CONTINUE
 *
+*     Check that a single precision solve that overflows is
+*     detected and that the routine falls back to double precision.
+*     For A = diag( 1e-30, 1e-30 ) and B = 1e30, the solution X = 1e60
+*     is representable in double but not in single precision, so the
+*     single precision solve returns Inf.  We want ITER < 0, INFO = 0
+*     and X correct to double precision.
+*
+      TA( 1, 1 ) = 1.0D-30
+      TA( 2, 1 ) = ZERO
+      TA( 1, 2 ) = ZERO
+      TA( 2, 2 ) = 1.0D-30
+      TB( 1, 1 ) = 1.0D+30
+      TB( 2, 1 ) = 1.0D+30
+      SRNAMT = 'DSGESV'
+      CALL DSGESV( 2, 1, TA, 2, TIP, TB, 2, TX, 2, TW, TSW,
+     $             TITER, TINFO )
+      TBAD = TINFO.NE.0 .OR. TITER.GE.0
+      DO 130 TI = 1, 2
+         IF( .NOT.( ABS( TX( TI, 1 )-1.0D+60 ).LE.1.0D+50 ) )
+     $      TBAD = .TRUE.
+  130 CONTINUE
+      NRUN = NRUN + 1
+      IF( TBAD ) THEN
+         IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
+     $      CALL ALAHD( NOUT, PATH )
+         WRITE( NOUT, FMT = 9987 )'DSGESV', TITER, TINFO
+         NFAIL = NFAIL + 1
+      END IF
+*
 *     Print a summary of the results.
 *
       IF( NFAIL.GT.0 ) THEN
@@ -395,6 +429,9 @@
 *
  9998 FORMAT( ' TRANS=''', A1, ''', N =', I5, ', NRHS=', I3, ', type ',
      $      I2, ', test(', I2, ') =', G12.5 )
+ 9987 FORMAT( ' *** ', A6, ' did not fall back to double precision',
+     $      ' when the single precision solve overflowed: ITER =',
+     $      I5, ', INFO =', I5 )
  9996 FORMAT( 1X, A6, ': ', I6, ' out of ', I6,
      $      ' tests failed to pass the threshold' )
  9995 FORMAT( /1X, 'All tests for ', A6,

@@ -164,7 +164,9 @@
 *>               -1 : the routine fell back to full precision for
 *>                    implementation- or machine-specific reasons
 *>               -2 : narrowing the precision induced an overflow,
-*>                    the routine fell back to full precision
+*>                    or the single precision solution or its
+*>                    residual was not finite (Inf or NaN), the
+*>                    routine fell back to full precision
 *>               -3 : failure of CGETRF
 *>               -31: stop the iterative refinement after the 30th
 *>                    iterations
@@ -231,7 +233,7 @@
 *
 *     .. Local Scalars ..
       INTEGER            I, IITER, PTSA, PTSX
-      DOUBLE PRECISION   ANRM, CTE, EPS, RNRM, XNRM
+      DOUBLE PRECISION   ANRM, CTE, EPS, OVFL, RNRM, XNRM
       COMPLEX*16         ZDUM
 *
 *     .. External Subroutines ..
@@ -293,6 +295,7 @@
 *
       ANRM = ZLANGE( 'I', N, N, A, LDA, RWORK )
       EPS = DLAMCH( 'Epsilon' )
+      OVFL = DLAMCH( 'Overflow' )
       CTE = ANRM*EPS*SQRT( DBLE( N ) )*BWDMAX
 *
 *     Set the indices PTSA, PTSX for referencing SA and SX in SWORK.
@@ -350,6 +353,12 @@
 *     stopping criterion. If yes, set ITER=0 and return.
 *
       DO I = 1, NRHS
+         XNRM = ZLANGE( 'M', N, 1, X( 1, I ), LDX, RWORK )
+         RNRM = ZLANGE( 'M', N, 1, WORK( 1, I ), N, RWORK )
+         IF( .NOT.( XNRM.LE.OVFL .AND. RNRM.LE.OVFL ) ) THEN
+            ITER = -2
+            GO TO 40
+         END IF
          XNRM = CABS1( X( IZAMAX( N, X( 1, I ), 1 ), I ) )
          RNRM = CABS1( WORK( IZAMAX( N, WORK( 1, I ), 1 ), I ) )
          IF( RNRM.GT.XNRM*CTE )
@@ -403,6 +412,12 @@
 *        stopping criterion. If yes, set ITER=IITER>0 and return.
 *
          DO I = 1, NRHS
+            XNRM = ZLANGE( 'M', N, 1, X( 1, I ), LDX, RWORK )
+            RNRM = ZLANGE( 'M', N, 1, WORK( 1, I ), N, RWORK )
+            IF( .NOT.( XNRM.LE.OVFL .AND. RNRM.LE.OVFL ) ) THEN
+               ITER = -2
+               GO TO 40
+            END IF
             XNRM = CABS1( X( IZAMAX( N, X( 1, I ), 1 ), I ) )
             RNRM = CABS1( WORK( IZAMAX( N, WORK( 1, I ), 1 ), I ) )
             IF( RNRM.GT.XNRM*CTE )
