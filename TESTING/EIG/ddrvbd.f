@@ -101,6 +101,21 @@
 *> (39)   S contains MNMIN nonnegative values in decreasing order.
 *>        (Return 0 if true, 1/ULP if false.)
 *>
+*> Test for DGESVDQ with JOBA = 'A' and JOBR = 'T', on a matrix whose
+*> first N/2 columns are repeated to fill it, so that its rank is at
+*> most N/2:
+*>
+*> (40)   | A - U diag(S) VT | / ( |A| max(M,N) ulp )
+*>
+*> (41)   | I - U'U | / ( M ulp )
+*>
+*> (42)   | I - VT VT' | / ( N ulp )
+*>
+*> (43)   S contains MNMIN nonnegative values in decreasing order,
+*>        and the workspace query and the workspace lengths it
+*>        returns are consistent.
+*>        (Return 0 if true, 1/ULP if false.)
+*>
 *> Test for DGESVJ:
 *>
 *> (15)   | A - U diag(S) VT | / ( |A| max(M,N) ulp )
@@ -406,7 +421,8 @@
      $                   ULPINV, UNFL, VL, VU
 *     ..
 *     .. Local Scalars for DGESVDQ ..
-      INTEGER            LIWORK, LRWORK, NUMRANK
+      INTEGER            KRANK, LG, LIWORK, LMIN, LOPT, LRWORK,
+     $                   NUMRANK
 *     ..
 *     .. Local Arrays for DGESVDQ ..
       DOUBLE PRECISION   RWORK( 2 )
@@ -414,7 +430,7 @@
 *     .. Local Arrays ..
       CHARACTER          CJOB( 4 ), CJOBR( 3 ), CJOBV( 2 )
       INTEGER            IOLDSD( 4 ), ISEED2( 4 )
-      DOUBLE PRECISION   RESULT( 39 )
+      DOUBLE PRECISION   RESULT( 43 )
 *     ..
 *     .. External Functions ..
       DOUBLE PRECISION   DLAMCH, DLARND
@@ -1177,9 +1193,126 @@
      $                      RESULT( 35 ) )
                IF( OVERRN ) RESULT( 33 ) = ULPINV
 *
+*              Test DGESVDQ with JOBA = 'A' and JOBR = 'T' on a matrix
+*              of rank at most N/2. JOBA = 'A' lets it truncate R to
+*              the numerical rank, and that takes the path which
+*              assembles V from the QR factorization of R**T. The
+*              workspace query is checked. The solve gets the queried
+*              minimal workspace for IWS = 1, the queried optimal
+*              workspace (or all of LWORK, if less) for IWS = 4, and
+*              lengths in between otherwise.
+*              Note: DGESVDQ only works for M >= N
+*              This test comes last because it overwrites USAV, VTSAV
+*              and SSAV. The tests of DGESVJ and DGEJSV for the
+*              overflow matrix type fail if it runs before them.
+*
+               RESULT( 40 ) = ZERO
+               RESULT( 41 ) = ZERO
+               RESULT( 42 ) = ZERO
+               RESULT( 43 ) = ZERO
+*
+               IF( M.GE.N .AND. N.GE.2 ) THEN
+                  RESULT( 40 ) = ZERO
+                  RESULT( 41 ) = ZERO
+                  RESULT( 42 ) = ZERO
+                  RESULT( 43 ) = ZERO
+                  KRANK = N / 2
+                  CALL DLACPY( 'F', M, N, ASAV, LDA, A, LDA )
+                  DO 196 J = KRANK + 1, N
+                     CALL DLACPY( 'F', M, 1,
+     $                            A( 1, MOD( J-1, KRANK )+1 ), LDA,
+     $                            A( 1, J ), LDA )
+  196             CONTINUE
+                  CALL DLACPY( 'F', M, N, A, LDA, U, LDU )
+                  SRNAMT = 'DGESVDQ'
+*
+                  LERR = .FALSE.
+                  CALL DGESVDQ( 'A', 'N', 'T', 'A', 'A',
+     $                          M, N, A, LDA, SSAV, USAV, LDU,
+     $                          VTSAV, LDVT, NUMRANK, IWORK, -1,
+     $                          WORK, -1, RWORK, -1, IINFO )
+                  IF( IINFO.NE.0 ) THEN
+                     WRITE( NOUT, FMT = 9995 )'DGESVDQ', IINFO, M,
+     $                  N, JTYPE, -1, IOLDSD
+                     INFO = ABS( IINFO )
+                     RETURN
+                  END IF
+*
+*                 xGESVDQ does not check the INFO of the xORMQR queries
+*                 inside its own workspace query. The test XERBLA sets
+*                 LERR when any routine reports an illegal argument.
+*
+                  IF( LERR )
+     $               RESULT( 43 ) = ULPINV
+*
+*                 The query returns the minimal LIWORK in IWORK(1), the
+*                 optimal and the minimal LWORK in WORK(1) and WORK(2)
+*                 and the minimal LRWORK in RWORK(1). RWORK has two
+*                 entries here.
+*
+                  IF( .NOT.( IWORK( 1 ).GE.1 .AND.
+     $                   WORK( 2 ).GE.ONE .AND.
+     $                   WORK( 1 ).GE.WORK( 2 ) .AND.
+     $                   WORK( 2 ).LE.DBLE( LWORK ) .AND.
+     $                   RWORK( 1 ).GE.TWO .AND.
+     $                   RWORK( 1 ).LE.TWO ) ) THEN
+                     RESULT( 43 ) = ULPINV
+                  ELSE
+                     LIWORK = IWORK( 1 )
+                     LRWORK = 2
+                     LMIN = INT( WORK( 2 ) )
+                     LOPT = INT( MIN( WORK( 1 ), DBLE( LWORK ) ) )
+                     LSWORK = LMIN + ( IWS-1 )*( LOPT-LMIN ) / 3
+                     IF( IWS.EQ.4 )
+     $                  LSWORK = LOPT
+                     LG = MIN( 8, LWORK-LSWORK )
+                     DO 198 J = LSWORK + 1, LSWORK + LG
+                        WORK( J ) = GUARD
+  198                CONTINUE
+                     LERR = .FALSE.
+*
+                     CALL DGESVDQ( 'A', 'N', 'T', 'A', 'A',
+     $                             M, N, A, LDA, SSAV, USAV, LDU,
+     $                             VTSAV, LDVT, NUMRANK, IWORK, LIWORK,
+     $                             WORK, LSWORK, RWORK, LRWORK, IINFO )
+*
+                     IF( IINFO.NE.0 ) THEN
+                        WRITE( NOUT, FMT = 9995 )'DGESVDQ', IINFO,
+     $                     M, N, JTYPE, LSWORK, IOLDSD
+                        INFO = ABS( IINFO )
+                        RETURN
+                     END IF
+                     IF( LERR )
+     $                  RESULT( 43 ) = ULPINV
+                     DO 195 J = LSWORK + 1, LSWORK + LG
+                        IF( WORK( J ).NE.GUARD )
+     $                     RESULT( 43 ) = ULPINV
+  195                CONTINUE
+*
+*                    Do tests 40--43
+*
+                     CALL DBDT01( M, N, 0, U, LDU, USAV, LDU, SSAV, E,
+     $                            VTSAV, LDVT, WORK, RESULT( 40 ) )
+                     CALL DORT01( 'Columns', M, M, USAV, LDU, WORK,
+     $                            LWORK, RESULT( 41 ) )
+                     CALL DORT01( 'Rows', N, N, VTSAV, LDVT, WORK,
+     $                            LWORK, RESULT( 42 ) )
+                     DO 197 I = 1, MNMIN - 1
+                        IF( .NOT.( SSAV( I ).GE.SSAV( I+1 ) ) )
+     $                     RESULT( 43 ) = ULPINV
+  197                CONTINUE
+                     IF( .NOT.( SSAV( MNMIN ).GE.ZERO ) )
+     $                  RESULT( 43 ) = ULPINV
+                  END IF
+                  DO 194 J = 40, 43
+                     IF( .NOT.( RESULT( J ).GE.ZERO ) )
+     $                  RESULT( J ) = ULPINV
+  194             CONTINUE
+               END IF
+*
 *              End of Loop -- Check for RESULT(j) > THRESH
 *
-               DO 210 J = 1, 39
+               DO 210 J = 1, 43
                   IF( RESULT( J ).GE.THRESH ) THEN
                      IF( NFAIL.EQ.0 ) THEN
                         WRITE( NOUT, FMT = 9999 )
@@ -1190,7 +1323,7 @@
                      NFAIL = NFAIL + 1
                   END IF
   210          CONTINUE
-               NTEST = NTEST + 39
+               NTEST = NTEST + 43
   220       CONTINUE
   230    CONTINUE
   240 CONTINUE
@@ -1257,6 +1390,14 @@
      $      / '38 = | I - VT VT**T | / ( N ulp ) ',
      $      / '39 = 0 if S contains min(M,N) nonnegative values in',
      $      ' decreasing order, else 1/ulp',
+     $      / ' DGESVDQ(A,N,T,A,A',
+     $      / '40 = | A - U diag(S) VT | / ( |A| max(M,N) ulp ) ',
+     $      ' of a matrix of rank <= N/2',
+     $      / '41 = | I - U**T U | / ( M ulp ) ',
+     $      / '42 = | I - VT VT**T | / ( N ulp ) ',
+     $      / '43 = 0 if S contains min(M,N) nonnegative values in',
+     $      ' decreasing order and the workspace query is',
+     $      ' consistent, else 1/ulp',
      $      / / )
  9997 FORMAT( ' M=', I5, ', N=', I5, ', type ', I1, ', IWS=', I1,
      $      ', seed=', 4( I4, ',' ), ' test(', I2, ')=', G11.4 )
