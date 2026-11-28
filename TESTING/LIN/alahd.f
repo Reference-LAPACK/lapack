@@ -859,7 +859,8 @@
      $      '5. Scaled near underflow', 10X,
      $      '11. Scaled near underflow', / 4X,
      $      '6. Scaled near overflow', 11X, '12. Scaled near overflow',
-     $      / 39X, '13. Last diagonal entry a NaN' )
+     $      / 39X, '13. Last diagonal entry a NaN',
+     $      / 39X, '14. Scaled into the subnormal range' )
 *
 *     PO, PP matrix types
 *

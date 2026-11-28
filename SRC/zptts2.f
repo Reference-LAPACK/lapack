@@ -126,20 +126,33 @@
 *
 *     .. Local Scalars ..
       INTEGER            I, J
+      DOUBLE PRECISION   SFMIN
+*     ..
+*     .. External Functions ..
+      DOUBLE PRECISION   DLAMCH
+      EXTERNAL           DLAMCH
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ZDSCAL
 *     ..
 *     .. Intrinsic Functions ..
-      INTRINSIC          CONJG
+      INTRINSIC          ABS, CONJG
 *     ..
 *     .. Executable Statements ..
 *
 *     Quick return if possible
 *
       IF( N.LE.1 ) THEN
-         IF( N.EQ.1 )
-     $      CALL ZDSCAL( NRHS, 1.D0 / D( 1 ), B, LDB )
+         IF( N.EQ.1 ) THEN
+            SFMIN = DLAMCH( 'S' )
+            IF( ABS( D( 1 ) ).GE.SFMIN ) THEN
+               CALL ZDSCAL( NRHS, 1.D0 / D( 1 ), B, LDB )
+            ELSE
+               DO 1 J = 1, NRHS
+                  B( 1, J ) = B( 1, J ) / D( 1 )
+    1          CONTINUE
+            END IF
+         END IF
          RETURN
       END IF
 *
