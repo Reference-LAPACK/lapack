@@ -9,6 +9,7 @@
 [![LAPACKE coverage](https://img.shields.io/codecov/c/github/Reference-LAPACK/lapack/master?component=lapacke&label=LAPACKE%20coverage&logo=codecov)](https://codecov.io/gh/Reference-LAPACK/lapack?components[]=lapacke)
 [![Packaging status](https://repology.org/badge/tiny-repos/lapack.svg)](https://repology.org/metapackage/lapack/versions)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/Reference-LAPACK/lapack/badge)](https://securityscorecards.dev/viewer/?uri=github.com/Reference-LAPACK/lapack)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/16951/badge)](https://www.bestpractices.dev/projects/16951)
 
 * VERSION 1.0   :  February 29, 1992
 * VERSION 1.0a  :  June 30, 1992
