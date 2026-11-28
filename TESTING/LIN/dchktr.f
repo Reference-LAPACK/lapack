@@ -188,7 +188,7 @@
       INTEGER            NTYPE1, NTYPES
       PARAMETER          ( NTYPE1 = 10, NTYPES = 18 )
       INTEGER            NTESTS
-      PARAMETER          ( NTESTS = 10 )
+      PARAMETER          ( NTESTS = 11 )
       INTEGER            NTRAN
       PARAMETER          ( NTRAN = 3 )
       DOUBLE PRECISION   ONE, ZERO
@@ -198,7 +198,9 @@
       CHARACTER          DIAG, NORM, TRANS, UPLO, XTYPE
       CHARACTER*3        PATH
       INTEGER            I, IDIAG, IMAT, IN, INB, INFO, IRHS, ITRAN,
-     $                   IUPLO, K, LDA, N, NB, NERRS, NFAIL, NRHS, NRUN
+     $                   IUPLO, J, K, LDA, N, NB, NERRS, NFAIL, NRHS,
+     $                   NRUN
+      DOUBLE PRECISION   ASCL
       DOUBLE PRECISION   AINVNM, ANORM, BIGNUM, DLAMCH, DUMMY, RCOND,
      $                   RCONDC, RCONDI, RCONDO, RES, SCALE
 *     ..
@@ -209,14 +211,15 @@
 *     ..
 *     .. External Functions ..
       LOGICAL            LSAME
-      DOUBLE PRECISION   DLANTR
-      EXTERNAL           LSAME, DLANTR
+      DOUBLE PRECISION   DLANTR, DASUM
+      EXTERNAL           LSAME, DLANTR, DASUM
 *     ..
 *     .. External Subroutines ..
       EXTERNAL           ALAERH, ALAHD, ALASUM, DCOPY, DERRTR, DGET04,
      $                   DLACPY, DLAMCH, DSCAL, DLARHS, DLATRS, DLATRS3,
      $                   DLATTR, DTRCON, DTRRFS, DTRT01, DTRT02, DTRT03,
      $                   DTRT05, DTRT06, DTRTRI, DTRTRS, XLAENV
+      EXTERNAL           DLARNV
 *     ..
 *     .. Scalars in Common ..
       LOGICAL            LERR, OK
@@ -595,6 +598,93 @@
    90          CONTINUE
   100       CONTINUE
   110    CONTINUE
+*
+*        Use a matrix with huge entries to test DLATRS3 when DLATRS
+*        scales A to avoid overflow in the column norms. DLATRS then
+*        returns SCALE > 1 and DLATRS3 must not discard it.
+*        The solution of the scaled system is checked against the
+*        unscaled matrix.
+*
+         IF( N.GE.2 .AND. DOTYPE( 2 ) ) THEN
+            ASCL = 8.0D0*DLAMCH( 'Precision' ) /
+     $             DLAMCH( 'Safe minimum' )
+            IMAT = 2
+            DO 160 IUPLO = 1, 2
+               UPLO = UPLOS( IUPLO )
+               SRNAMT = 'DLATTR'
+               CALL DLATTR( IMAT, UPLO, 'No transpose', DIAG, ISEED,
+     $                      N, A, LDA, X, WORK, INFO )
+               CALL DLACPY( UPLO, N, N, A, LDA, AINV, LDA )
+               DO 130 J = 1, N
+                  IF( LSAME( UPLO, 'U' ) ) THEN
+                     CALL DSCAL( J, ASCL, AINV( ( J-1 )*LDA+1 ),
+     $                            1 )
+                  ELSE
+                     CALL DSCAL( N-J+1, ASCL,
+     $                            AINV( ( J-1 )*LDA+J ), 1 )
+                  END IF
+  130          CONTINUE
+               CALL DLARNV( 2, ISEED, 2*N, XACT )
+               DO 150 ITRAN = 1, NTRAN
+                  TRANS = TRANSS( ITRAN )
+                  DO 140 INB = 1, NNB
+                     NB = NBVAL( INB )
+                     CALL XLAENV( 1, NB )
+                     DO 145 NRHS = 2, 1, -1
+                        CALL DCOPY( N*NRHS, XACT, 1, B, 1 )
+                        SRNAMT = 'DLATRS3'
+                        CALL DLATRS3( UPLO, TRANS, DIAG, 'N', N,
+     $                                NRHS, AINV, LDA, B, LDA,
+     $                                SCALE3, RWORK, WORK,
+     $                                NMAX, INFO )
+                        IF( INFO.NE.0 )
+     $                     CALL ALAERH( PATH, 'DLATRS3', INFO, 0,
+     $                                  UPLO // TRANS // DIAG // 'N',
+     $                                  N, N, -1, -1, -1, IMAT,
+     $                                  NFAIL, NERRS, NOUT )
+*
+*                       Column norms of the unscaled A.
+*
+                        DO 135 J = 1, N
+                           IF( LSAME( UPLO, 'U' ) ) THEN
+                              RWORK( J ) = DASUM( J-1,
+     $                                  A( ( J-1 )*LDA+1 ), 1 )
+                           ELSE
+                              RWORK( J ) = DASUM( N-J,
+     $                                  A( ( J-1 )*LDA+J+1 ), 1 )
+                           END IF
+  135                   CONTINUE
+*
+*                       A*x = SCALE*b for the scaled A means
+*                       A0*x = ( SCALE/ASCL )*b for the unscaled A0.
+*
+                        RESULT( 11 ) = ZERO
+                        DO 137 IRHS = 1, NRHS
+                           CALL DTRT03( UPLO, TRANS, DIAG, N, 1, A,
+     $                                  LDA, SCALE3( IRHS ) / ASCL,
+     $                                  RWORK, ONE,
+     $                                  B( ( IRHS-1 )*N+1 ), LDA,
+     $                                  XACT( ( IRHS-1 )*N+1 ), LDA,
+     $                                  WORK, RES )
+*                          DTRT03 returns the residual without the
+*                          division by EPS.
+                           RES = RES / DLAMCH( 'Epsilon' )
+                           RESULT( 11 ) = MAX( RESULT( 11 ), RES )
+  137                   CONTINUE
+                        IF( RESULT( 11 ).GE.THRESH ) THEN
+                           IF( NFAIL.EQ.0 .AND. NERRS.EQ.0 )
+     $                        CALL ALAHD( NOUT, PATH )
+                           WRITE( NOUT, FMT = 9995 )UPLO, TRANS,
+     $                        DIAG, N, NB, NRHS, IMAT, 11,
+     $                        RESULT( 11 )
+                           NFAIL = NFAIL + 1
+                        END IF
+                        NRUN = NRUN + 1
+  145                CONTINUE
+  140             CONTINUE
+  150          CONTINUE
+  160       CONTINUE
+         END IF
   120 CONTINUE
 *
 *     Print a summary of the results.
@@ -608,6 +698,9 @@
      $      I2, ')= ', G12.5 )
  9997 FORMAT( ' NORM=''', A1, ''', UPLO =''', A1, ''', N=', I5, ',',
      $      11X, ' type ', I2, ', test(', I2, ')=', G12.5 )
+ 9995 FORMAT( ' DLATRS3 with huge A: UPLO=''', A1, ''', TRANS=''',
+     $      A1, ''', DIAG=''', A1, ''', N=', I5, ', NB=', I4,
+     $      ', NRHS=', I2, ', type ', I2, ', test(', I2, ')=', G12.5 )
  9996 FORMAT( 1X, A, '( ''', A1, ''', ''', A1, ''', ''', A1, ''', ''',
      $      A1, ''',', I5, ', ... ), type ', I2, ', test(', I2, ')=',
      $      G12.5 )
