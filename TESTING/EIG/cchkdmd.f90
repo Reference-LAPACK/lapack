@@ -42,6 +42,8 @@
       PROGRAM DMD_TEST
 
       use iso_fortran_env
+      use, intrinsic :: ieee_arithmetic, only: ieee_value, &
+                              ieee_quiet_nan, ieee_positive_inf
       IMPLICIT NONE
       integer, parameter :: WP = real32
 !............................................................
@@ -81,6 +83,13 @@
       CHARACTER :: GRADE, JOBREF, JOBZ, PIVTNG, RSIGN,   &
                    SCALE, RESIDS, WANTQ, WANTR
       LOGICAL :: TEST_QRDMD
+      INTEGER :: iBAD, iBADSVD, NFAIL_NONFIN = 0, NFAILQ_NONFIN = 0
+      REAL(KIND=WP) :: BADVAL
+      LOGICAL :: LERR, OK, XERR_EXP
+      CHARACTER(LEN=32) :: SRNAMT
+      INTEGER :: INFOT, NOUT
+      COMMON / INFOC / INFOT, NOUT, OK, LERR
+      COMMON / SRNAMC / SRNAMT
 
 !..... external subroutines (BLAS and LAPACK)
       EXTERNAL CAXPY, CGEEV, CGEMM, CGEMV, CLASCL, XLAENV, &
@@ -618,6 +627,103 @@
       END DO ! 1 or 2 trajectories
       !write(*,*) 'trajectories  loop completed'
 
+      !..... A NaN or an infinity in the snapshots. CGEDMD has to
+      ! report it through INFO = 2 (SVD of X) or INFO = 3 (eigenvalues
+      ! of the Rayleigh quotient) instead of returning INFO = 0 and
+      ! garbage eigenvalues. CGEDMDQ passes INFO of CGEDMD through.
+      ! The XERBLA of this test program (XER_REPLACE) returns and sets
+      ! LERR, which is checked here. With WHTSVD = 3 and a NaN or an
+      ! infinity in X, CGESVDQ is expected to call XERBLA (INFO = -8)
+      ! and CGEDMD has to return INFO = 2 after that. No other case
+      ! may call XERBLA, as the default XERBLA would stop the program.
+      ! WHTSVD = 4 is not tested, as in the rest of this program: the
+      ! workspace query of CGEDMD for it ends in a workspace query of
+      ! CGESVJ with LWORK = -1, whose CWORK( LWORK ) is then indexed,
+      ! which a build with array bounds checking rejects.
+      NOUT  = 6
+      OK    = .TRUE.
+      DO iBAD = 1, 4
+         ! iBAD = 1, 2: NaN in X, Y; iBAD = 3, 4: infinity in X, Y.
+         IF ( iBAD <= 2 ) THEN
+            BADVAL = IEEE_VALUE( ONE, IEEE_QUIET_NAN )
+         ELSE
+            BADVAL = IEEE_VALUE( ONE, IEEE_POSITIVE_INF )
+         END IF
+         DO iBADSVD = 1, 3
+            XERR_EXP = ( iBADSVD == 3 .AND. MOD( iBAD, 2 ) == 1 )
+            IF ( XERR_EXP ) THEN
+               INFOT  = 8
+               SRNAMT = 'CGESVDQ'
+            ELSE
+               INFOT  = 0
+               SRNAMT = ' '
+            END IF
+            X(1:M,1:N) = X0(1:M,1:N)
+            Y(1:M,1:N) = Y0(1:M,1:N)
+            IF ( MOD( iBAD, 2 ) == 1 ) THEN
+               X(1,1) = CMPLX( BADVAL, ZERO, KIND=WP )
+            ELSE
+               Y(1,1) = CMPLX( BADVAL, ZERO, KIND=WP )
+            END IF
+            CALL CGEDMD( 'N', 'N', 'N', 'N', iBADSVD, M, N, X, LDX, Y, LDY, &
+                 -1, TOL, K, CEIGS, Z, LDZ, RES, AU, LDAU, W, LDW, S, LDS, &
+                 CDUMMY, -1, WDUMMY, -1, IDUMMY, -1, INFO )
+            LCWORK = INT( CDUMMY(2) )
+            LWORK  = INT( WDUMMY(1) )
+            LIWORK = IDUMMY(1)
+            ALLOCATE( CWORK(LCWORK) )
+            ALLOCATE( WORK(LWORK) )
+            ALLOCATE( IWORK(LIWORK) )
+            LERR = .FALSE.
+            CALL CGEDMD( 'N', 'N', 'N', 'N', iBADSVD, M, N, X, LDX, Y, LDY, &
+                 -1, TOL, K, CEIGS, Z, LDZ, RES, AU, LDAU, W, LDW, S, LDS, &
+                 CWORK, LCWORK, WORK, LWORK, IWORK, LIWORK, INFO )
+            DEALLOCATE( CWORK )
+            DEALLOCATE( WORK )
+            DEALLOCATE( IWORK )
+            IF ( .NOT. ( ( INFO == 2 .OR. INFO == 3 ) .AND. &
+                         ( LERR .EQV. XERR_EXP ) ) ) THEN
+               NFAIL_NONFIN = NFAIL_NONFIN + 1
+               WRITE(*,*) 'Non-finite input test: CGEDMD returned INFO = ', &
+                          INFO, ', XERBLA called = ', LERR, &
+                          ' for iBAD, WHTSVD = ', iBAD, iBADSVD
+            END IF
+
+            F1(1:M,1:N) = X0(1:M,1:N)
+            F1(1:M,N+1) = Y0(1:M,N)
+            IF ( MOD( iBAD, 2 ) == 1 ) THEN
+               F1(1,1) = CMPLX( BADVAL, ZERO, KIND=WP )
+            ELSE
+               F1(1,N+1) = CMPLX( BADVAL, ZERO, KIND=WP )
+            END IF
+            CALL CGEDMDQ( 'N', 'N', 'N', 'N', 'N', 'N', iBADSVD, M, N+1, F1, &
+                 LDF, X, LDX, Y, LDY, -1, TOL, KQ, CEIGS, Z, LDZ, RES, AU, &
+                 LDAU, W, LDW, S, LDS, CDUMMY, -1, WDUMMY, -1, IDUMMY, -1, &
+                 INFO )
+            LCWORK = INT( CDUMMY(2) )
+            LWORK  = INT( WDUMMY(1) )
+            LIWORK = IDUMMY(1)
+            ALLOCATE( CWORK(LCWORK) )
+            ALLOCATE( WORK(LWORK) )
+            ALLOCATE( IWORK(LIWORK) )
+            LERR = .FALSE.
+            CALL CGEDMDQ( 'N', 'N', 'N', 'N', 'N', 'N', iBADSVD, M, N+1, F1, &
+                 LDF, X, LDX, Y, LDY, -1, TOL, KQ, CEIGS, Z, LDZ, RES, AU, &
+                 LDAU, W, LDW, S, LDS, CWORK, LCWORK, WORK, LWORK, IWORK, &
+                 LIWORK, INFO )
+            DEALLOCATE( CWORK )
+            DEALLOCATE( WORK )
+            DEALLOCATE( IWORK )
+            IF ( .NOT. ( ( INFO == 2 .OR. INFO == 3 ) .AND. &
+                         ( LERR .EQV. XERR_EXP ) ) ) THEN
+               NFAILQ_NONFIN = NFAILQ_NONFIN + 1
+               WRITE(*,*) 'Non-finite input test: CGEDMDQ returned INFO = ', &
+                          INFO, ', XERBLA called = ', LERR, &
+                          ' for iBAD, WHTSVD = ', iBAD, iBADSVD
+            END IF
+         END DO
+      END DO
+
       DEALLOCATE( A )
       DEALLOCATE( AC )
       DEALLOCATE( Z )
@@ -673,6 +779,13 @@
         WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
         NFAIL_TOTAL = NFAIL_TOTAL + NFAIL_REZ
       END IF
+      IF ( NFAIL_NONFIN == 0 ) THEN
+         WRITE(*,*) '>>>> Non-finite input test PASSED.'
+      ELSE
+         WRITE(*,*) 'Non-finite input test FAILED ', NFAIL_NONFIN, ' time(s)'
+         NFAIL_TOTAL = NFAIL_TOTAL + NFAIL_NONFIN
+      END IF
+
       IF ( NFAIL_TOTAL == 0 ) THEN
         WRITE(*,*) '>>>> CGEDMD :: ALL TESTS PASSED.'
       ELSE
@@ -713,6 +826,13 @@
         WRITE(*,*) 'Max residual computing test adjusted error measure was ', TMP_REZQ
         WRITE(*,*) 'It should be up to O(M*N) times EPS, EPS = ', EPS
         NFAILQ_TOTAL = NFAILQ_TOTAL + NFAIL_REZQ
+      END IF
+
+      IF ( NFAILQ_NONFIN == 0 ) THEN
+         WRITE(*,*) '>>>> Non-finite input test PASSED.'
+      ELSE
+         WRITE(*,*) 'Non-finite input test FAILED ', NFAILQ_NONFIN, ' time(s)'
+         NFAILQ_TOTAL = NFAILQ_TOTAL + NFAILQ_NONFIN
       END IF
 
       IF ( NFAILQ_TOTAL == 0 ) THEN
