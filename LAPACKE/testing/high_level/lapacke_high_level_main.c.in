@@ -38,7 +38,9 @@ int main(int argc, char** argv)
         sizeof(lapacke_high_level_tests) / sizeof(lapacke_high_level_tests[0]);
     size_t i;
     int matched = 0;
-    lapack_int minus_1 = -1, two = 2, one = 1, info = 0;
+    lapack_int minus_1 = -1, two = 2, one = 1, info = 0, out_len;
+    char buf[30];
+    API_SUFFIX(LAPACKE_get_libname)(buf, &out_len, sizeof(buf));
     LAPACK_XERBLA F77_cb;
     LAPACK_get_lapack_xerbla(&F77_cb);
     LAPACK_set_lapack_xerbla(F77_cb);

@@ -11651,6 +11651,17 @@ void LAPACK_zlauum_base(
 void LAPACK_ilaver(
     lapack_int* vers_major, lapack_int* vers_minor, lapack_int* vers_patch );
 
+#define LAPACK_get_lapack_libname_base LAPACK_GLOBAL_SUFFIX(get_lapack_libname,GET_LAPACK_LIBNAME)
+#ifdef LAPACK_FORTRAN_STRLEN_END
+void LAPACK_get_lapack_libname_base(char *buffer, lapack_int *out_len, FORTRAN_STRLEN buf_len);
+#define LAPACK_get_lapack_libname(buffer, out_len, buf_len) \
+    LAPACK_get_lapack_libname_base(buffer, out_len, buf_len)
+#else
+void LAPACK_get_lapack_libname_base(char *buffer, FORTRAN_STRLEN buf_len, lapack_int *out_len);
+#define LAPACK_get_lapack_libname(buffer, out_len, buf_len) \
+    LAPACK_get_lapack_libname_base(buffer, buf_len, out_len)
+#endif
+
 #define LAPACK_dopgtr_base LAPACK_GLOBAL_SUFFIX(dopgtr,DOPGTR)
 void LAPACK_dopgtr_base(
     char const* uplo,

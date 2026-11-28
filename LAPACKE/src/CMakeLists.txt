@@ -1225,6 +1225,7 @@ lapacke_nancheck.c
 )
 set(SOURCES
 lapacke_ilaver.c
+lapacke_get_libname.c
 )
 set(SOURCES_SINGLE
 lapacke_sbbcsd.c
