@@ -249,16 +249,21 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         KD    = ILAENV2STAGE( 1, 'ZHETRD_2STAGE', JOBZ, N, -1, -1,
-     $                         -1 )
-         IB    = ILAENV2STAGE( 2, 'ZHETRD_2STAGE', JOBZ, N, KD, -1,
-     $                         -1 )
-         LHTRD = ILAENV2STAGE( 3, 'ZHETRD_2STAGE', JOBZ, N, KD, IB,
-     $                         -1 )
-         LWTRD = ILAENV2STAGE( 4, 'ZHETRD_2STAGE', JOBZ, N, KD, IB,
-     $                         -1 )
-         LWMIN = N + LHTRD + LWTRD
-         WORK( 1 )  = LWMIN
+         IF( N.LE.1 ) THEN
+            LWMIN = 1
+            WORK( 1 ) = LWMIN
+         ELSE
+            KD    = ILAENV2STAGE( 1, 'ZHETRD_2STAGE', JOBZ, N, -1, -1,
+     $                            -1 )
+            IB    = ILAENV2STAGE( 2, 'ZHETRD_2STAGE', JOBZ, N, KD, -1,
+     $                            -1 )
+            LHTRD = ILAENV2STAGE( 3, 'ZHETRD_2STAGE', JOBZ, N, KD, IB,
+     $                            -1 )
+            LWTRD = ILAENV2STAGE( 4, 'ZHETRD_2STAGE', JOBZ, N, KD, IB,
+     $                            -1 )
+            LWMIN = N + LHTRD + LWTRD
+            WORK( 1 )  = LWMIN
+         END IF
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY )
      $      INFO = -8

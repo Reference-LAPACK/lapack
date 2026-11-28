@@ -383,6 +383,7 @@
      $                   VL, VU
 *     ..
 *     .. Local Arrays ..
+      INTEGER            LWTEST
       INTEGER            IDUMMA( 1 ), IOLDSD( 4 ), ISEED2( 4 ),
      $                   ISEED3( 4 ), KMAGN( MAXTYP ), KMODE( MAXTYP ),
      $                   KTYPE( MAXTYP )
@@ -1684,8 +1685,24 @@
                CALL CLACPY( ' ', N, N, V, LDU, A, LDA )
 *
                NTEST = NTEST + 2
+               LWTEST = LWORK
+               IF( N.LE.1 ) THEN
+*
+*                 N <= 1 needs LWORK = 1 only, and the workspace
+*                 query must return 1.
+*
+                  LWTEST = 1
+                  WORK( 1 ) = ZERO
+                  CALL CHEEV_2STAGE( 'N', UPLO, N, A, LDU, D3, WORK,
+     $                               -1, RWORK, IINFO )
+                  IF( IINFO.NE.0 .OR.
+     $                .NOT.( REAL( WORK( 1 ) ).EQ.ONE ) ) THEN
+                     RESULT( NTEST ) = ULPINV
+                     GO TO 950
+                  END IF
+               END IF
                CALL CHEEV_2STAGE( 'N', UPLO, N, A, LDU, D3,
-     $                            WORK, LWORK, RWORK, IINFO )
+     $                            WORK, LWTEST, RWORK, IINFO )
                IF( IINFO.NE.0 ) THEN
                   WRITE( NOUNIT, FMT = 9999 )
      $               'CHEEV_2STAGE(N,' // UPLO // ')',
@@ -1694,6 +1711,12 @@
                   IF( IINFO.LT.0 ) THEN
                      RETURN
                   ELSE
+                     RESULT( NTEST ) = ULPINV
+                     GO TO 950
+                  END IF
+               END IF
+               IF( N.LE.1 ) THEN
+                  IF( .NOT.( REAL( WORK( 1 ) ).EQ.ONE ) ) THEN
                      RESULT( NTEST ) = ULPINV
                      GO TO 950
                   END IF

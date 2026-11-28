@@ -293,16 +293,21 @@
       END IF
 *
       IF( INFO.EQ.0 ) THEN
-         KD    = ILAENV2STAGE( 1, 'CHETRD_2STAGE', JOBZ, N, -1, -1,
-     $                         -1 )
-         IB    = ILAENV2STAGE( 2, 'CHETRD_2STAGE', JOBZ, N, KD, -1,
-     $                         -1 )
-         LHTRD = ILAENV2STAGE( 3, 'CHETRD_2STAGE', JOBZ, N, KD, IB,
-     $                         -1 )
-         LWTRD = ILAENV2STAGE( 4, 'CHETRD_2STAGE', JOBZ, N, KD, IB,
-     $                         -1 )
-         LWMIN = N + LHTRD + LWTRD
-         WORK( 1 )  = SROUNDUP_LWORK(LWMIN)
+         IF( N.LE.1 ) THEN
+            LWMIN = 1
+            WORK( 1 ) = SROUNDUP_LWORK(LWMIN)
+         ELSE
+            KD    = ILAENV2STAGE( 1, 'CHETRD_2STAGE', JOBZ, N, -1, -1,
+     $                            -1 )
+            IB    = ILAENV2STAGE( 2, 'CHETRD_2STAGE', JOBZ, N, KD, -1,
+     $                            -1 )
+            LHTRD = ILAENV2STAGE( 3, 'CHETRD_2STAGE', JOBZ, N, KD, IB,
+     $                            -1 )
+            LWTRD = ILAENV2STAGE( 4, 'CHETRD_2STAGE', JOBZ, N, KD, IB,
+     $                            -1 )
+            LWMIN = N + LHTRD + LWTRD
+            WORK( 1 )  = SROUNDUP_LWORK(LWMIN)
+         END IF
 *
          IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN
             INFO = -11

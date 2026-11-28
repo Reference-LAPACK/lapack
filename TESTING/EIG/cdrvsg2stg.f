@@ -416,6 +416,7 @@
      $                   RTUNFL, ULP, ULPINV, UNFL, VL, VU, TEMP1, TEMP2
 *     ..
 *     .. Local Arrays ..
+      INTEGER            LWTEST
       INTEGER            IDUMMA( 1 ), IOLDSD( 4 ), ISEED2( 4 ),
      $                   KMAGN( MAXTYP ), KMODE( MAXTYP ),
      $                   KTYPE( MAXTYP )
@@ -738,8 +739,25 @@
                   CALL CLACPY( ' ', N, N, A, LDA, Z, LDZ )
                   CALL CLACPY( UPLO, N, N, B, LDB, BB, LDB )
 *
+                  LWTEST = NWORK
+                  IF( N.LE.1 ) THEN
+*
+*                    N <= 1 needs LWORK = 1 only, and the
+*                    workspace query must return 1.
+*
+                     LWTEST = 1
+                     WORK( 1 ) = ZERO
+                     CALL CHEGV_2STAGE( IBTYPE, 'N', UPLO, N, Z, LDZ,
+     $                               BB, LDB, D2, WORK, -1, RWORK,
+     $                               IINFO )
+                     IF( IINFO.NE.0 .OR.
+     $                .NOT.( REAL( WORK( 1 ) ).EQ.ONE ) ) THEN
+                        RESULT( NTEST ) = ULPINV
+                        GO TO 100
+                     END IF
+                  END IF
                   CALL CHEGV_2STAGE( IBTYPE, 'N', UPLO, N, Z, LDZ,
-     $                               BB, LDB, D2, WORK, NWORK, RWORK, 
+     $                               BB, LDB, D2, WORK, LWTEST, RWORK, 
      $                               IINFO )
                   IF( IINFO.NE.0 ) THEN
                      WRITE( NOUNIT, FMT = 9999 )
@@ -749,6 +767,12 @@
                      IF( IINFO.LT.0 ) THEN
                         RETURN
                      ELSE
+                        RESULT( NTEST ) = ULPINV
+                        GO TO 100
+                     END IF
+                  END IF
+                  IF( N.LE.1 ) THEN
+                     IF( .NOT.( REAL( WORK( 1 ) ).EQ.ONE ) ) THEN
                         RESULT( NTEST ) = ULPINV
                         GO TO 100
                      END IF
