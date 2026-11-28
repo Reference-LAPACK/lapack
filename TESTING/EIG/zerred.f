@@ -87,6 +87,7 @@
       PARAMETER          ( ZERO = 0.0D0, ONE = 1.0D0 )
 *     ..
 *     .. Local Scalars ..
+      CHARACTER          BAL
       CHARACTER*2        C2
       INTEGER            I, IHI, ILO, INFO, J, NS, NT, SDIM
       DOUBLE PRECISION   ABNRM, RNAN, RONE, RZERO
@@ -232,6 +233,30 @@
          CALL CHKXER( 'ZGEES ', INFOT, NOUT, LERR, OK )
          NT = NT + 6
 *
+*        ZGEES must return INFO = -5, without calling XERBLA, when A
+*        contains a NaN or an infinity.
+*
+         RONE = ONE
+         RZERO = ZERO
+         RNAN = SQRT( -RONE )
+         DO 70 J = 1, 2
+            A( 1, 1 ) = ONE
+            A( 2, 1 ) = RNAN
+            A( 1, 2 ) = ZERO
+            A( 2, 2 ) = ONE
+            IF( J.EQ.2 )
+     $         A( 2, 1 ) = RONE / RZERO
+            INFOT = 0
+            LERR = .FALSE.
+            CALL ZGEES( 'N', 'N', ZSLECT, 2, A, NMAX, SDIM, X, VL,
+     $                  1, W, 10*NMAX, RW, B, INFO )
+            IF( LERR .OR. INFO.NE.-5 ) THEN
+               WRITE( NOUT, FMT = 9995 )'ZGEES', INFO
+               OK = .FALSE.
+            END IF
+   70    CONTINUE
+         NT = NT + 2
+*
       ELSE IF( LSAMEN( 2, C2, 'VX' ) ) THEN
 *
 *        Test ZGEEVX
@@ -279,6 +304,38 @@
          CALL CHKXER( 'ZGEEVX', INFOT, NOUT, LERR, OK )
          NT = NT + 10
 *
+*        ZGEEVX must return INFO = -6, without calling XERBLA, when A
+*        contains a NaN or an infinity.
+*
+         RONE = ONE
+         RZERO = ZERO
+         RNAN = SQRT( -RONE )
+         DO 80 J = 1, 8
+            BAL = 'N'
+            IF( (J+1)/2.EQ.2 )
+     $         BAL = 'P'
+            IF( (J+1)/2.EQ.3 )
+     $         BAL = 'S'
+            IF( (J+1)/2.EQ.4 )
+     $         BAL = 'B'
+            A( 1, 1 ) = ONE
+            A( 2, 1 ) = RNAN
+            A( 1, 2 ) = ZERO
+            A( 2, 2 ) = ONE
+            IF( MOD( J, 2 ).EQ.0 )
+     $         A( 2, 1 ) = RONE / RZERO
+            INFOT = 0
+            LERR = .FALSE.
+            CALL ZGEEVX( BAL, 'N', 'N', 'N', 2, A, NMAX, X, VL,
+     $                   1, VR, 1, ILO, IHI, S, ABNRM, R1, R2, W,
+     $                   10*NMAX, RW, INFO )
+            IF( LERR .OR. INFO.NE.-6 ) THEN
+               WRITE( NOUT, FMT = 9996 )'ZGEEVX', INFO
+               OK = .FALSE.
+            END IF
+   80    CONTINUE
+         NT = NT + 8
+*
       ELSE IF( LSAMEN( 2, C2, 'SX' ) ) THEN
 *
 *        Test ZGEESX
@@ -313,6 +370,31 @@
      $                R1( 1 ), R2( 1 ), W, 1, RW, B, INFO )
          CALL CHKXER( 'ZGEESX', INFOT, NOUT, LERR, OK )
          NT = NT + 7
+*
+*        ZGEESX must return INFO = -6, without calling XERBLA, when A
+*        contains a NaN or an infinity.
+*
+         RONE = ONE
+         RZERO = ZERO
+         RNAN = SQRT( -RONE )
+         DO 90 J = 1, 2
+            A( 1, 1 ) = ONE
+            A( 2, 1 ) = RNAN
+            A( 1, 2 ) = ZERO
+            A( 2, 2 ) = ONE
+            IF( J.EQ.2 )
+     $         A( 2, 1 ) = RONE / RZERO
+            INFOT = 0
+            LERR = .FALSE.
+            CALL ZGEESX( 'N', 'N', ZSLECT, 'N', 2, A, NMAX, SDIM, X,
+     $                   VL, 1, R1( 1 ), R2( 1 ), W, 10*NMAX, RW,
+     $                   B, INFO )
+            IF( LERR .OR. INFO.NE.-6 ) THEN
+               WRITE( NOUT, FMT = 9996 )'ZGEESX', INFO
+               OK = .FALSE.
+            END IF
+   90    CONTINUE
+         NT = NT + 2
 *
       ELSE IF( LSAMEN( 2, C2, 'BD' ) ) THEN
 *
@@ -697,6 +779,9 @@
  9999 FORMAT( 1X, A, ' passed the tests of the error exits (', I3,
      $      ' tests done)' )
  9998 FORMAT( ' *** ', A, ' failed the tests of the error exits ***' )
+ 9995 FORMAT( ' *** ', A, ' did not return INFO = -5 without calling',
+     $      ' XERBLA for a matrix with a NaN or an infinity',
+     $      ' (INFO = ', I6, ') ***' )
  9997 FORMAT( ' *** ', A, ' did not return INFO = -4 without calling',
      $      ' XERBLA for a matrix with a NaN or an infinity',
      $      ' (INFO = ', I6, ') ***' )
