@@ -33,4 +33,26 @@ LAPACKE_TEST(stgevc)
             }
         }
     }
+
+    /* With MM = 2, the requested side needs two columns and the unused side needs one. */
+    {
+        static const struct {
+            const char *label;
+            char side;
+            lapack_int ldvl, ldvr, expected;
+        } cases[] = {
+            {"short requested VL", 'L', 1, 1, -11},
+            {"short requested VR", 'R', 1, 1, -13},
+            {"zero unused LDVL", 'R', 0, 2, -11},
+            {"zero unused LDVR", 'L', 2, 0, -13},
+        };
+        float vl[4] = {0}, vr[4] = {0};
+        lapack_int m = 0;
+        for (size_t i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
+            lapack_int info = API_SUFFIX(LAPACKE_stgevc)(
+                LAPACK_ROW_MAJOR, cases[i].side, 'A', select, 2, s, 2, p, 2,
+                vl, cases[i].ldvl, vr, cases[i].ldvr, 2, &m);
+            lapacke_test_check("stgevc", cases[i].label, info, cases[i].expected);
+        }
+    }
 }
