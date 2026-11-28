@@ -58,6 +58,11 @@ lapack_int API_SUFFIX(LAPACKE_ztgevc_work)( int matrix_layout, char side, char h
         lapack_complex_double* p_t = NULL;
         lapack_complex_double* vl_t = NULL;
         lapack_complex_double* vr_t = NULL;
+        /* The unrequested side can use a leading dimension of one. */
+        lapack_int min_ldvl = API_SUFFIX(LAPACKE_lsame)( side, 'r' ) ?
+                              MIN(1,mm) : mm;
+        lapack_int min_ldvr = API_SUFFIX(LAPACKE_lsame)( side, 'l' ) ?
+                              MIN(1,mm) : mm;
         /* Check leading dimension(s) */
         if( ldp < n ) {
             info = -9;
@@ -69,12 +74,12 @@ lapack_int API_SUFFIX(LAPACKE_ztgevc_work)( int matrix_layout, char side, char h
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztgevc_work", info );
             return info;
         }
-        if( ldvl < mm ) {
+        if( ldvl < min_ldvl ) {
             info = -11;
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztgevc_work", info );
             return info;
         }
-        if( ldvr < mm ) {
+        if( ldvr < min_ldvr ) {
             info = -13;
             API_SUFFIX(LAPACKE_xerbla)( "LAPACKE_ztgevc_work", info );
             return info;
